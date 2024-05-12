@@ -23,8 +23,6 @@ import SOIL from "@/abis/SOIL.json";
 import ERC20 from "@/abis/ERC20.json";
 import { DepositToken, address } from "@/types/types";
 
-const SOILAddress = import.meta.env.VITE_SOIL;
-
 type Deposit = {
   token: DepositToken;
   amount: number;
@@ -82,7 +80,7 @@ export const BorrowModal = () => {
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
 
-    const SOILContract = new Contract(SOILAddress, SOIL.abi, signer);
+    const SOILContract = new Contract(address["SOIL"], SOIL.abi, signer);
     const ERC20Contract = new Contract(
       address[deposit.token],
       ERC20.abi,
@@ -92,23 +90,12 @@ export const BorrowModal = () => {
     try {
       // approval
       const approvalTxn = await ERC20Contract.approve(
-        address[deposit.token],
+        address["SOIL"],
         parseUnits(deposit.amount.toString())
       );
       approvalTxn.wait();
     } catch (error) {
       throw new Error("approval error");
-    }
-
-    try {
-      // depositCollateral
-      const depositTxn = await SOILContract.depositCollateral(
-        address[deposit.token],
-        parseUnits(deposit.amount.toString())
-      );
-      depositTxn.wait();
-    } catch (error) {
-      throw new Error("deposit error");
     }
 
     try {
