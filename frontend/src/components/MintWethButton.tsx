@@ -1,14 +1,15 @@
-import { BrowserProvider, Contract } from "ethers";
+import { BrowserProvider, Contract, formatUnits, parseUnits } from "ethers";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 
 import { Button } from "./ui/button";
-import WETH from "@/abis/WETH.json";
+import ERC20 from "@/abis/ERC20.json";
+import { toast } from "./ui/use-toast";
 
 const MintWethButton = () => {
-  const { isConnected } = useWeb3ModalAccount();
+  const { isConnected, address } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
   const WETHAddress = import.meta.env.VITE_WETH;
   const mintWETH = async () => {
@@ -17,9 +18,16 @@ const MintWethButton = () => {
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
 
-    const contract = new Contract(WETHAddress, WETH.abi, signer);
-    const txn = await contract.mint();
+    const contract = new Contract(WETHAddress, ERC20.abi, signer);
+    const txn = await contract.mint(address, parseUnits("16"));
     txn.wait();
+    toast({
+      duration: 1500,
+      title: "Mint Successfully",
+    });
+
+    const balance = await contract.balanceOf(address);
+    console.log(formatUnits(balance, 18));
   };
 
   return <Button onClick={mintWETH}>Mint WETH</Button>;

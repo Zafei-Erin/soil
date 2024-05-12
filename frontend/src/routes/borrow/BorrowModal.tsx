@@ -20,6 +20,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useFetchPrice } from "@/hooks/useFetchPrice";
 import { Slider } from "@/components/ui/slider";
 import SOIL from "@/abis/SOIL.json";
+import ERC20 from "@/abis/ERC20.json";
 import { DepositToken, address } from "@/types/types";
 
 const SOILAddress = import.meta.env.VITE_SOIL;
@@ -43,7 +44,8 @@ export const BorrowModal = () => {
   const { isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
-  const disabled = healthFactor < 1.5 || deposit.amount <= 0 || soilAmount <= 0 || borrowing
+  const disabled =
+    healthFactor < 1.5 || deposit.amount <= 0 || soilAmount <= 0 || borrowing;
 
   const setHealthFactor = async (depositAmount: number, soilAmount: number) => {
     const depositValue = getPrice(deposit.token) * depositAmount;
@@ -80,32 +82,47 @@ export const BorrowModal = () => {
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
 
-    const SOILMintContract = new Contract(SOILAddress, SOIL.abi, signer);
-
-    // approval
-    const approvalTxn = await SOILMintContract.approve(
+    const SOILContract = new Contract(SOILAddress, SOIL.abi, signer);
+    const ERC20Contract = new Contract(
       address[deposit.token],
-      parseUnits(deposit.amount.toString())
+      ERC20.abi,
+      signer
     );
-    approvalTxn.wait();
 
-    // depositCollateral
-    const depositTxn = await SOILMintContract.depositCollateral(
-      address[deposit.token],
-      parseUnits(deposit.amount.toString())
-    );
-    depositTxn.wait();
+    try {
+      // approval
+      const approvalTxn = await ERC20Contract.approve(
+        address[deposit.token],
+        parseUnits(deposit.amount.toString())
+      );
+      approvalTxn.wait();
+    } catch (error) {
+      throw new Error("approval error");
+    }
 
-    // depositAndMint
-    const depositAndMintTxn = await SOILMintContract.depositAndMint(
-      address[deposit.token],
-      parseUnits(deposit.amount.toString()),
-      parseUnits(soilAmount.toString())
-    );
-    depositAndMintTxn.wait();
+    try {
+      // depositCollateral
+      const depositTxn = await SOILContract.depositCollateral(
+        address[deposit.token],
+        parseUnits(deposit.amount.toString())
+      );
+      depositTxn.wait();
+    } catch (error) {
+      throw new Error("deposit error");
+    }
+
+    try {
+      // depositAndMint
+      const depositAndMintTxn = await SOILContract.depositAndMint(
+        address[deposit.token],
+        parseUnits(deposit.amount.toString()),
+        parseUnits(soilAmount.toString())
+      );
+      depositAndMintTxn.wait();
+    } catch (error) {
+      throw new Error("mint error");
+    }
   };
-
-
 
   const borrow = async () => {
     if (healthFactor < 1.5 || deposit.amount <= 0 || soilAmount <= 0) {
