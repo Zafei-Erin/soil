@@ -38,7 +38,7 @@ export const BorrowModal = () => {
   const [loanToValue, _setLoanToValue] = useState<number>(0);
   const [borrowing, setBorrowing] = useState<boolean>(false);
   const { prices } = useFetchPrice();
-  const { balances } = useFetchBalances();
+  const { balances, refreshBalances } = useFetchBalances();
   const { isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
@@ -125,6 +125,7 @@ export const BorrowModal = () => {
 
     try {
       await approvalAndMint();
+      refreshBalances();
       toast({
         duration: 1500,
         title: "Borrow Successfully",

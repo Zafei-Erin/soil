@@ -35,16 +35,20 @@ export function useFetchBalances() {
     setBalances(newBalances);
   };
 
-  useEffect(() => {
+  const refreshBalances = () => {
     if (!isConnected || !walletProvider) {
       return;
     }
     fetchBalances(walletProvider);
+  };
+
+  useEffect(() => {
+    refreshBalances();
   }, [isConnected, walletProvider]);
 
   const getBalances = (token: Token) => {
     return balances[token];
   };
 
-  return { getBalances, balances };
+  return { getBalances, balances, refreshBalances };
 }
