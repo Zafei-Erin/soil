@@ -1,42 +1,50 @@
+import { Token } from "@/types/address";
+import {
+  useWeb3ModalAccount,
+  useWeb3ModalProvider,
+} from "@web3modal/ethers/react";
+import { BrowserProvider, Contract, formatUnits } from "ethers";
 import { useEffect, useState } from "react";
+import PriceFeed from "@/abis/PriceFeed.json";
+import { JsonRpcSigner } from "ethers";
+import { DEFAULT_PRICES, Prices, priceAddress } from "@/types/price";
+import { Eip1193Provider } from "ethers";
 
-const Tokens = ["WETH", "DAI", "SOIL"] as const;
-type Token = (typeof Tokens)[number];
-type Price = {
-  [token in Token]: number;
-};
-const DEFAULT_PRICES: Price = {
-  DAI: 0,
-  WETH: 0,
-  SOIL: 0,
-};
 export function useFetchPrice() {
-  const [prices, setPrices] = useState<Price>(DEFAULT_PRICES);
+  const [prices, setPrices] = useState<Prices>(DEFAULT_PRICES);
+  const { isConnected } = useWeb3ModalAccount();
+  const { walletProvider } = useWeb3ModalProvider();
 
-  const fetchPrice = async (token: Token) => {
-    if (token == "WETH") {
-      return Math.random() * 300;
-    }
-    return Math.random() * 100;
+  const fetchPrice = async (signer: JsonRpcSigner, token: Token) => {
+    const contract = new Contract(priceAddress[token], PriceFeed.abi, signer);
+    const result = await contract.latestRoundData();
+    const price = parseFloat(formatUnits(result[1], 8));
+    return price;
   };
 
-  const fetchPrices = () => {
+  const fetchPrices = async (walletProvider: Eip1193Provider) => {
     const newPrices = { ...DEFAULT_PRICES };
-    for (const token of Tokens) {
-      fetchPrice(token).then((price) => (newPrices[token] = price));
+
+    const ethersProvider = new BrowserProvider(walletProvider);
+    const signer = await ethersProvider.getSigner();
+    for (const token of Token) {
+      await fetchPrice(signer, token).then(
+        (price) => (newPrices[token] = price)
+      );
     }
     setPrices(newPrices);
   };
 
   useEffect(() => {
-    // Fetch prices initially and then at regular intervals
-    fetchPrices();
-    setInterval(fetchPrices, 30 * 1000);
-  }, []);
+    if (!isConnected || !walletProvider) {
+      return;
+    }
+    fetchPrices(walletProvider);
+  }, [isConnected, walletProvider]);
 
   const getPrice = (token: Token) => {
     return prices[token];
   };
 
-  return { getPrice };
+  return { getPrice, prices };
 }

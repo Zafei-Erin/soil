@@ -38,7 +38,7 @@ export const BorrowModal = () => {
   const [soilAmount, setSoilAmount] = useState<number>(0);
   const [loanToValue, _setLoanToValue] = useState<number>(0);
   const [borrowing, setBorrowing] = useState<boolean>(false);
-  const { getPrice } = useFetchPrice();
+  const { prices } = useFetchPrice();
   const { isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
@@ -46,8 +46,8 @@ export const BorrowModal = () => {
     loanToValue > 0.8 || deposit.amount <= 0 || soilAmount <= 0 || borrowing;
 
   const setLoanToValue = async (depositAmount: number, soilAmount: number) => {
-    const depositValue = getPrice(deposit.token) * depositAmount;
-    const soilValue = getPrice("SOIL") * soilAmount;
+    const depositValue = prices[deposit.token] * depositAmount;
+    const soilValue = prices["SOIL"] * soilAmount;
     let loanToValue = soilValue / depositValue;
 
     loanToValue =
@@ -69,7 +69,8 @@ export const BorrowModal = () => {
   const changeHF = (value: number[]) => {
     _setLoanToValue(value[0]);
 
-    let s = value[0] * deposit.amount;
+    let s =
+      (value[0] * deposit.amount * prices[deposit.token]) / prices["SOIL"];
     s = isNaN(s) ? 0 : s;
     setSoilAmount(s);
   };
@@ -163,7 +164,7 @@ export const BorrowModal = () => {
                     setDeposit({
                       token: "WETH",
                       amount: 0,
-                      price: getPrice("WETH"),
+                      price: prices["WETH"],
                     })
                   }
                 >
@@ -175,7 +176,7 @@ export const BorrowModal = () => {
                     setDeposit({
                       token: "DAI",
                       amount: 0,
-                      price: getPrice("DAI"),
+                      price: prices["DAI"],
                     })
                   }
                 >
