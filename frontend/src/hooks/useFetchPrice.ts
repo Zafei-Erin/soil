@@ -35,16 +35,19 @@ export function useFetchPrice() {
     setPrices(newPrices);
   };
 
-  useEffect(() => {
+  const refreshPrices = () => {
     if (!isConnected || !walletProvider) {
+      console.log("refresh prices failed");
       return;
     }
     fetchPrices(walletProvider);
-  }, [isConnected, walletProvider]);
-
-  const getPrice = (token: Token) => {
-    return prices[token];
+    console.log("refresh prices success");
   };
 
-  return { getPrice, prices };
+  useEffect(() => {
+    refreshPrices();
+    setInterval(refreshPrices, 60 * 1000);
+  }, [isConnected, walletProvider]);
+
+  return { prices, refreshPrices };
 }
