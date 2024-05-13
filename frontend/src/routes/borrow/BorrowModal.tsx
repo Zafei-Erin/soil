@@ -26,14 +26,12 @@ import { DepositToken, tokenAddress } from "@/types/address";
 type Deposit = {
   token: DepositToken;
   amount: number;
-  price: number;
 };
 
 export const BorrowModal = () => {
   const [deposit, setDeposit] = useState<Deposit>({
     token: "WETH",
     amount: 0,
-    price: 0,
   });
   const [soilAmount, setSoilAmount] = useState<number>(0);
   const [loanToValue, _setLoanToValue] = useState<number>(0);
@@ -153,33 +151,24 @@ export const BorrowModal = () => {
         <div className="space-y-3">
           <h3 className="font-semibold">Deposit required</h3>
           <div className="flex gap-2">
-            <Select defaultValue="WETH">
+            <Select
+              defaultValue="WETH"
+              onValueChange={(token: DepositToken) => {
+                setDeposit((prev) => ({
+                  ...prev,
+                  token: token,
+                }));
+                _setLoanToValue(0);
+              }}
+            >
               <SelectTrigger className="bg-gray-100 flex items-center justify-between px-4 w-32 rounded-lg h-12 border border-gray-200">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem
-                  value="WETH"
-                  onClick={() =>
-                    setDeposit({
-                      token: "WETH",
-                      amount: 0,
-                      price: prices["WETH"],
-                    })
-                  }
-                >
+                <SelectItem value="WETH">
                   <div className="flex items-center px-4 w-30 h-10">WETH</div>
                 </SelectItem>
-                <SelectItem
-                  value="DAI"
-                  onClick={() =>
-                    setDeposit({
-                      token: "DAI",
-                      amount: 0,
-                      price: prices["DAI"],
-                    })
-                  }
-                >
+                <SelectItem value="DAI">
                   <div className="flex items-center px-4 w-30 h-10">DAI</div>
                 </SelectItem>
               </SelectContent>
