@@ -21,7 +21,7 @@ import { useFetchPrice } from "@/hooks/useFetchPrice";
 import { Slider } from "@/components/ui/slider";
 import SOIL from "@/abis/SOIL.json";
 import ERC20 from "@/abis/ERC20.json";
-import { DepositToken, tokenAddress } from "@/types/types";
+import { DepositToken, tokenAddress } from "@/types/address";
 
 type Deposit = {
   token: DepositToken;

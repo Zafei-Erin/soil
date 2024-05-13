@@ -7,7 +7,7 @@ import {
 import { Button } from "./ui/button";
 import ERC20 from "@/abis/ERC20.json";
 import { toast } from "./ui/use-toast";
-import { tokenAddress } from "@/types/types";
+import { tokenAddress } from "@/types/address";
 
 const MintWethButton = () => {
   const { isConnected, address } = useWeb3ModalAccount();
