@@ -21,7 +21,7 @@ import { useFetchPrice } from "@/hooks/useFetchPrice";
 import { Slider } from "@/components/ui/slider";
 import SOIL from "@/abis/SOIL.json";
 import ERC20 from "@/abis/ERC20.json";
-import { DepositToken, address } from "@/types/types";
+import { DepositToken, tokenAddress } from "@/types/types";
 
 type Deposit = {
   token: DepositToken;
@@ -36,38 +36,38 @@ export const BorrowModal = () => {
     price: 0,
   });
   const [soilAmount, setSoilAmount] = useState<number>(0);
-  const [healthFactor, _setHealthFactor] = useState<number>(0);
+  const [loanToValue, _setLoanToValue] = useState<number>(0);
   const [borrowing, setBorrowing] = useState<boolean>(false);
   const { getPrice } = useFetchPrice();
   const { isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
   const disabled =
-    healthFactor < 1.5 || deposit.amount <= 0 || soilAmount <= 0 || borrowing;
+    loanToValue > 0.8 || deposit.amount <= 0 || soilAmount <= 0 || borrowing;
 
-  const setHealthFactor = async (depositAmount: number, soilAmount: number) => {
+  const setLoanToValue = async (depositAmount: number, soilAmount: number) => {
     const depositValue = getPrice(deposit.token) * depositAmount;
     const soilValue = getPrice("SOIL") * soilAmount;
-    let healthFactor = depositValue / soilValue;
+    let loanToValue = soilValue / depositValue;
 
-    healthFactor =
-      isNaN(healthFactor) || healthFactor == Infinity ? 0 : healthFactor;
-    _setHealthFactor(healthFactor);
+    loanToValue =
+      isNaN(loanToValue) || loanToValue == Infinity ? 0 : loanToValue;
+    _setLoanToValue(loanToValue);
   };
   const changeDepositAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     let t = parseFloat(e.target.value);
     t = isNaN(t) ? 0 : t;
     setDeposit((prev) => ({ ...prev, amount: t }));
-    setHealthFactor(t, soilAmount);
+    setLoanToValue(t, soilAmount);
   };
   const changeSoilAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     let s = parseFloat(e.target.value);
     s = isNaN(s) ? 0 : s;
     setSoilAmount(s);
-    setHealthFactor(deposit.amount, s);
+    setLoanToValue(deposit.amount, s);
   };
   const changeHF = (value: number[]) => {
-    _setHealthFactor(value[0]);
+    _setLoanToValue(value[0]);
 
     let s = value[0] * deposit.amount;
     s = isNaN(s) ? 0 : s;
@@ -80,9 +80,9 @@ export const BorrowModal = () => {
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
 
-    const SOILContract = new Contract(address["SOIL"], SOIL.abi, signer);
+    const SOILContract = new Contract(tokenAddress["SOIL"], SOIL.abi, signer);
     const ERC20Contract = new Contract(
-      address[deposit.token],
+      tokenAddress[deposit.token],
       ERC20.abi,
       signer
     );
@@ -90,7 +90,7 @@ export const BorrowModal = () => {
     try {
       // approval
       const approvalTxn = await ERC20Contract.approve(
-        address["SOIL"],
+        tokenAddress["SOIL"],
         parseUnits(deposit.amount.toString())
       );
       approvalTxn.wait();
@@ -101,7 +101,7 @@ export const BorrowModal = () => {
     try {
       // depositAndMint
       const depositAndMintTxn = await SOILContract.depositAndMint(
-        address[deposit.token],
+        tokenAddress[deposit.token],
         parseUnits(deposit.amount.toString()),
         parseUnits(soilAmount.toString())
       );
@@ -112,7 +112,7 @@ export const BorrowModal = () => {
   };
 
   const borrow = async () => {
-    if (healthFactor < 1.5 || deposit.amount <= 0 || soilAmount <= 0) {
+    if (loanToValue > 0.8 || deposit.amount <= 0 || soilAmount <= 0) {
       return;
     }
     setBorrowing(true);
@@ -210,27 +210,27 @@ export const BorrowModal = () => {
         {/* Health Factor */}
       </div>
       <div className="space-y-3">
-        <h3 className="font-semibold">Health Factor %</h3>
+        <h3 className="font-semibold">LoanToValue %</h3>
         <div>
           <input
-            value={healthFactor == 0 ? "" : (healthFactor * 100).toFixed(2)}
+            value={loanToValue == 0 ? "" : (loanToValue * 100).toFixed(2)}
             disabled
             className="bg-gray-100 h-12 w-30 rounded-lg border border-gray-200 px-4 appearance-none focus:outline-none"
           />
           <p
             className={cn(
               "text-xs text-red-600 mt-2 hidden",
-              healthFactor > 0 && healthFactor < 1.5 && "block"
+              loanToValue > 0.8 && "block"
             )}
           >
-            Health Factor must be greater than 150% to place a transaction
+            LoanToValue must be less than 80% to place a transaction
           </p>
         </div>
         <Slider
           defaultValue={[0]}
-          value={[healthFactor]}
-          max={200}
-          min={1.5}
+          value={[loanToValue]}
+          max={1}
+          min={0}
           step={0.01}
           onValueChange={changeHF}
         />

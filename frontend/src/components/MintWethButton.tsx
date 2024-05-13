@@ -7,11 +7,12 @@ import {
 import { Button } from "./ui/button";
 import ERC20 from "@/abis/ERC20.json";
 import { toast } from "./ui/use-toast";
+import { tokenAddress } from "@/types/types";
 
 const MintWethButton = () => {
   const { isConnected, address } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
-  const WETHAddress = import.meta.env.VITE_WETH;
+  const WETHAddress = tokenAddress["WETH"];
   const mintWETH = async () => {
     if (!isConnected || !walletProvider) throw Error("User disconnected");
 
