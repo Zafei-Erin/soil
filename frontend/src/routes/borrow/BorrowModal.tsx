@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, roundTo } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useFetchPrice } from "@/hooks/useFetchPrice";
@@ -70,6 +70,7 @@ export const BorrowModal = () => {
     let s =
       (value[0] * deposit.amount * prices[deposit.token]) / prices["SOIL"];
     s = isNaN(s) ? 0 : s;
+    s = roundTo(s, 2);
     setSoilAmount(s);
   };
 
@@ -173,12 +174,21 @@ export const BorrowModal = () => {
                 </SelectItem>
               </SelectContent>
             </Select>
-            <input
-              type="number"
-              inputMode="decimal"
-              onChange={changeDepositAmount}
-              className="bg-gray-100 h-12 w-30 rounded-lg border border-gray-200 px-4 appearance-none focus:outline-none"
-            />
+
+            <div className="bg-gray-100 h-12 w-30 rounded-lg border border-gray-200 px-4 py-1">
+              <input
+                type="number"
+                inputMode="decimal"
+                onChange={changeDepositAmount}
+                className="bg-transparent appearance-none focus:outline-none"
+              />
+              <p className="text-xs text-gray-600">
+                $
+                {prices[deposit.token].toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -189,12 +199,20 @@ export const BorrowModal = () => {
             <div className="bg-gray-100 flex items-center justify-center px-4 w-32 rounded-lg h-12 border border-gray-200">
               SOIL
             </div>
-            <input
-              value={soilAmount == 0 ? "" : soilAmount}
-              inputMode="decimal"
-              onChange={changeSoilAmount}
-              className="bg-gray-100 h-12 w-30 rounded-lg border border-gray-200 px-4 appearance-none focus:outline-none"
-            />
+            <div className="bg-gray-100 h-12 w-30 rounded-lg border border-gray-200 px-4 py-1">
+              <input
+                value={soilAmount == 0 ? "" : soilAmount}
+                inputMode="decimal"
+                onChange={changeSoilAmount}
+                className="bg-transparent  appearance-none focus:outline-none"
+              />
+              <p className="text-xs text-gray-600">
+                $
+                {prices["SOIL"].toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}
+              </p>
+            </div>
           </div>
         </div>
         {/* Health Factor */}
