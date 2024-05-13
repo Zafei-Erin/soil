@@ -22,6 +22,7 @@ import { Slider } from "@/components/ui/slider";
 import SOIL from "@/abis/SOIL.json";
 import ERC20 from "@/abis/ERC20.json";
 import { DepositToken, tokenAddress } from "@/types/address";
+import { useFetchBalances } from "@/hooks/useFetchBalance";
 
 type Deposit = {
   token: DepositToken;
@@ -37,11 +38,16 @@ export const BorrowModal = () => {
   const [loanToValue, _setLoanToValue] = useState<number>(0);
   const [borrowing, setBorrowing] = useState<boolean>(false);
   const { prices } = useFetchPrice();
+  const { balances } = useFetchBalances();
   const { isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
   const disabled =
-    loanToValue > 0.8 || deposit.amount <= 0 || soilAmount <= 0 || borrowing;
+    loanToValue > 0.8 ||
+    deposit.amount <= 0 ||
+    soilAmount <= 0 ||
+    borrowing ||
+    deposit.amount > balances[deposit.token];
 
   const setLoanToValue = async (depositAmount: number, soilAmount: number) => {
     const depositValue = prices[deposit.token] * depositAmount;
@@ -182,14 +188,27 @@ export const BorrowModal = () => {
                 onChange={changeDepositAmount}
                 className="bg-transparent appearance-none focus:outline-none"
               />
-              <p className="text-xs text-gray-600">
-                $
-                {prices[deposit.token].toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })}
-              </p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-gray-600">
+                  price: $
+                  {prices[deposit.token].toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
+                <p className="text-xs text-gray-600">
+                  balance: {balances[deposit.token]}
+                </p>
+              </div>
             </div>
           </div>
+          <p
+            className={cn(
+              "text-xs text-red-600 mt-2 hidden",
+              deposit.amount > balances[deposit.token] && "block"
+            )}
+          >
+            You dont have enough balance!
+          </p>
         </div>
 
         {/* borrow */}
@@ -206,12 +225,17 @@ export const BorrowModal = () => {
                 onChange={changeSoilAmount}
                 className="bg-transparent  appearance-none focus:outline-none"
               />
-              <p className="text-xs text-gray-600">
-                $
-                {prices["SOIL"].toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })}
-              </p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-gray-600">
+                  price: $
+                  {prices["SOIL"].toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
+                <p className="text-xs text-gray-600">
+                  balance: {balances["SOIL"]}
+                </p>
+              </div>
             </div>
           </div>
         </div>
