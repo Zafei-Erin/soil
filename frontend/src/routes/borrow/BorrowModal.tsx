@@ -1,23 +1,24 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import { BrowserProvider, Contract, parseUnits } from "ethers";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+import ERC20 from "@/abis/ERC20.json";
+import SOIL from "@/abis/SOIL.json";
 import { DepositComponent } from "@/components/DepositComponent";
 import { Button } from "@/components/ui/button";
-import { cn, roundTo } from "@/lib/utils";
-import { toast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
-import { useFetchPrice } from "@/hooks/useFetchPrice";
 import { Slider } from "@/components/ui/slider";
-import SOIL from "@/abis/SOIL.json";
-import ERC20 from "@/abis/ERC20.json";
+import { ToastAction } from "@/components/ui/toast";
+import { toast } from "@/components/ui/use-toast";
+import { useBalances } from "@/hooks/useBalances";
+import { usePrices } from "@/hooks/usePrices";
+import { cn, roundTo } from "@/lib/utils";
 import { DepositToken, tokenAddress } from "@/types/address";
-import { useFetchBalances } from "@/hooks/useFetchBalance";
 
-type Deposit = {
+export type Deposit = {
   token: DepositToken;
   amount: number;
 };
@@ -30,8 +31,8 @@ export const BorrowModal = () => {
   const [soilAmount, setSoilAmount] = useState<number>(0);
   const [loanToValue, _setLoanToValue] = useState<number>(0);
   const [borrowing, setBorrowing] = useState<boolean>(false);
-  const { prices } = useFetchPrice();
-  const { balances, refreshBalances } = useFetchBalances();
+  const { prices } = usePrices();
+  const { balances, refreshBalances } = useBalances();
   const { isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
@@ -144,7 +145,7 @@ export const BorrowModal = () => {
   };
 
   return (
-    <div className="max-w-3xl h-fit flex flex-col gap-8 max-md:items-center justify-between bg-white mx-4 p-8 rounded-lg border border-gray-200">
+    <div className="max-w-3xl w-full h-fit flex flex-col gap-8 max-md:items-center justify-between bg-white mx-4 p-8 rounded-lg border border-gray-200">
       <h1 className="text-2xl font-semibold">Borrow SOIL</h1>
 
       <div className="md:flex max-md:space-y-6 justify-between md:gap-3">
@@ -155,12 +156,12 @@ export const BorrowModal = () => {
           <DepositComponent
             status="deposit"
             onTokenChange={(token: DepositToken) => {
-                setDeposit((prev) => ({
-                  ...prev,
-                  token: token,
-                }));
-                _setLoanToValue(0);
-              }}
+              setDeposit((prev) => ({
+                ...prev,
+                token: token,
+              }));
+              _setLoanToValue(0);
+            }}
             onAmountChange={changeDepositAmount}
             deposit={deposit}
             errorMessage={
@@ -199,9 +200,10 @@ export const BorrowModal = () => {
             </div>
           </div>
         </div>
-        {/* Health Factor */}
       </div>
-      <div className="space-y-3">
+
+      {/* LoanToValue */}
+      <div className="space-y-3 w-full">
         <h3 className="font-semibold">LoanToValue %</h3>
         <div>
           <input

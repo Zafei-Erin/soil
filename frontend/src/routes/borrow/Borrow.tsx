@@ -1,5 +1,6 @@
 import MintWethButton from "@/components/MintWethButton";
 import { BorrowModal } from "./BorrowModal";
+import { InformativeModal } from "./InformativeModal";
 
 export const Borrow = () => {
   return (
@@ -11,8 +12,9 @@ export const Borrow = () => {
         </div>
         <MintWethButton />
       </div>
-      <div className="flex items-center justify-center">
+      <div className="flex flex-col gap-3 items-center justify-center">
         <BorrowModal />
+        <InformativeModal />
       </div>
     </div>
   );
