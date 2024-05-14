@@ -12,7 +12,7 @@ function App() {
   return (
     <div>
       <Header />
-      <div className="w-full h-[calc(100vh-5rem)]">
+      <div>
         <Routes>
           <Route path="/" element={<Borrow />} />
           <Route path="/dashboard" element={<DashBoard />} />
