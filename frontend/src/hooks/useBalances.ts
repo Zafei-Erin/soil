@@ -10,7 +10,7 @@ import { Eip1193Provider } from "ethers";
 import { Balances, DEFAULT_BALANCES } from "@/types/balance";
 import ERC20 from "@/abis/ERC20.json";
 
-export function useFetchBalances() {
+export function useBalances() {
   const [balances, setBalances] = useState<Balances>(DEFAULT_BALANCES);
   const { isConnected, address } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();

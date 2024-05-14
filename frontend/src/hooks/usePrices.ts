@@ -10,7 +10,7 @@ import { JsonRpcSigner } from "ethers";
 import { DEFAULT_PRICES, Prices, priceAddress } from "@/types/price";
 import { Eip1193Provider } from "ethers";
 
-export function useFetchPrice() {
+export function usePrices() {
   const [prices, setPrices] = useState<Prices>(DEFAULT_PRICES);
   const { isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
@@ -37,11 +37,11 @@ export function useFetchPrice() {
 
   const refreshPrices = () => {
     if (!isConnected || !walletProvider) {
-      console.log("refresh prices failed");
+      // console.log("refresh prices failed");
       return;
     }
     fetchPrices(walletProvider);
-    console.log("refresh prices success");
+    // console.log("refresh prices success");
   };
 
   useEffect(() => {
