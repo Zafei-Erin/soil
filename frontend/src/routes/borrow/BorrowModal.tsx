@@ -5,14 +5,7 @@ import {
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import { BrowserProvider, Contract, parseUnits } from "ethers";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { DepositComponent } from "@/components/DepositComponent";
 import { Button } from "@/components/ui/button";
 import { cn, roundTo } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
@@ -158,58 +151,24 @@ export const BorrowModal = () => {
         {/* deposit */}
         <div className="space-y-3">
           <h3 className="font-semibold">Deposit required</h3>
-          <div className="flex gap-2">
-            <Select
-              defaultValue="WETH"
-              onValueChange={(token: DepositToken) => {
+
+          <DepositComponent
+            status="deposit"
+            onTokenChange={(token: DepositToken) => {
                 setDeposit((prev) => ({
                   ...prev,
                   token: token,
                 }));
                 _setLoanToValue(0);
               }}
-            >
-              <SelectTrigger className="bg-gray-100 flex items-center justify-between px-4 w-32 rounded-lg h-12 border border-gray-200">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="WETH">
-                  <div className="flex items-center px-4 w-30 h-10">WETH</div>
-                </SelectItem>
-                <SelectItem value="DAI">
-                  <div className="flex items-center px-4 w-30 h-10">DAI</div>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-
-            <div className="bg-gray-100 h-12 w-30 rounded-lg border border-gray-200 px-4 py-1">
-              <input
-                type="number"
-                inputMode="decimal"
-                onChange={changeDepositAmount}
-                className="bg-transparent appearance-none focus:outline-none"
-              />
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-gray-600">
-                  price: $
-                  {prices[deposit.token].toLocaleString(undefined, {
-                    maximumFractionDigits: 2,
-                  })}
-                </p>
-                <p className="text-xs text-gray-600">
-                  balance: {balances[deposit.token]}
-                </p>
-              </div>
-            </div>
-          </div>
-          <p
-            className={cn(
-              "text-xs text-red-600 mt-2 hidden",
-              deposit.amount > balances[deposit.token] && "block"
-            )}
-          >
-            You dont have enough balance!
-          </p>
+            onAmountChange={changeDepositAmount}
+            deposit={deposit}
+            errorMessage={
+              deposit.amount > balances[deposit.token]
+                ? "You dont have enough balance!"
+                : ""
+            }
+          />
         </div>
 
         {/* borrow */}
