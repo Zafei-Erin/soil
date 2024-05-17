@@ -17,6 +17,7 @@ import { useBalances } from "@/hooks/useBalances";
 import { usePrices } from "@/hooks/usePrices";
 import { cn, roundTo } from "@/lib/utils";
 import { DepositToken, tokenAddress } from "@/types/address";
+import { SoilComponent } from "@/components/SoilComponent";
 
 export type Deposit = {
   token: DepositToken;
@@ -169,30 +170,10 @@ export const BorrowModal = () => {
         {/* borrow */}
         <div className="space-y-3">
           <h3 className="font-semibold">Borrow</h3>
-          <div className="flex gap-2">
-            <div className="bg-gray-100 flex items-center justify-center px-4 w-32 rounded-lg h-12 border border-gray-200">
-              SOIL
-            </div>
-            <div className="bg-gray-100 h-12 w-30 rounded-lg border border-gray-200 px-4 py-1">
-              <input
-                value={soilAmount == 0 ? "" : soilAmount}
-                inputMode="decimal"
-                onChange={changeSoilAmount}
-                className="bg-transparent  appearance-none focus:outline-none"
-              />
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-gray-600">
-                  price: $
-                  {prices["SOIL"].toLocaleString(undefined, {
-                    maximumFractionDigits: 2,
-                  })}
-                </p>
-                <p className="text-xs text-gray-600">
-                  balance: {balances["SOIL"]}
-                </p>
-              </div>
-            </div>
-          </div>
+          <SoilComponent
+            amount={soilAmount}
+            onAmountChange={changeSoilAmount}
+          />
         </div>
       </div>
 
