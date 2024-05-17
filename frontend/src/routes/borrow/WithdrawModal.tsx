@@ -9,9 +9,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { toast } from "@/components/ui/use-toast";
 import { useHealthFactor } from "@/hooks/useHealthFactor";
 import { usePosition } from "@/hooks/usePosition";
 import { usePrices } from "@/hooks/usePrices";
+import { useWithDraw } from "@/hooks/useWithdraw";
 import { DepositToken } from "@/types/address";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
@@ -30,6 +32,8 @@ export const WithdrawModal: React.FC = () => {
   const { healthFactor } = useHealthFactor();
   const { prices } = usePrices();
   const { position } = usePosition();
+  const { withDraw } = useWithDraw();
+
   const estimatedRemainDeposit =
     position.deposited - prices[withdraw.token] * withdraw.amount;
   const estimatedHealthFactor =
@@ -50,6 +54,24 @@ export const WithdrawModal: React.FC = () => {
     t = isNaN(t) ? 0 : t;
     setDeposit((prev) => ({ ...prev, amount: t }));
   };
+
+  const withDrawFormat = async () => {
+    try {
+      await withDraw(withdraw.token, withdraw.amount);
+      toast({
+        duration: 1500,
+        title: "Withdraw Successfully",
+        description: `You have Withdraw ${withdraw.amount} ${withdraw.token}!`,
+      });
+    } catch (error) {
+      toast({
+        duration: 1500,
+        title: "Withdraw Failed",
+        description: `${error}`,
+      });
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -102,7 +124,10 @@ export const WithdrawModal: React.FC = () => {
           </div>
         </div>
 
-        <DialogFooter className="sm:justify-start">
+        <DialogFooter className="sm:justify-end">
+          <Button disabled={disabled} onClick={withDrawFormat}>
+            WithDraw
+          </Button>
           <DialogClose asChild>
             <Button type="button" variant="secondary">
               Close
