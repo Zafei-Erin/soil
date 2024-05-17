@@ -1,6 +1,6 @@
-import { usePosition } from "@/hooks/usePosition";
 import { useHealthFactor } from "@/hooks/useHealthFactor";
-import { Button } from "@/components/ui/button";
+import { usePosition } from "@/hooks/usePosition";
+import { RepayModal } from "./RepayModal";
 import { WithdrawModal } from "./WithdrawModal";
 
 export const InformativeModal = () => {
@@ -44,9 +44,7 @@ export const InformativeModal = () => {
               })}
             </div>
           </div>
-          <Button variant={"secondary"} className="w-32">
-            Repay
-          </Button>
+          <RepayModal />
         </div>
       </div>
     </div>
