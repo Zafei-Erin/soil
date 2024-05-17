@@ -33,7 +33,7 @@ export const SoilComponent: React.FC<Props> = ({
             value={amount == 0 ? "" : amount}
             inputMode="decimal"
             type="number"
-            onBeforeInput={(e) => {
+            onBeforeInput={(e: React.CompositionEvent<HTMLInputElement>) => {
               if (e.data.includes("-") || e.data.includes("e")) {
                 e.preventDefault();
               }
