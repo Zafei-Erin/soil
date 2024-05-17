@@ -30,9 +30,20 @@ export const WithdrawModal: React.FC = () => {
   const { healthFactor } = useHealthFactor();
   const { prices } = usePrices();
   const { position } = usePosition();
+  const estimatedRemainDeposit =
+    position.deposited - prices[withdraw.token] * withdraw.amount;
   const estimatedHealthFactor =
-    (position.deposited - prices[withdraw.token] * withdraw.amount) /
-    position.borrowed;
+    (Math.max(estimatedRemainDeposit, 0) / position.borrowed) * 0.67;
+
+  const disabled = estimatedHealthFactor < 1 || estimatedRemainDeposit < 0;
+
+  let errorMessage = "";
+  if (estimatedHealthFactor < 1) {
+    errorMessage = "Remaining collateral cannot support the loan";
+  }
+  if (estimatedRemainDeposit < 0) {
+    errorMessage = "Exceeds your balance";
+  }
 
   const onAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let t = parseFloat(e.target.value);
@@ -53,7 +64,6 @@ export const WithdrawModal: React.FC = () => {
         </DialogHeader>
 
         <DepositComponent
-          status="withdraw"
           onTokenChange={(token: DepositToken) => {
             setDeposit((prev) => ({
               ...prev,
@@ -62,6 +72,8 @@ export const WithdrawModal: React.FC = () => {
           }}
           onAmountChange={onAmountChange}
           deposit={withdraw}
+          isError={disabled}
+          errorMessage={errorMessage}
         />
 
         <div className="bg-gray-100 w-full flex flex-col items-center px-4 rounded-lg border border-gray-200">

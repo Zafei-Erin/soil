@@ -58,11 +58,9 @@ export const BorrowModal = () => {
     setDeposit((prev) => ({ ...prev, amount: t }));
     setLoanToValue(t, soilAmount);
   };
-  const changeSoilAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let s = parseFloat(e.target.value);
-    s = isNaN(s) ? 0 : s;
-    setSoilAmount(s);
-    setLoanToValue(deposit.amount, s);
+  const changeSoilAmount = (amount: number) => {
+    setSoilAmount(amount);
+    setLoanToValue(deposit.amount, amount);
   };
   const changeHF = (value: number[]) => {
     _setLoanToValue(value[0]);
@@ -154,7 +152,6 @@ export const BorrowModal = () => {
           <h3 className="font-semibold">Deposit required</h3>
 
           <DepositComponent
-            status="deposit"
             onTokenChange={(token: DepositToken) => {
               setDeposit((prev) => ({
                 ...prev,
@@ -164,11 +161,8 @@ export const BorrowModal = () => {
             }}
             onAmountChange={changeDepositAmount}
             deposit={deposit}
-            errorMessage={
-              deposit.amount > balances[deposit.token]
-                ? "You dont have enough balance!"
-                : ""
-            }
+            isError={deposit.amount > balances[deposit.token]}
+            errorMessage={"You dont have enough balance!"}
           />
         </div>
 

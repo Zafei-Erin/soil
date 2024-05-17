@@ -11,8 +11,8 @@ import { Deposit } from "@/routes/borrow/BorrowModal";
 import { DepositToken } from "@/types/address";
 
 type Props = {
-  status: "deposit" | "withdraw";
   deposit: Deposit;
+  isError?: boolean;
   errorMessage?: string;
   onTokenChange?: (token: DepositToken) => void;
   onAmountChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -21,6 +21,7 @@ type Props = {
 export const DepositComponent: React.FC<Props> = ({
   onTokenChange,
   onAmountChange,
+  isError,
   deposit,
   errorMessage,
 }) => {
@@ -52,7 +53,9 @@ export const DepositComponent: React.FC<Props> = ({
           <input
             type="number"
             inputMode="decimal"
+            pattern="\d+(\.\d*)?"
             onChange={onAmountChange}
+            
             className="bg-transparent appearance-none focus:outline-none"
           />
           <div className="flex items-center justify-between">
@@ -69,7 +72,7 @@ export const DepositComponent: React.FC<Props> = ({
         </div>
       </div>
 
-      {errorMessage && (
+      {isError && (
         <p className="text-xs text-red-600 mt-2 block">{errorMessage}</p>
       )}
     </div>
