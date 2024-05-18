@@ -53,11 +53,9 @@ export const BorrowModal = () => {
       isNaN(loanToValue) || loanToValue == Infinity ? 0 : loanToValue;
     _setLoanToValue(loanToValue);
   };
-  const changeDepositAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let t = parseFloat(e.target.value);
-    t = isNaN(t) ? 0 : t;
-    setDeposit((prev) => ({ ...prev, amount: t }));
-    setLoanToValue(t, soilAmount);
+  const changeDepositAmount = (amount: number) => {
+    setDeposit((prev) => ({ ...prev, amount: amount }));
+    setLoanToValue(amount, soilAmount);
   };
   const changeSoilAmount = (amount: number) => {
     setSoilAmount(amount);
@@ -170,10 +168,7 @@ export const BorrowModal = () => {
         {/* borrow */}
         <div className="space-y-3">
           <h3 className="font-semibold">Borrow</h3>
-          <SoilComponent
-            amount={soilAmount}
-            onAmountChange={changeSoilAmount}
-          />
+          <SoilComponent onAmountChange={changeSoilAmount} />
         </div>
       </div>
 

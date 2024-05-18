@@ -1,27 +1,21 @@
 import { useBalances } from "@/hooks/useBalances";
 import { usePrices } from "@/hooks/usePrices";
+import { NumberInput } from "./NumberInput";
 
 type Props = {
-  amount: number;
   isError?: boolean;
   errorMessage?: string;
   onAmountChange?: (amount: number) => void;
 };
 
 export const SoilComponent: React.FC<Props> = ({
-  amount,
   onAmountChange,
   isError,
   errorMessage,
 }) => {
   const { prices } = usePrices();
   const { balances } = useBalances();
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let num = Number(e.target.value);
-    num = isNaN(num) ? 0 : num;
-    num = Math.max(num, 0);
-    onAmountChange?.(num);
-  };
+
   return (
     <div>
       <div className="flex gap-2">
@@ -29,18 +23,7 @@ export const SoilComponent: React.FC<Props> = ({
           SOIL1
         </div>
         <div className="bg-gray-100 h-12 w-30 rounded-lg border border-gray-200 px-4 py-1">
-          <input
-            value={amount == 0 ? "" : amount}
-            inputMode="decimal"
-            type="number"
-            onBeforeInput={(e: React.CompositionEvent<HTMLInputElement>) => {
-              if (e.data.includes("-") || e.data.includes("e")) {
-                e.preventDefault();
-              }
-            }}
-            onChange={onChange}
-            className="bg-transparent appearance-none focus:outline-none"
-          />
+          <NumberInput onAmountChange={onAmountChange} />
           <div className="flex items-center justify-between">
             <p className="text-xs text-gray-600">
               price: $

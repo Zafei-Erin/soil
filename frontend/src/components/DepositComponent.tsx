@@ -9,13 +9,14 @@ import { useBalances } from "@/hooks/useBalances";
 import { usePrices } from "@/hooks/usePrices";
 import { Deposit } from "@/routes/borrow/BorrowModal";
 import { DepositToken } from "@/types/address";
+import { NumberInput } from "./NumberInput";
 
 type Props = {
   deposit: Deposit;
   isError?: boolean;
   errorMessage?: string;
   onTokenChange?: (token: DepositToken) => void;
-  onAmountChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onAmountChange?: (amount: number) => void;
 };
 
 export const DepositComponent: React.FC<Props> = ({
@@ -50,14 +51,7 @@ export const DepositComponent: React.FC<Props> = ({
         </Select>
 
         <div className="bg-gray-100 h-12 w-full rounded-lg border border-gray-200 px-4 py-1">
-          <input
-            type="number"
-            inputMode="decimal"
-            pattern="\d+(\.\d*)?"
-            onChange={onAmountChange}
-            
-            className="bg-transparent appearance-none focus:outline-none"
-          />
+          <NumberInput onAmountChange={onAmountChange} />
           <div className="flex items-center justify-between">
             <p className="text-xs text-gray-600">
               price: $
