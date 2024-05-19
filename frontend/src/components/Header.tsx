@@ -8,6 +8,7 @@ export const Header = () => {
       <div className="flex gap-3 items-center">
         <Link to="/">Mint and Borrow</Link>
         <Link to="/dashboard">DashBoard</Link>
+        <Link to="/liquidate">Liquidate</Link>
         <ConnectButton />
       </div>
     </div>
