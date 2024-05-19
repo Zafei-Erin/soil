@@ -1,18 +1,30 @@
+import ConnectButton from "@/components/ConnectButton";
 import { usePosition } from "@/hooks/usePosition";
+import { useWeb3ModalAccount } from "@web3modal/ethers/react";
+import { HealthFactor } from "./HealthFactor";
 import { RepayModal } from "./RepayModal";
 import { WithdrawModal } from "./WithdrawModal";
-import { HealthFactor } from "./HealthFactor";
 
 export const Dashboard = () => {
   const { position } = usePosition();
+  const { isConnected } = useWeb3ModalAccount();
   return (
-    <div className="flex flex-col gap-3 items-center justify-center h-full bg-gray-100 pb-16">
-      <div className="max-w-sm w-full h-fit gap-8 max-md:items-center justify-between bg-white mx-4 p-8 rounded-lg border border-gray-200">
-        <HealthFactor />
+    <div className="h-full py-16">
+      <div className="flex flex-col items-center justify-center">
+        <div className="relative w-96 h-[30rem] bg-white rounded-lg border border-gray-200">
+          {!isConnected && (
+            <div className="backdrop-blur-md w-full h-full absolute bg-white/60 rounded-lg flex flex-col gap-6 items-center justify-center">
+              <h1 className="text-2xl font-semibold">
+                Please connect your wallet
+              </h1>
+              <ConnectButton />
+            </div>
+          )}
 
-        <div className="space-y-3 mt-6">
-          <div className="flex items-center justify-between">
-            <div>
+          <div className=" mx-4 p-8 ">
+            <HealthFactor />
+
+            <div className="space-y-3 mt-10">
               <h3 className="font-semibold">Collateral deposited</h3>
               <div>
                 $
@@ -21,12 +33,10 @@ export const Dashboard = () => {
                   minimumFractionDigits: 2,
                 })}
               </div>
+              <WithdrawModal className="w-full" />
             </div>
-            <WithdrawModal />
-          </div>
 
-          <div className="flex items-center justify-between">
-            <div>
+            <div className="space-y-3 mt-10">
               <h3 className="font-semibold">Borrow</h3>
               <div>
                 $
@@ -35,8 +45,8 @@ export const Dashboard = () => {
                   minimumFractionDigits: 2,
                 })}
               </div>
+              <RepayModal className="w-full" />
             </div>
-            <RepayModal />
           </div>
         </div>
       </div>

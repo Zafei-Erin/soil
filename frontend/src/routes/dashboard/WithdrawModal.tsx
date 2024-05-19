@@ -14,6 +14,7 @@ import { useHealthFactor } from "@/hooks/useHealthFactor";
 import { usePosition } from "@/hooks/usePosition";
 import { usePrices } from "@/hooks/usePrices";
 import { useWithDraw } from "@/hooks/useWithdraw";
+import { cn } from "@/lib/utils";
 import { DepositToken } from "@/types/address";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
@@ -23,7 +24,11 @@ type Deposit = {
   amount: number;
 };
 
-export const WithdrawModal: React.FC = () => {
+type Props = {
+  className?: string;
+};
+
+export const WithdrawModal: React.FC<Props> = ({ className }) => {
   const [withdraw, setDeposit] = useState<Deposit>({
     token: "WETH",
     amount: 0,
@@ -73,7 +78,7 @@ export const WithdrawModal: React.FC = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"secondary"} className="w-32">
+        <Button variant={"secondary"} className={cn("w-32", className)}>
           Withdraw
         </Button>
       </DialogTrigger>

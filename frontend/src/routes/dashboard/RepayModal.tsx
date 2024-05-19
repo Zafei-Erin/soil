@@ -15,10 +15,15 @@ import { useHealthFactor } from "@/hooks/useHealthFactor";
 import { usePosition } from "@/hooks/usePosition";
 import { usePrices } from "@/hooks/usePrices";
 import { useRepay } from "@/hooks/useRepay";
+import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 
-export const RepayModal: React.FC = () => {
+type Props = {
+  className?: string;
+};
+
+export const RepayModal: React.FC<Props> = ({ className }) => {
   const [amount, setAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -62,7 +67,7 @@ export const RepayModal: React.FC = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"secondary"} className="w-32">
+        <Button variant={"secondary"} className={cn("w-32", className)}>
           Repay
         </Button>
       </DialogTrigger>
