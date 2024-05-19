@@ -13,7 +13,7 @@ function App() {
   return (
     <div>
       <Header />
-      <div>
+      <div className="h-[calc(100dvh-5rem)] w-full bg-gray-100">
         <Routes>
           <Route path="/" element={<Borrow />} />
           <Route path="/dashboard" element={<Dashboard />} />
