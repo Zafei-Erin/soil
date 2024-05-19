@@ -73,7 +73,6 @@ export const RepayModal: React.FC = () => {
         </DialogHeader>
 
         <SoilComponent
-          amount={amount}
           onAmountChange={setAmount}
           isError={error}
           errorMessage="Exceeds your debt"

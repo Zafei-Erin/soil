@@ -49,10 +49,8 @@ export const WithdrawModal: React.FC = () => {
     errorMessage = "Exceeds your balance";
   }
 
-  const onAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let t = parseFloat(e.target.value);
-    t = isNaN(t) ? 0 : t;
-    setDeposit((prev) => ({ ...prev, amount: t }));
+  const onAmountChange = (amount: number) => {
+    setDeposit((prev) => ({ ...prev, amount: amount }));
   };
 
   const withDrawFormat = async () => {
