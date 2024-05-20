@@ -3,12 +3,14 @@ import { usePrices } from "@/hooks/usePrices";
 import { NumberInput } from "./NumberInput";
 
 type Props = {
+  amount: number;
   isError?: boolean;
   errorMessage?: string;
   onAmountChange?: (amount: number) => void;
 };
 
 export const SoilComponent: React.FC<Props> = ({
+  amount,
   onAmountChange,
   isError,
   errorMessage,
@@ -23,7 +25,7 @@ export const SoilComponent: React.FC<Props> = ({
           SOIL1
         </div>
         <div className="bg-gray-100 h-12 w-30 rounded-lg border border-gray-200 px-4 py-1">
-          <NumberInput onAmountChange={onAmountChange} />
+          <NumberInput amount={amount} onAmountChange={onAmountChange} />
           <div className="flex items-center justify-between">
             <p className="text-xs text-gray-600">
               price: $

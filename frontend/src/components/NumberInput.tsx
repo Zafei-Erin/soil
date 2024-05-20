@@ -5,6 +5,7 @@ type Props = Omit<
   ComponentProps<"input">,
   "inputMode" | "type" | "ref" | "onBeforeInput" | "onChange"
 > & {
+  amount?: number;
   onAmountChange?: (amount: number) => void;
 };
 
@@ -13,6 +14,7 @@ const VALID_FLOAT_REGEX = /^\d*\.?\d*$/;
 export const NumberInput: React.FC<Props> = ({
   onAmountChange,
   className,
+  amount,
   ...props
 }) => {
   const [value, setValue] = useState<number>(0);
@@ -21,6 +23,7 @@ export const NumberInput: React.FC<Props> = ({
   return (
     <input
       {...props}
+      value={amount || undefined}
       ref={inputRef}
       type="text"
       inputMode="decimal"

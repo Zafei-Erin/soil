@@ -169,7 +169,10 @@ export const BorrowModal = () => {
         {/* borrow */}
         <div className="space-y-3">
           <h3 className="font-semibold">Borrow</h3>
-          <SoilComponent onAmountChange={changeSoilAmount} />
+          <SoilComponent
+            amount={soilAmount}
+            onAmountChange={changeSoilAmount}
+          />
         </div>
       </div>
 
