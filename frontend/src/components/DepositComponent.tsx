@@ -60,7 +60,11 @@ export const DepositComponent: React.FC<Props> = ({
               })}
             </p>
             <p className="text-xs text-gray-600">
-              balance: {balances[deposit.token]}
+              balance:{" "}
+              {balances[deposit.token].toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </p>
           </div>
         </div>
