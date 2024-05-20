@@ -3,7 +3,7 @@ import { usePrices } from "@/hooks/usePrices";
 import { NumberInput } from "./NumberInput";
 
 type Props = {
-  amount: number;
+  amount?: number;
   isError?: boolean;
   errorMessage?: string;
   onAmountChange?: (amount: number) => void;
