@@ -18,6 +18,7 @@ import { usePrices } from "@/hooks/usePrices";
 import { cn, roundTo } from "@/lib/utils";
 import { DepositToken, tokenAddress } from "@/types/address";
 import { SoilComponent } from "@/components/SoilComponent";
+import { Loader } from "@/icons";
 
 export type Deposit = {
   token: DepositToken;
@@ -199,8 +200,13 @@ export const BorrowModal = () => {
           onValueChange={changeHF}
         />
       </div>
-      <Button className="w-full mt-3" onClick={borrow} disabled={disabled}>
-        Borrow
+      <Button
+        className="w-full mt-3 flex items-center justify-center gap-2"
+        onClick={borrow}
+        disabled={disabled}
+      >
+        <span>Borrow</span>
+        {borrowing && <Loader className="w-7 h-6 stroke-white fill-white" />}
       </Button>
     </div>
   );
