@@ -14,6 +14,7 @@ import { useHealthFactor } from "@/hooks/useHealthFactor";
 import { usePosition } from "@/hooks/usePosition";
 import { usePrices } from "@/hooks/usePrices";
 import { useWithDraw } from "@/hooks/useWithdraw";
+import { Loader } from "@/icons";
 import { cn } from "@/lib/utils";
 import { DepositToken } from "@/types/address";
 import { ArrowRight } from "lucide-react";
@@ -29,10 +30,12 @@ type Props = {
 };
 
 export const WithdrawModal: React.FC<Props> = ({ className }) => {
-  const [withdraw, setDeposit] = useState<Deposit>({
+  const [withdraw, setWithdraw] = useState<Deposit>({
     token: "WETH",
     amount: 0,
   });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const { healthFactor } = useHealthFactor();
   const { prices } = usePrices();
@@ -44,21 +47,26 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
   const estimatedHealthFactor =
     (Math.max(estimatedRemainDeposit, 0) / position.borrowed) * 0.67;
 
-  const disabled = estimatedHealthFactor < 1 || estimatedRemainDeposit < 0;
+  const disabled =
+    estimatedHealthFactor < 1 ||
+    estimatedRemainDeposit < 0 ||
+    withdraw.amount <= 0 ||
+    loading;
 
   let errorMessage = "";
   if (estimatedHealthFactor < 1) {
     errorMessage = "Remaining collateral cannot support the loan";
   }
   if (estimatedRemainDeposit < 0) {
-    errorMessage = "Exceeds your balance";
+    errorMessage = "Exceeds your supply";
   }
 
   const onAmountChange = (amount: number) => {
-    setDeposit((prev) => ({ ...prev, amount: amount }));
+    setWithdraw((prev) => ({ ...prev, amount: amount }));
   };
 
-  const withDrawFormat = async () => {
+  const withDrawWrapped = async () => {
+    setLoading(true);
     try {
       await withDraw(withdraw.token, withdraw.amount);
       toast({
@@ -72,11 +80,15 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
         title: "Withdraw Failed",
         description: `${error}`,
       });
+    } finally {
+      setLoading(false);
+      setWithdraw((prev) => ({ ...prev, amount: 0 }));
+      setOpen(false);
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={"secondary"} className={cn("w-32", className)}>
           Withdraw
@@ -90,7 +102,7 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
 
         <DepositComponent
           onTokenChange={(token: DepositToken) => {
-            setDeposit((prev) => ({
+            setWithdraw((prev) => ({
               ...prev,
               token: token,
             }));
@@ -127,9 +139,14 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
           </div>
         </div>
 
-        <DialogFooter className="sm:justify-end">
-          <Button disabled={disabled} onClick={withDrawFormat}>
-            WithDraw
+        <DialogFooter className="sm:justify-end mt-3">
+          <Button
+            disabled={disabled}
+            onClick={withDrawWrapped}
+            className="flex items-center justify-center gap-2"
+          >
+            <span>WithDraw</span>
+            {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
           </Button>
           <DialogClose asChild>
             <Button type="button" variant="secondary">
