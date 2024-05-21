@@ -1,4 +1,3 @@
-import { SoilComponent } from "./SoilComponent";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,11 +12,12 @@ import { toast } from "@/components/ui/use-toast";
 import { useBalances } from "@/hooks/useBalances";
 import { useHealthFactor } from "@/hooks/useHealthFactor";
 import { usePosition } from "@/hooks/usePosition";
-import { usePrices } from "@/hooks/usePrices";
 import { useRepay } from "@/hooks/useRepay";
+import { Loader } from "@/icons";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { SoilComponent } from "./SoilComponent";
 
 type Props = {
   className?: string;
@@ -26,17 +26,23 @@ type Props = {
 export const RepayModal: React.FC<Props> = ({ className }) => {
   const [amount, setAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const { healthFactor } = useHealthFactor();
-  const { prices } = usePrices();
   const { position } = usePosition();
   const { balances } = useBalances();
   const { repay } = useRepay();
 
+  const soilPrice =
+    (position.deposited * 0.67) / (healthFactor * balances["SOIL"]);
   const remainDebt = Math.max(balances["SOIL"] - amount, 0);
-  const estimatedRemainDebtValue = remainDebt * prices["SOIL"];
+  const estimatedRemainDebtValue = remainDebt * soilPrice;
   const estimatedHealthFactor =
     (position.deposited / estimatedRemainDebtValue) * 0.67;
+
+  useEffect(() => {
+    setAmount(0);
+  }, [open]);
 
   const error = balances["SOIL"] - amount < 0;
   const disabled = error || amount <= 0 || loading;
@@ -61,11 +67,12 @@ export const RepayModal: React.FC<Props> = ({ className }) => {
       });
     } finally {
       setLoading(false);
+      setOpen(false);
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={"secondary"} className={cn("w-32", className)}>
           Repay
@@ -86,7 +93,12 @@ export const RepayModal: React.FC<Props> = ({ className }) => {
         <div className="bg-gray-100 w-full flex flex-col items-center px-4 rounded-lg border border-gray-200">
           <div className="flex items-center justify-between w-full h-12">
             <span>Remaining debt</span>
-            <span>{remainDebt}</span>
+            <span>
+              {remainDebt.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 2,
+              })}
+            </span>
           </div>
           <hr className="h-0.5 w-full bg-gray-200 " />
           <div className="flex items-center justify-between w-full h-12">
@@ -109,14 +121,14 @@ export const RepayModal: React.FC<Props> = ({ className }) => {
           </div>
         </div>
 
-        <DialogFooter className="sm:justify-end">
-          <Button disabled={disabled} onClick={repayFormat}>
+        <DialogFooter className="flex-col max-sm:space-y-2">
+          <Button variant="default" disabled={disabled} onClick={repayFormat}>
             Repay
+            {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
           </Button>
+
           <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
-            </Button>
+            <Button variant="secondary">Close</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
