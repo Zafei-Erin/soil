@@ -59,7 +59,7 @@ export function LiquidateCard() {
                   info.collateral == "DAI" && "border-2 border-yellow-500"
                 )}
                 onClick={() =>
-                  setInfo((prev) => ({ ...prev, collateral: "WETH" }))
+                  setInfo((prev) => ({ ...prev, collateral: "DAI" }))
                 }
               >
                 <DaiIcon className="w-16 h-16" />
