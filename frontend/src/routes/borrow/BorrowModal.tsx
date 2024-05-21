@@ -17,8 +17,8 @@ import { useBalances } from "@/hooks/useBalances";
 import { usePrices } from "@/hooks/usePrices";
 import { cn, roundTo } from "@/lib/utils";
 import { DepositToken, tokenAddress } from "@/types/address";
-import { SoilComponent } from "@/components/SoilComponent";
 import { Loader } from "@/icons";
+import { SoilComponent } from "./SoilComponent";
 
 export type Deposit = {
   token: DepositToken;

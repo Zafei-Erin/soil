@@ -1,4 +1,4 @@
-import { SoilComponent } from "@/components/SoilComponent";
+import { SoilComponent } from "./SoilComponent";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
