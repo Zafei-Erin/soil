@@ -15,10 +15,11 @@ import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 import { useBalances } from "@/hooks/useBalances";
 import { usePrices } from "@/hooks/usePrices";
+import { Loader } from "@/icons";
 import { cn, roundTo } from "@/lib/utils";
 import { DepositToken, tokenAddress } from "@/types/address";
-import { Loader } from "@/icons";
 import { SoilComponent } from "./SoilComponent";
+import { ConnectButton } from "@/components/ConnectButton";
 
 export type Deposit = {
   token: DepositToken;
@@ -145,7 +146,6 @@ export const BorrowModal = () => {
   return (
     <div className="max-w-3xl w-full h-fit flex flex-col gap-8 max-md:items-center justify-between bg-white mx-4 p-8 rounded-lg border border-gray-200">
       <h1 className="text-2xl font-semibold">Borrow SOIL</h1>
-
       <div className="md:flex max-md:space-y-6 justify-between md:gap-3">
         {/* deposit */}
         <div className="space-y-3">
@@ -175,7 +175,6 @@ export const BorrowModal = () => {
           />
         </div>
       </div>
-
       {/* LoanToValue */}
       <div className="space-y-3 w-full">
         <h3 className="font-semibold">LoanToValue %</h3>
@@ -203,14 +202,18 @@ export const BorrowModal = () => {
           onValueChange={changeHF}
         />
       </div>
-      <Button
-        className="w-full mt-3 flex items-center justify-center gap-2"
-        onClick={borrow}
-        disabled={disabled}
-      >
-        <span>Borrow</span>
-        {borrowing && <Loader className="w-7 h-6 stroke-white fill-white" />}
-      </Button>
+      {!isConnected ? (
+        <ConnectButton className="w-full mt-3" />
+      ) : (
+        <Button
+          className="w-full mt-3 flex items-center justify-center gap-2 disabled:cursor-not-allowed"
+          onClick={borrow}
+          disabled={disabled}
+        >
+          <span>Borrow</span>
+          {borrowing && <Loader className="w-7 h-6 stroke-white fill-white" />}
+        </Button>
+      )}
     </div>
   );
 };

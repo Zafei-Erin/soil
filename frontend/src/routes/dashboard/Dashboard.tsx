@@ -1,4 +1,4 @@
-import ConnectButton from "@/components/ConnectButton";
+import { ConnectButton } from "@/components/ConnectButton";
 import { usePosition } from "@/hooks/usePosition";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { HealthFactor } from "./HealthFactor";

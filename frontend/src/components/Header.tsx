@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import ConnectButton from "./ConnectButton";
+import {ConnectButton} from "./ConnectButton";
 
 export const Header = () => {
   return (
