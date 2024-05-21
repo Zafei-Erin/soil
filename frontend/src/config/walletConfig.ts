@@ -4,26 +4,28 @@ import { defaultConfig, Web3ModalOptions } from "@web3modal/ethers/react";
 const projectId = import.meta.env.VITE_CONNECT_WALLET_PROJECTID;
 
 // 2. Set chains
-const Amoy = {
+const PolygonAmoy = {
   chainId: 80002,
   name: "Polygon Amoy Testnet",
   currency: "MATIC",
   explorerUrl: "https://amoy.polygonscan.com/",
   rpcUrl: "https://rpc-amoy.polygon.technology/",
 };
-const Polygon = {
-  chainId: 137,
-  name: "Polygon Mainnet",
-  currency: "MATIC",
-  explorerUrl: "https://polygonscan.com",
-  rpcUrl: "https://polygon-rpc.com",
-};
-const Avalanche = {
-  chainId: 43114,
-  name: "Avalanche Network",
+
+const AvalancheFuji = {
+  chainId: 43113,
+  name: "Avalanche Testnet C-Chain",
   currency: "AVAX",
-  explorerUrl: "https://snowtrace.io/",
-  rpcUrl: "https://api.avax.network/ext/bc/C/rpc",
+  explorerUrl: "https://subnets-test.avax.network/",
+  rpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
+};
+
+const OptimismSepolia = {
+  chainId: 11155420,
+  name: "Optimism Sepolia",
+  currency: "ETH",
+  explorerUrl: "https://sepolia-optimistic.etherscan.io",
+  rpcUrl: "https://sepolia.optimism.io",
 };
 
 // 3. Create a metadata object
@@ -49,7 +51,7 @@ const ethersConfig = defaultConfig({
 
 export const walletOptions: Web3ModalOptions = {
   ethersConfig,
-  chains: [Amoy, Polygon, Avalanche],
+  chains: [PolygonAmoy, AvalancheFuji, OptimismSepolia],
   projectId,
   featuredWalletIds: [
     "c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96", // metamaske
