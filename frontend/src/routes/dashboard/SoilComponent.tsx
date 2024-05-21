@@ -19,11 +19,11 @@ export const SoilComponent: React.FC<Props> = ({
   return (
     <div>
       <div className="flex gap-2">
-        <div className="bg-gray-100 flex items-center justify-center px-4 w-32 rounded-lg h-12 border border-gray-200">
-          SOIL1
+        <div className="bg-gray-100 flex items-center justify-center px-4 w-48 rounded-lg h-12 border border-gray-200">
+          SOIL
         </div>
-        <div className="bg-gray-100 h-12 w-30 rounded-lg border border-gray-200 px-4 py-1">
-          <NumberInput onAmountChange={onAmountChange} />
+        <div className="bg-gray-100 h-12 w-full rounded-lg border border-gray-200 px-4 py-1">
+          <NumberInput onAmountChange={onAmountChange} className="w-full" />
           <div className="flex items-center justify-between">
             <p className="text-xs text-gray-600">
               price: $
