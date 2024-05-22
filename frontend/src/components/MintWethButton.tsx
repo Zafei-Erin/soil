@@ -7,7 +7,7 @@ import {
 import { Button } from "./ui/button";
 import ERC20 from "@/abis/ERC20.json";
 import { toast } from "./ui/use-toast";
-import { Chain, ChainID } from "@/constants/chain";
+import { Chain, ChainIDs } from "@/constants/chain";
 
 const MintWethButton = () => {
   const { isConnected, address, chainId } = useWeb3ModalAccount();
@@ -18,10 +18,15 @@ const MintWethButton = () => {
       throw Error("User disconnected");
     }
 
+    const chain = ChainIDs.find((c) => chainId === c);
+    if (!chain) {
+      throw Error("Chain not support");
+    }
+
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
 
-    const WETHAddress = Chain[chainId as ChainID].WETH;
+    const WETHAddress = Chain[chain].WETH;
     const contract = new Contract(WETHAddress, ERC20.abi, signer);
     const txn = await contract.mint(address, parseUnits("16"));
     txn.wait();
