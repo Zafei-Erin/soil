@@ -51,6 +51,8 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     refreshBalances();
+    const intervalId = setInterval(refreshBalances, 60 * 1000);
+    return () => clearInterval(intervalId);
   }, [isConnected, walletProvider, chainId]);
 
   const getBalances = (token: Token) => {
