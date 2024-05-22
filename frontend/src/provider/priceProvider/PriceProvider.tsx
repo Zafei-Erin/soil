@@ -1,6 +1,6 @@
 import PriceFeed from "@/abis/PriceFeed.json";
-import { DepositToken, Token } from "@/types/address";
-import { DEFAULT_PRICES, Prices, priceAddress } from "@/types/price";
+import { DepositToken, Token } from "@/constants/token";
+import { DEFAULT_PRICES, Prices, priceAddress } from "@/constants/price";
 import { formatUnits } from "ethers";
 import {
   ReactNode,

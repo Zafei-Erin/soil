@@ -1,6 +1,6 @@
 import SOIL from "@/abis/SOIL.json";
 import { LiquidateInfo } from "@/routes/liquidate/LiquidateCard";
-import { tokenAddress } from "@/types/address";
+import { tokenAddress } from "@/constants/token";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,

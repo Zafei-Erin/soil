@@ -1,5 +1,5 @@
 import SOIL from "@/abis/SOIL.json";
-import { tokenAddress } from "@/types/address";
+import { tokenAddress } from "@/constants/token";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,

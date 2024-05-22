@@ -1,4 +1,4 @@
-import { useBalances } from "@/hooks/useBalances";
+import { useBalances } from "@/provider/balanceProvider";
 import { usePrices } from "@/provider/priceProvider";
 import { useEffect, useRef, useState } from "react";
 
@@ -18,7 +18,7 @@ export const SoilComponent: React.FC<Props> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState<string>("");
   const { prices } = usePrices();
-  const { balances } = useBalances();
+  const { getBalances } = useBalances();
 
   useEffect(() => {
     setValue(amount == 0 ? "" : amount == undefined ? "" : amount.toString());
@@ -57,7 +57,9 @@ export const SoilComponent: React.FC<Props> = ({
                 maximumFractionDigits: 2,
               })}
             </p>
-            <p className="text-xs text-gray-600">balance: {balances["SOIL"]}</p>
+            <p className="text-xs text-gray-600">
+              balance: {getBalances("SOIL")}
+            </p>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useBalances } from "@/hooks/useBalances";
+import { useBalances } from "@/provider/balanceProvider";
 import { NumberInput } from "../../components/NumberInput";
 import { usePrices } from "@/provider/priceProvider";
 
@@ -14,7 +14,7 @@ export const SoilComponent: React.FC<Props> = ({
   errorMessage,
 }) => {
   const { prices } = usePrices();
-  const { balances } = useBalances();
+  const { getBalances } = useBalances();
 
   return (
     <div>
@@ -31,7 +31,9 @@ export const SoilComponent: React.FC<Props> = ({
                 maximumFractionDigits: 2,
               })}
             </p>
-            <p className="text-xs text-gray-600">balance: {balances["SOIL"]}</p>
+            <p className="text-xs text-gray-600">
+              balance: {getBalances("SOIL")}
+            </p>
           </div>
         </div>
       </div>

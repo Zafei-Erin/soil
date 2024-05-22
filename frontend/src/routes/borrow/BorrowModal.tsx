@@ -13,13 +13,13 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
-import { useBalances } from "@/hooks/useBalances";
 import { Loader } from "@/icons";
 import { cn, roundTo } from "@/lib/utils";
-import { DepositToken, tokenAddress } from "@/types/address";
+import { DepositToken, tokenAddress } from "@/constants/token";
 import { SoilComponent } from "./SoilComponent";
 import { ConnectButton } from "@/components/ConnectButton";
 import { usePrices } from "@/provider/priceProvider";
+import { useBalances } from "@/provider/balanceProvider";
 
 export type Deposit = {
   token: DepositToken;
@@ -35,7 +35,7 @@ export const BorrowModal = () => {
   const [loanToValue, _setLoanToValue] = useState<number>(0);
   const [borrowing, setBorrowing] = useState<boolean>(false);
   const { prices } = usePrices();
-  const { balances, refreshBalances } = useBalances();
+  const { getBalances, refreshBalances } = useBalances();
   const { isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
@@ -44,7 +44,7 @@ export const BorrowModal = () => {
     deposit.amount <= 0 ||
     soilAmount <= 0 ||
     borrowing ||
-    deposit.amount > balances[deposit.token];
+    deposit.amount > getBalances(deposit.token);
 
   const setLoanToValue = async (depositAmount: number, soilAmount: number) => {
     const depositValue = prices[deposit.token] * depositAmount;
@@ -161,7 +161,7 @@ export const BorrowModal = () => {
             }}
             onAmountChange={changeDepositAmount}
             deposit={deposit}
-            isError={deposit.amount > balances[deposit.token]}
+            isError={deposit.amount > getBalances(deposit.token)}
             errorMessage={"You dont have enough balance!"}
           />
         </div>

@@ -11,7 +11,7 @@ import {
 import { useLiquidate } from "@/hooks/useLiquidate";
 import { DaiIcon, WethIcon } from "@/icons";
 import { cn } from "@/lib/utils";
-import { DepositToken } from "@/types/address";
+import { DepositToken } from "@/constants/token";
 import { useState } from "react";
 
 export type LiquidateInfo = {

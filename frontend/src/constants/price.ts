@@ -1,4 +1,4 @@
-import { Token } from "./address";
+import { Token } from "./token";
 
 const WETHPriceAddress = import.meta.env.VITE_WETH_PRICE;
 const DAIPriceAddress = import.meta.env.VITE_DAI_PRICE;

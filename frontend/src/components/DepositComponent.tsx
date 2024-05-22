@@ -5,11 +5,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useBalances } from "@/hooks/useBalances";
 import { Deposit } from "@/routes/borrow/BorrowModal";
-import { DepositToken } from "@/types/address";
+import { DepositToken } from "@/constants/token";
 import { NumberInput } from "./NumberInput";
 import { usePrices } from "@/provider/priceProvider/usePrices";
+import { useBalances } from "@/provider/balanceProvider";
 
 type Props = {
   deposit: Deposit;
@@ -27,7 +27,7 @@ export const DepositComponent: React.FC<Props> = ({
   errorMessage,
 }) => {
   const { prices } = usePrices();
-  const { balances } = useBalances();
+  const { getBalances } = useBalances();
   return (
     <div>
       <div className="flex gap-2">
@@ -61,7 +61,7 @@ export const DepositComponent: React.FC<Props> = ({
             </p>
             <p className="text-xs text-gray-600">
               balance:{" "}
-              {balances[deposit.token].toLocaleString(undefined, {
+              {getBalances(deposit.token).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}

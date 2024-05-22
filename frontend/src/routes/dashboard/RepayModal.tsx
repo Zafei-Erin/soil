@@ -9,7 +9,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
-import { useBalances } from "@/hooks/useBalances";
 import { useHealthFactor } from "@/hooks/useHealthFactor";
 import { usePosition } from "@/hooks/usePosition";
 import { useRepay } from "@/hooks/useRepay";
@@ -18,6 +17,7 @@ import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SoilComponent } from "./SoilComponent";
+import { useBalances } from "@/provider/balanceProvider";
 
 type Props = {
   className?: string;
@@ -30,12 +30,12 @@ export const RepayModal: React.FC<Props> = ({ className }) => {
 
   const { healthFactor } = useHealthFactor();
   const { position } = usePosition();
-  const { balances } = useBalances();
+  const { getBalances } = useBalances();
   const { repay } = useRepay();
 
   const soilPrice =
-    (position.deposited * 0.67) / (healthFactor * balances["SOIL"]);
-  const remainDebt = Math.max(balances["SOIL"] - amount, 0);
+    (position.deposited * 0.67) / (healthFactor * getBalances("SOIL"));
+  const remainDebt = Math.max(getBalances("SOIL") - amount, 0);
   const estimatedRemainDebtValue = remainDebt * soilPrice;
   const estimatedHealthFactor =
     (position.deposited / estimatedRemainDebtValue) * 0.67;
@@ -44,7 +44,7 @@ export const RepayModal: React.FC<Props> = ({ className }) => {
     setAmount(0);
   }, [open]);
 
-  const error = balances["SOIL"] - amount < 0;
+  const error = getBalances("SOIL") - amount < 0;
   const disabled = error || amount <= 0 || loading;
 
   const repayFormat = async () => {

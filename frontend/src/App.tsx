@@ -7,6 +7,7 @@ import { walletOptions } from "./config/walletConfig";
 import { Toaster } from "./components/ui/toaster";
 import { Liquidate } from "./routes/liquidate";
 import { PriceProvider } from "./provider/priceProvider/PriceProvider";
+import { BalanceProvider } from "./provider/balanceProvider";
 
 function App() {
   // Create a Web3Modal instance
@@ -16,14 +17,16 @@ function App() {
       <Header />
 
       <PriceProvider>
-        <div className="h-[calc(100dvh-5rem)] w-full">
-          <Routes>
-            <Route path="/" element={<Borrow />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/liquidate" element={<Liquidate />} />
-            <Route path="/*" element={<Borrow />} />
-          </Routes>
-        </div>
+        <BalanceProvider>
+          <div className="h-[calc(100dvh-5rem)] w-full">
+            <Routes>
+              <Route path="/" element={<Borrow />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/liquidate" element={<Liquidate />} />
+              <Route path="/*" element={<Borrow />} />
+            </Routes>
+          </div>
+        </BalanceProvider>
       </PriceProvider>
       <Toaster />
     </div>

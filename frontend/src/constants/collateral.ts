@@ -1,4 +1,4 @@
-import { DepositToken } from "./address";
+import { DepositToken } from "./token";
 
 export type Collaterals = {
   [token in DepositToken]: number;

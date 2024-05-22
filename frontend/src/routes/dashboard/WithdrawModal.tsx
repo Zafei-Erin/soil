@@ -10,17 +10,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
+import { useCollaterals } from "@/hooks/useCollaterals";
 import { useHealthFactor } from "@/hooks/useHealthFactor";
 import { usePosition } from "@/hooks/usePosition";
 import { useWithDraw } from "@/hooks/useWithdraw";
 import { Loader } from "@/icons";
 import { cn } from "@/lib/utils";
 import { usePrices } from "@/provider/priceProvider";
-import { DepositToken } from "@/types/address";
+import { DepositToken } from "@/constants/token";
 import { ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-type Deposit = {
+type Withdraw = {
   token: DepositToken;
   amount: number;
 };
@@ -29,11 +30,13 @@ type Props = {
   className?: string;
 };
 
+const DEFAULT_WITHDRAW: Withdraw = {
+  token: "WETH",
+  amount: 0,
+};
+
 export const WithdrawModal: React.FC<Props> = ({ className }) => {
-  const [withdraw, setWithdraw] = useState<Deposit>({
-    token: "WETH",
-    amount: 0,
-  });
+  const [withdraw, setWithdraw] = useState<Withdraw>(DEFAULT_WITHDRAW);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
@@ -41,6 +44,7 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
   const { prices } = usePrices();
   const { position } = usePosition();
   const { withDraw } = useWithDraw();
+  const { collaterals } = useCollaterals();
 
   const estimatedRemainDeposit =
     position.deposited - prices[withdraw.token] * withdraw.amount;
@@ -60,6 +64,10 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
   if (estimatedRemainDeposit < 0) {
     errorMessage = "Exceeds your supply";
   }
+
+  useEffect(() => {
+    setWithdraw(DEFAULT_WITHDRAW);
+  }, [open]);
 
   const onAmountChange = (amount: number) => {
     setWithdraw((prev) => ({ ...prev, amount: amount }));
@@ -82,7 +90,7 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
       });
     } finally {
       setLoading(false);
-      setWithdraw((prev) => ({ ...prev, amount: 0 }));
+      setWithdraw(DEFAULT_WITHDRAW);
       setOpen(false);
     }
   };
@@ -116,7 +124,7 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
         <div className="bg-gray-100 w-full flex flex-col items-center px-4 rounded-lg border border-gray-200">
           <div className="flex items-center justify-between w-full h-12">
             <span>Remaining supply</span>
-            <span>x</span>
+            <span>{collaterals[withdraw.token]}</span>
           </div>
           <hr className="h-0.5 w-full bg-gray-200 " />
           <div className="flex items-center justify-between w-full h-12">

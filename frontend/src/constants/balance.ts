@@ -1,4 +1,4 @@
-import { Token } from "./address";
+import { Token } from "./token";
 
 export type Balances = {
   [token in Token]: number;
