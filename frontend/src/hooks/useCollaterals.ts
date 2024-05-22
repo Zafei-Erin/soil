@@ -1,4 +1,4 @@
-import ERC20 from "@/abis/ERC20.json";
+import SOIL from "@/abis/SOIL.json";
 import { Collaterals, DEFAULT_COLLATERALS } from "@/constants/collateral";
 import { DepositToken, TokenAddress } from "@/constants/token";
 import { isValidChain } from "@/lib/utils";
@@ -21,7 +21,7 @@ export function useCollaterals() {
     tokenAddress: string,
     address: string
   ) => {
-    const contract = new Contract(soilAddress, ERC20.abi, signer);
+    const contract = new Contract(soilAddress, SOIL.abi, signer);
     const result = await contract.getAccountCollateralAmount(
       address,
       tokenAddress
