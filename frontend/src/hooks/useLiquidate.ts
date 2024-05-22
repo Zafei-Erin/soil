@@ -1,14 +1,15 @@
 import SOIL from "@/abis/SOIL.json";
 import { LiquidateInfo } from "@/routes/liquidate/LiquidateCard";
-import { tokenAddress } from "@/constants/token";
+import { TokenAddress } from "@/constants/token";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import { BrowserProvider, Contract, parseUnits } from "ethers";
+import { isValidChain } from "@/lib/utils";
 
 export function useLiquidate() {
-  const { isConnected } = useWeb3ModalAccount();
+  const { isConnected, chainId } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
   const liquidate = async ({
@@ -17,14 +18,22 @@ export function useLiquidate() {
     soilAmount,
   }: LiquidateInfo) => {
     if (!isConnected || !walletProvider) {
-      return;
+      throw Error("User disconnected");
     }
+
+    if (!chainId || !isValidChain(chainId)) {
+      throw Error("Chain not support");
+    }
+
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
-    const contract = new Contract(tokenAddress["SOIL"], SOIL.abi, signer);
+
+    const soilAddress = TokenAddress[chainId].SOIL;
+    const tokenAddress = TokenAddress[chainId][collateral];
+    const contract = new Contract(soilAddress, SOIL.abi, signer);
     const result = await contract.liquidate(
       userAddress,
-      tokenAddress[collateral],
+      tokenAddress,
       parseUnits(soilAmount.toString())
     );
     console.log("liquidate result", result);

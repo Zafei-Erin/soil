@@ -1,5 +1,6 @@
 import SOIL from "@/abis/SOIL.json";
-import { DepositToken, tokenAddress } from "@/constants/token";
+import { DepositToken, TokenAddress } from "@/constants/token";
+import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
@@ -7,7 +8,7 @@ import {
 import { BrowserProvider, Contract, parseUnits } from "ethers";
 
 export function useWithDraw() {
-  const { isConnected } = useWeb3ModalAccount();
+  const { isConnected, chainId } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
   const withDraw = async (
@@ -15,13 +16,21 @@ export function useWithDraw() {
     withDrawAmount: number
   ) => {
     if (!isConnected || !walletProvider) {
-      return;
+      throw Error("User disconnected");
     }
+
+    if (!chainId || !isValidChain(chainId)) {
+      throw Error("Chain not support");
+    }
+
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
-    const contract = new Contract(tokenAddress["SOIL"], SOIL.abi, signer);
+
+    const soilAddress = TokenAddress[chainId].SOIL;
+    const tokenAddress = TokenAddress[chainId][withDrawToken];
+    const contract = new Contract(soilAddress, SOIL.abi, signer);
     const result = await contract.redeem(
-      tokenAddress[withDrawToken],
+      tokenAddress,
       parseUnits(withDrawAmount.toString())
     );
     console.log("redeem result", result);

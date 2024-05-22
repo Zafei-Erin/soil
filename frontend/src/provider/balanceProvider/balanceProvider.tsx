@@ -1,15 +1,13 @@
+import ERC20 from "@/abis/ERC20.json";
 import { Balances, DEFAULT_BALANCES } from "@/constants/balance";
+import { Token, TokenAddress } from "@/constants/token";
+import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
-import { Contract, formatUnits } from "ethers";
-import { JsonRpcSigner } from "ethers";
+import { BrowserProvider, Contract, JsonRpcSigner, formatUnits } from "ethers";
 import { ReactNode, createContext, useEffect, useState } from "react";
-import ERC20 from "@/abis/ERC20.json";
-import { Chain, ChainIDs } from "@/constants/chain";
-import { BrowserProvider } from "ethers";
-import { Token } from "@/constants/token";
 
 type BalanceContext = {
   getBalances: (token: Token) => number;
@@ -31,12 +29,11 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const refreshBalances = async () => {
-    if (!isConnected || !walletProvider || !chainId) {
+    if (!isConnected || !walletProvider || !address) {
       throw Error("User disconnected");
     }
 
-    const chain = ChainIDs.find((c) => chainId === c);
-    if (!chain) {
+    if (!chainId || !isValidChain(chainId)) {
       throw Error("Chain not support");
     }
 
@@ -45,10 +42,9 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
 
     const newBalances = { ...DEFAULT_BALANCES };
     for (const token of Token) {
-      const tokenAddress = Chain[chain][token];
-      await fetchBalance(signer, tokenAddress).then(
-        (balance) => (newBalances[token] = balance)
-      );
+      const tokenAddress = TokenAddress[chainId][token];
+      const balance = await fetchBalance(signer, tokenAddress);
+      newBalances[token] = balance;
     }
     setBalances(newBalances);
   };

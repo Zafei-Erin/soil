@@ -1,53 +1,65 @@
-import { DepositToken, Token, tokenAddress } from "@/constants/token";
+import ERC20 from "@/abis/ERC20.json";
+import { Collaterals, DEFAULT_COLLATERALS } from "@/constants/collateral";
+import { DepositToken, TokenAddress } from "@/constants/token";
+import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
-import { BrowserProvider, Contract, formatUnits } from "ethers";
-import { useEffect, useState } from "react";
-import { JsonRpcSigner } from "ethers";
-import { Eip1193Provider } from "ethers";
-import ERC20 from "@/abis/ERC20.json";
-import { Collaterals, DEFAULT_COLLATERALS } from "@/constants/collateral";
+import { BrowserProvider, Contract, JsonRpcSigner, formatUnits } from "ethers";
+import { useCallback, useEffect, useState } from "react";
 
 export function useCollaterals() {
   const [collaterals, setCollaterals] =
     useState<Collaterals>(DEFAULT_COLLATERALS);
-  const { isConnected, address } = useWeb3ModalAccount();
+  const { isConnected, address, chainId } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
-  const fetchCollateral = async (signer: JsonRpcSigner, token: Token) => {
-    const contract = new Contract(tokenAddress[token], ERC20.abi, signer);
+  const fetchCollateral = async (
+    signer: JsonRpcSigner,
+    soilAddress: string,
+    tokenAddress: string,
+    address: string
+  ) => {
+    const contract = new Contract(soilAddress, ERC20.abi, signer);
     const result = await contract.getAccountCollateralAmount(
       address,
-      tokenAddress[token]
+      tokenAddress
     );
-    const price = parseFloat(formatUnits(result));
-    return price;
+    const collateral = parseFloat(formatUnits(result));
+    return collateral;
   };
 
-  const fetchCollaterals = async (walletProvider: Eip1193Provider) => {
-    const newCollaterals = { ...DEFAULT_COLLATERALS };
+  const refreshCollaterals = useCallback(async () => {
+    if (!isConnected || !walletProvider || !address) {
+      throw Error("User disconnected");
+    }
+
+    if (!chainId || !isValidChain(chainId)) {
+      throw Error("Chain not support");
+    }
+
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
+
+    const newCollaterals = { ...DEFAULT_COLLATERALS };
     for (const token of DepositToken) {
-      await fetchCollateral(signer, token).then(
-        (collateral) => (newCollaterals[token] = collateral)
+      const soilAddress = TokenAddress[chainId].SOIL;
+      const tokenAddress = TokenAddress[chainId][token];
+      const collateral = await fetchCollateral(
+        signer,
+        soilAddress,
+        tokenAddress,
+        address
       );
+      newCollaterals[token] = collateral;
     }
     setCollaterals(newCollaterals);
-  };
-
-  const refreshCollaterals = () => {
-    if (!isConnected || !walletProvider || !address) {
-      return;
-    }
-    fetchCollaterals(walletProvider);
-  };
+  }, [isConnected, walletProvider, chainId, address]);
 
   useEffect(() => {
     refreshCollaterals();
-  }, [isConnected, walletProvider]);
+  }, [refreshCollaterals]);
 
   return { collaterals, refreshCollaterals };
 }

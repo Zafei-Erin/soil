@@ -1,25 +1,20 @@
-import {
-  useWeb3ModalAccount,
-  useWeb3ModalProvider,
-} from "@web3modal/ethers/react";
-import { BrowserProvider, Contract, parseUnits } from "ethers";
+import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import ERC20 from "@/abis/ERC20.json";
-import SOIL from "@/abis/SOIL.json";
+import { ConnectButton } from "@/components/ConnectButton";
 import { DepositComponent } from "@/components/DepositComponent";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
+import { DepositToken } from "@/constants/token";
 import { Loader } from "@/icons";
 import { cn, roundTo } from "@/lib/utils";
-import { DepositToken, tokenAddress } from "@/constants/token";
-import { SoilComponent } from "./SoilComponent";
-import { ConnectButton } from "@/components/ConnectButton";
-import { usePrices } from "@/provider/priceProvider";
 import { useBalances } from "@/provider/balanceProvider";
+import { usePrices } from "@/provider/priceProvider";
+import { SoilComponent } from "./SoilComponent";
+import { useApproveAndMint } from "@/hooks/useApproveAndMint";
 
 export type Deposit = {
   token: DepositToken;
@@ -36,8 +31,8 @@ export const BorrowModal = () => {
   const [borrowing, setBorrowing] = useState<boolean>(false);
   const { prices } = usePrices();
   const { getBalances, refreshBalances } = useBalances();
+  const { approvalAndMint } = useApproveAndMint();
   const { isConnected } = useWeb3ModalAccount();
-  const { walletProvider } = useWeb3ModalProvider();
 
   const disabled =
     loanToValue > 0.8 ||
@@ -73,43 +68,6 @@ export const BorrowModal = () => {
     setSoilAmount(s);
   };
 
-  const approvalAndMint = async () => {
-    if (!isConnected || !walletProvider) throw Error("User disconnected");
-
-    const ethersProvider = new BrowserProvider(walletProvider);
-    const signer = await ethersProvider.getSigner();
-
-    const SOILContract = new Contract(tokenAddress["SOIL"], SOIL.abi, signer);
-    const ERC20Contract = new Contract(
-      tokenAddress[deposit.token],
-      ERC20.abi,
-      signer
-    );
-
-    try {
-      // approval
-      const approvalTxn = await ERC20Contract.approve(
-        tokenAddress["SOIL"],
-        parseUnits(deposit.amount.toString())
-      );
-      approvalTxn.wait();
-    } catch (error) {
-      throw new Error("approval error");
-    }
-
-    try {
-      // depositAndMint
-      const depositAndMintTxn = await SOILContract.depositAndMint(
-        tokenAddress[deposit.token],
-        parseUnits(deposit.amount.toString()),
-        parseUnits(soilAmount.toString())
-      );
-      depositAndMintTxn.wait();
-    } catch (error) {
-      throw new Error("mint error");
-    }
-  };
-
   const borrow = async () => {
     if (loanToValue > 0.8 || deposit.amount <= 0 || soilAmount <= 0) {
       return;
@@ -117,7 +75,7 @@ export const BorrowModal = () => {
     setBorrowing(true);
 
     try {
-      await approvalAndMint();
+      await approvalAndMint(deposit.token, deposit.amount, soilAmount);
       refreshBalances();
       toast({
         duration: 1500,

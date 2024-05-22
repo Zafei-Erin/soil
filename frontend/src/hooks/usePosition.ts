@@ -1,16 +1,12 @@
 import SOIL from "@/abis/SOIL.json";
-import { tokenAddress } from "@/constants/token";
+import { TokenAddress } from "@/constants/token";
+import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
-import {
-  BrowserProvider,
-  Contract,
-  Eip1193Provider,
-  formatUnits,
-} from "ethers";
-import { useEffect, useState } from "react";
+import { BrowserProvider, Contract, formatUnits } from "ethers";
+import { useCallback, useEffect, useState } from "react";
 
 type Position = {
   deposited: number;
@@ -24,32 +20,34 @@ const DEFAULT_POSITION: Position = {
 
 export function usePosition() {
   const [position, setPosition] = useState<Position>(DEFAULT_POSITION);
-  const { isConnected, address } = useWeb3ModalAccount();
+  const { isConnected, address, chainId } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
-  const fetchPosition = async (walletProvider: Eip1193Provider) => {
+  const refreshPosition = useCallback(async () => {
+    if (!isConnected || !walletProvider || !address) {
+      throw Error("User disconnected");
+    }
+
+    if (!chainId || !isValidChain(chainId)) {
+      throw Error("Chain not support");
+    }
+
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
-    const contract = new Contract(tokenAddress["SOIL"], SOIL.abi, signer);
+
+    const soilAddress = TokenAddress[chainId].SOIL;
+    const contract = new Contract(soilAddress, SOIL.abi, signer);
     const result = await contract.getAccountInformationValue(address);
-    console.log("position: ", result);
 
     const borrowed = parseFloat(formatUnits(result[0], 18));
     const deposited = parseFloat(formatUnits(result[1], 18));
     console.log("position: ", deposited, borrowed);
     setPosition({ deposited, borrowed });
-  };
-
-  const refreshPosition = () => {
-    if (!isConnected || !walletProvider) {
-      return;
-    }
-    fetchPosition(walletProvider);
-  };
+  }, [isConnected, walletProvider, chainId, address]);
 
   useEffect(() => {
     refreshPosition();
-  }, [isConnected, walletProvider]);
+  }, [refreshPosition]);
 
   return { position, refreshPosition };
 }
