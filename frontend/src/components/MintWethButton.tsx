@@ -7,18 +7,21 @@ import {
 import { Button } from "./ui/button";
 import ERC20 from "@/abis/ERC20.json";
 import { toast } from "./ui/use-toast";
-import { tokenAddress } from "@/types/address";
+import { Chain, ChainID } from "@/constants/chain";
 
 const MintWethButton = () => {
-  const { isConnected, address } = useWeb3ModalAccount();
+  const { isConnected, address, chainId } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
-  const WETHAddress = tokenAddress["WETH"];
+
   const mintWETH = async () => {
-    if (!isConnected || !walletProvider) throw Error("User disconnected");
+    if (!isConnected || !walletProvider || !chainId) {
+      throw Error("User disconnected");
+    }
 
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
 
+    const WETHAddress = Chain[chainId as ChainID].WETH;
     const contract = new Contract(WETHAddress, ERC20.abi, signer);
     const txn = await contract.mint(address, parseUnits("16"));
     txn.wait();
@@ -28,7 +31,7 @@ const MintWethButton = () => {
     });
 
     const balance = await contract.balanceOf(address);
-    console.log(formatUnits(balance, 18));
+    console.log("balance aft mint: ", formatUnits(balance, 18));
   };
 
   return <Button onClick={mintWETH}>Mint WETH</Button>;
