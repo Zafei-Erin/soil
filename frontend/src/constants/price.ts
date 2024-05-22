@@ -1,13 +1,10 @@
 import { Token } from "./token";
 
-const WETHPriceAddress = import.meta.env.VITE_WETH_PRICE;
-const DAIPriceAddress = import.meta.env.VITE_DAI_PRICE;
-const SOILPriceAddress = import.meta.env.VITE_SOIL_PRICE;
-
+// on optimism chain
 export const priceAddress: Record<Token, string> = {
-  WETH: WETHPriceAddress,
-  DAI: DAIPriceAddress,
-  SOIL: SOILPriceAddress,
+  WETH: "0x61Ec26aA57019C486B10502285c5A3D4A4750AD7",
+  DAI: "0x4beA21743541fE4509790F1606c37f2B2C312479",
+  SOIL: "",
 };
 
 export type Prices = {
