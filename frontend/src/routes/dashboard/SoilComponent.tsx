@@ -1,6 +1,6 @@
 import { useBalances } from "@/hooks/useBalances";
-import { usePrices } from "@/hooks/usePrices";
 import { NumberInput } from "../../components/NumberInput";
+import { usePrices } from "@/provider/priceProvider";
 
 type Props = {
   isError?: boolean;

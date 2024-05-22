@@ -6,10 +6,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useBalances } from "@/hooks/useBalances";
-import { usePrices } from "@/hooks/usePrices";
 import { Deposit } from "@/routes/borrow/BorrowModal";
 import { DepositToken } from "@/types/address";
 import { NumberInput } from "./NumberInput";
+import { usePrices } from "@/provider/priceProvider/usePrices";
 
 type Props = {
   deposit: Deposit;

@@ -6,6 +6,7 @@ import { createWeb3Modal } from "@web3modal/ethers/react";
 import { walletOptions } from "./config/walletConfig";
 import { Toaster } from "./components/ui/toaster";
 import { Liquidate } from "./routes/liquidate";
+import { PriceProvider } from "./provider/priceProvider/PriceProvider";
 
 function App() {
   // Create a Web3Modal instance
@@ -13,14 +14,17 @@ function App() {
   return (
     <div>
       <Header />
-      <div className="h-[calc(100dvh-5rem)] w-full bg-gray-100">
-        <Routes>
-          <Route path="/" element={<Borrow />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/liquidate" element={<Liquidate />} />
-          <Route path="/*" element={<Borrow />} />
-        </Routes>
-      </div>
+
+      <PriceProvider>
+        <div className="h-[calc(100dvh-5rem)] w-full">
+          <Routes>
+            <Route path="/" element={<Borrow />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/liquidate" element={<Liquidate />} />
+            <Route path="/*" element={<Borrow />} />
+          </Routes>
+        </div>
+      </PriceProvider>
       <Toaster />
     </div>
   );

@@ -14,12 +14,12 @@ import { Slider } from "@/components/ui/slider";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 import { useBalances } from "@/hooks/useBalances";
-import { usePrices } from "@/hooks/usePrices";
 import { Loader } from "@/icons";
 import { cn, roundTo } from "@/lib/utils";
 import { DepositToken, tokenAddress } from "@/types/address";
 import { SoilComponent } from "./SoilComponent";
 import { ConnectButton } from "@/components/ConnectButton";
+import { usePrices } from "@/provider/priceProvider";
 
 export type Deposit = {
   token: DepositToken;

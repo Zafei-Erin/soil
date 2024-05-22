@@ -1,5 +1,5 @@
 import { useBalances } from "@/hooks/useBalances";
-import { usePrices } from "@/hooks/usePrices";
+import { usePrices } from "@/provider/priceProvider";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
