@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
 import { useCollaterals } from "@/hooks/useCollaterals";
-import { useHealthFactor } from "@/hooks/useHealthFactor";
 import { usePosition } from "@/hooks/usePosition";
 import { useWithDraw } from "@/hooks/useWithdraw";
 import { Loader } from "@/icons";
@@ -20,6 +19,7 @@ import { usePrices } from "@/provider/priceProvider";
 import { DepositToken } from "@/constants/token";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useHealthFactor } from "@/provider/healthFactorProvider";
 
 type Withdraw = {
   token: DepositToken;

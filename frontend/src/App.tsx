@@ -8,6 +8,7 @@ import { Toaster } from "./components/ui/toaster";
 import { Liquidate } from "./routes/liquidate";
 import { PriceProvider } from "./provider/priceProvider/PriceProvider";
 import { BalanceProvider } from "./provider/balanceProvider";
+import { HealthFactorProvider } from "./provider/healthFactorProvider";
 
 function App() {
   // Create a Web3Modal instance
@@ -18,14 +19,16 @@ function App() {
 
       <PriceProvider>
         <BalanceProvider>
-          <div className="h-[calc(100dvh-5rem)] w-full">
-            <Routes>
-              <Route path="/" element={<Borrow />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/liquidate" element={<Liquidate />} />
-              <Route path="/*" element={<Borrow />} />
-            </Routes>
-          </div>
+          <HealthFactorProvider>
+            <div className="h-[calc(100dvh-5rem)] w-full">
+              <Routes>
+                <Route path="/" element={<Borrow />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/liquidate" element={<Liquidate />} />
+                <Route path="/*" element={<Borrow />} />
+              </Routes>
+            </div>
+          </HealthFactorProvider>
         </BalanceProvider>
       </PriceProvider>
       <Toaster />

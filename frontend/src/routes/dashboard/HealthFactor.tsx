@@ -1,5 +1,5 @@
-import { useHealthFactor } from "@/hooks/useHealthFactor";
 import { cn } from "@/lib/utils";
+import { useHealthFactor } from "@/provider/healthFactorProvider";
 
 type State = "INIT" | "BROKE" | "DANGER" | "SAFE";
 

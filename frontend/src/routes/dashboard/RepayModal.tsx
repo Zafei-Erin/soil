@@ -9,7 +9,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
-import { useHealthFactor } from "@/hooks/useHealthFactor";
 import { usePosition } from "@/hooks/usePosition";
 import { useRepay } from "@/hooks/useRepay";
 import { Loader } from "@/icons";
@@ -18,6 +17,7 @@ import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SoilComponent } from "./SoilComponent";
 import { useBalances } from "@/provider/balanceProvider";
+import { useHealthFactor } from "@/provider/healthFactorProvider";
 
 type Props = {
   className?: string;

@@ -1,21 +1,38 @@
 import SOIL from "@/abis/SOIL.json";
+
 import { TokenAddress } from "@/constants/token";
 import { isValidChain } from "@/lib/utils";
-import { useBalances } from "@/provider/balanceProvider";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import { BrowserProvider, Contract, formatUnits } from "ethers";
-import { useEffect, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import { useBalances } from "../balanceProvider";
 
-export function useHealthFactor() {
+type HealthFactorContext = {
+  healthFactor: number;
+  refreshHealthFactor: () => Promise<void>;
+};
+
+export const HealthFactorContext = createContext<HealthFactorContext | null>(
+  null
+);
+
+export const HealthFactorProvider = ({ children }: { children: ReactNode }) => {
   const [healthFactor, setHealthFactor] = useState<number>(0);
   const { isConnected, address, chainId } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
   const { getBalances } = useBalances();
+  const soilBalance = getBalances("SOIL");
 
-  const refreshHealthFactor = async () => {
+  const refreshHealthFactor = useCallback(async () => {
     if (!isConnected || !walletProvider || !address) {
       throw Error("User disconnected");
     }
@@ -24,7 +41,6 @@ export function useHealthFactor() {
       throw Error("Chain not support");
     }
 
-    const soilBalance = getBalances("SOIL");
     if (soilBalance == 0) {
       setHealthFactor(0);
       return;
@@ -40,11 +56,15 @@ export function useHealthFactor() {
 
     console.log("health factor", healthFactor);
     setHealthFactor(healthFactor);
-  };
+  }, [isConnected, walletProvider, address, chainId, soilBalance]);
 
   useEffect(() => {
     refreshHealthFactor();
-  }, [isConnected, walletProvider]);
+  }, [refreshHealthFactor]);
 
-  return { healthFactor, refreshHealthFactor };
-}
+  return (
+    <HealthFactorContext.Provider value={{ healthFactor, refreshHealthFactor }}>
+      {children}
+    </HealthFactorContext.Provider>
+  );
+};
