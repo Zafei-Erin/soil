@@ -138,7 +138,9 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
               </div>
               <ArrowRight className="w-4 h-4" />
               <div>
-                {estimatedHealthFactor.toLocaleString(undefined, {
+                {isNaN(estimatedHealthFactor)
+                  ? "0.00"
+                  : estimatedHealthFactor.toLocaleString(undefined, {
                   maximumFractionDigits: 2,
                   minimumFractionDigits: 2,
                 })}
@@ -147,12 +149,8 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
           </div>
         </div>
 
-        <DialogFooter className="sm:justify-end mt-3">
-          <Button
-            disabled={disabled}
-            onClick={withDrawWrapped}
-            className="flex items-center justify-center gap-2"
-          >
+        <DialogFooter className="flex-col gap-2 sm:space-x-0">
+          <Button disabled={disabled} onClick={withDrawWrapped}>
             <span>WithDraw</span>
             {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
           </Button>
