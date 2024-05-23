@@ -9,8 +9,11 @@ import {
 } from "@/constants/price";
 import { Token, TokenAddress } from "@/constants/token";
 import { isValidChain } from "@/lib/utils";
-import { useWeb3ModalAccount } from "@web3modal/ethers/react";
-import { formatUnits } from "ethers";
+import {
+  useWeb3ModalAccount,
+  useWeb3ModalProvider,
+} from "@web3modal/ethers/react";
+import { BrowserProvider, Contract, formatUnits } from "ethers";
 import {
   ReactNode,
   createContext,
@@ -32,7 +35,8 @@ export const PriceContext = createContext<PriceContext>({
 
 export const PriceProvider = ({ children }: { children: ReactNode }) => {
   const [prices, setPrices] = useState<PricesOnChain>(DEFAULT_PRICES_ON_CHAIN);
-  const { chainId } = useWeb3ModalAccount();
+  const { isConnected, chainId } = useWeb3ModalAccount();
+  const { walletProvider } = useWeb3ModalProvider();
 
   const fetchPrice = async (web3: Web3, token: Token) => {
     const contract = new web3.eth.Contract(PriceFeed.abi, priceAddress[token]);
@@ -41,18 +45,26 @@ export const PriceProvider = ({ children }: { children: ReactNode }) => {
       const price = parseFloat(formatUnits(result[1], 8));
       return price;
     }
-    return 0;
+    return DEFAULT_PRICES_ON_CHAIN[token];
   };
 
-  const fetchSOILOnChain = async (web3: Web3, chain: ChainID) => {
-    const contract = new web3.eth.Contract(SOIL.abi, TokenAddress[chain].SOIL);
-    const result = await contract.methods.getCrudeOilPrice().call();
-    if (result) {
-      const price = parseFloat(formatUnits(result[1], 8));
-      return price;
+  const fetchSOILOnChain = useCallback(async () => {
+    if (!isConnected || !walletProvider) {
+      console.log("User disconnected");
+      return DEFAULT_PRICES_ON_CHAIN.SOIL_ON_CHAIN;
     }
-    return 0;
-  };
+    if (!chainId || !isValidChain(chainId) || chainId == ChainID.Optimism) {
+      console.log("Chain not support");
+      return DEFAULT_PRICES_ON_CHAIN.SOIL_ON_CHAIN;
+    }
+    const ethersProvider = new BrowserProvider(walletProvider);
+    const signer = await ethersProvider.getSigner();
+
+    const contract = new Contract(TokenAddress[chainId].SOIL, SOIL.abi, signer);
+    const result = await contract.getCrudeOilPrice();
+    const price = parseFloat(formatUnits(result));
+    return price;
+  }, [chainId, isConnected, walletProvider]);
 
   const fetchPrices = useCallback(async () => {
     const newPrices = { ...DEFAULT_PRICES_ON_CHAIN };
@@ -66,13 +78,12 @@ export const PriceProvider = ({ children }: { children: ReactNode }) => {
     }
 
     // price of soil on current chain
-    const chain = chainId && isValidChain(chainId) ? chainId : ChainID.Optimism;
-    await fetchSOILOnChain(web3, chain)
+    await fetchSOILOnChain()
       .then((price) => (newPrices.SOIL_ON_CHAIN = price))
       .catch((error) => console.log(error));
 
     setPrices(newPrices);
-  }, [chainId]);
+  }, [fetchSOILOnChain]);
 
   useEffect(() => {
     fetchPrices();
