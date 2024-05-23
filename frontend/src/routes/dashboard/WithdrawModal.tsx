@@ -141,9 +141,9 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
                 {isNaN(estimatedHealthFactor)
                   ? "0.00"
                   : estimatedHealthFactor.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                  minimumFractionDigits: 2,
-                })}
+                      maximumFractionDigits: 2,
+                      minimumFractionDigits: 2,
+                    })}
               </div>
             </div>
           </div>

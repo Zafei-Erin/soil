@@ -9,12 +9,12 @@ import { Slider } from "@/components/ui/slider";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 import { DepositToken } from "@/constants/token";
+import { useApproveAndMint } from "@/hooks/useApproveAndMint";
 import { Loader } from "@/icons";
 import { cn, roundTo } from "@/lib/utils";
 import { useBalances } from "@/provider/balanceProvider";
 import { usePrices } from "@/provider/priceProvider";
 import { SoilComponent } from "./SoilComponent";
-import { useApproveAndMint } from "@/hooks/useApproveAndMint";
 
 export type Deposit = {
   token: DepositToken;
@@ -102,7 +102,7 @@ export const BorrowModal = () => {
   };
 
   return (
-    <div className="max-w-3xl w-full h-fit flex flex-col gap-8 max-md:items-center justify-between bg-white mx-4 p-8 rounded-lg border border-gray-200">
+    <div className="max-w-3xl w-full h-fit flex flex-col gap-8 max-md:items-center justify-between mx-4 p-8 rounded-lg border border-gray-200">
       <h1 className="text-2xl font-semibold">Borrow SOIL</h1>
       <div className="md:flex max-md:space-y-6 justify-between md:gap-3">
         {/* deposit */}
@@ -140,7 +140,7 @@ export const BorrowModal = () => {
           <input
             value={loanToValue == 0 ? "" : (loanToValue * 100).toFixed(2)}
             disabled
-            className="bg-gray-100 h-12 w-30 rounded-lg border border-gray-200 px-4 appearance-none focus:outline-none"
+            className="bg-gray-100 h-12 rounded-lg border border-gray-200 px-4 appearance-none focus:outline-none"
           />
           <p
             className={cn(
