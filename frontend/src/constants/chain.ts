@@ -1,6 +1,17 @@
-export const ChainID = {
-  POLYGON: 80002,
-  AVALANCHE: 43113,
-  OPTIMISM: 11155420,
+export const SourceChain = {
+  OPTIMISM: "Optimism",
 } as const;
-export type ChainID = (typeof ChainID)[keyof typeof ChainID];
+export type SourceChain = (typeof SourceChain)[keyof typeof SourceChain];
+
+export const DestinationChain = {
+  AVALANCHE: "Avalanche",
+  POLYGON: "Polygon",
+} as const;
+export type DestinationChain =
+  (typeof DestinationChain)[keyof typeof DestinationChain];
+
+export const Chain = {
+  ...SourceChain,
+  ...DestinationChain,
+};
+export type Chain = (typeof Chain)[keyof typeof Chain];

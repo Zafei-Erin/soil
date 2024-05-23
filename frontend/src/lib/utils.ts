@@ -1,4 +1,4 @@
-import { ChainID } from "@/constants/chain";
+import { ChainID } from "@/constants/chainId";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
