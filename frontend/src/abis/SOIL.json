@@ -17,113 +17,61 @@
           "name": "priceFeedAddresses",
           "type": "address[]"
         },
-        {
-          "internalType": "uint64",
-          "name": "_chainSelector",
-          "type": "uint64"
-        }
+        { "internalType": "uint64", "name": "_chainSelector", "type": "uint64" }
       ],
       "stateMutability": "nonpayable",
       "type": "constructor"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "spender",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "allowance",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "needed",
-          "type": "uint256"
-        }
+        { "internalType": "address", "name": "spender", "type": "address" },
+        { "internalType": "uint256", "name": "allowance", "type": "uint256" },
+        { "internalType": "uint256", "name": "needed", "type": "uint256" }
       ],
       "name": "ERC20InsufficientAllowance",
       "type": "error"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "sender",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "balance",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "needed",
-          "type": "uint256"
-        }
+        { "internalType": "address", "name": "sender", "type": "address" },
+        { "internalType": "uint256", "name": "balance", "type": "uint256" },
+        { "internalType": "uint256", "name": "needed", "type": "uint256" }
       ],
       "name": "ERC20InsufficientBalance",
       "type": "error"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "approver",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "approver", "type": "address" }
       ],
       "name": "ERC20InvalidApprover",
       "type": "error"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "receiver",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "receiver", "type": "address" }
       ],
       "name": "ERC20InvalidReceiver",
       "type": "error"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "sender",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "sender", "type": "address" }
       ],
       "name": "ERC20InvalidSender",
       "type": "error"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "spender",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "spender", "type": "address" }
       ],
       "name": "ERC20InvalidSpender",
       "type": "error"
     },
-    {
-      "inputs": [],
-      "name": "ReentrancyGuardReentrantCall",
-      "type": "error"
-    },
+    { "inputs": [], "name": "ReentrancyGuardReentrantCall", "type": "error" },
     {
       "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "healthFactor",
-          "type": "uint256"
-        }
+        { "internalType": "uint256", "name": "healthFactor", "type": "uint256" }
       ],
       "name": "sOIL__BreaksHealthFactor",
       "type": "error"
@@ -133,32 +81,16 @@
       "name": "sOIL__CollateralAddressesAndPriceFeedAddressesAmountsDontMatch",
       "type": "error"
     },
-    {
-      "inputs": [],
-      "name": "sOIL__HealthFactorOk",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "sOIL__NeedsMoreThanZero",
-      "type": "error"
-    },
+    { "inputs": [], "name": "sOIL__HealthFactorOk", "type": "error" },
+    { "inputs": [], "name": "sOIL__NeedsMoreThanZero", "type": "error" },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "token",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "token", "type": "address" }
       ],
       "name": "sOIL__TokenNotAllowed",
       "type": "error"
     },
-    {
-      "inputs": [],
-      "name": "sOIL__TransferFailed",
-      "type": "error"
-    },
+    { "inputs": [], "name": "sOIL__TransferFailed", "type": "error" },
     {
       "anonymous": false,
       "inputs": [
@@ -343,93 +275,43 @@
     {
       "inputs": [],
       "name": "ADDITIONAL_FEED_PRECISION",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [],
       "name": "PRECISION",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "spender",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "owner", "type": "address" },
+        { "internalType": "address", "name": "spender", "type": "address" }
       ],
       "name": "allowance",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "spender",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "value",
-          "type": "uint256"
-        }
+        { "internalType": "address", "name": "spender", "type": "address" },
+        { "internalType": "uint256", "name": "value", "type": "uint256" }
       ],
       "name": "approve",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "account",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "account", "type": "address" }
       ],
       "name": "balanceOf",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
@@ -449,33 +331,19 @@
     {
       "inputs": [],
       "name": "decimals",
-      "outputs": [
-        {
-          "internalType": "uint8",
-          "name": "",
-          "type": "uint8"
-        }
-      ],
+      "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "collateral",
-          "type": "address"
-        },
+        { "internalType": "address", "name": "collateral", "type": "address" },
         {
           "internalType": "uint256",
           "name": "amountCollateral",
           "type": "uint256"
         },
-        {
-          "internalType": "uint256",
-          "name": "amountToMint",
-          "type": "uint256"
-        }
+        { "internalType": "uint256", "name": "amountToMint", "type": "uint256" }
       ],
       "name": "depositAndMint",
       "outputs": [],
@@ -484,16 +352,8 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "collateral",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
+        { "internalType": "address", "name": "collateral", "type": "address" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" }
       ],
       "name": "depositCollateral",
       "outputs": [],
@@ -502,35 +362,17 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "collateral",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "user", "type": "address" },
+        { "internalType": "address", "name": "collateral", "type": "address" }
       ],
       "name": "getAccountCollateralAmount",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "user", "type": "address" }
       ],
       "name": "getAccountCollateralValue",
       "outputs": [
@@ -545,11 +387,7 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "user", "type": "address" }
       ],
       "name": "getAccountInformationValue",
       "outputs": [
@@ -568,31 +406,42 @@
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        }
-      ],
-      "name": "getHealthFactor",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "inputs": [],
+      "name": "getCrudeOilPrice",
+      "outputs": [{ "internalType": "int256", "name": "", "type": "int256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "collateral",
-          "type": "address"
+          "internalType": "uint64",
+          "name": "destinationChainSelector",
+          "type": "uint64"
         },
+        {
+          "internalType": "enum MessageSender.PayFeesIn",
+          "name": "payFeesIn",
+          "type": "uint8"
+        }
+      ],
+      "name": "getEstimatedFeeAmount",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "user", "type": "address" }
+      ],
+      "name": "getHealthFactor",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "collateral", "type": "address" },
         {
           "internalType": "uint256",
           "name": "usdAmountInWei",
@@ -600,13 +449,7 @@
         }
       ],
       "name": "getTokenAmountFromUsd",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
@@ -619,23 +462,13 @@
         }
       ],
       "name": "getUsdAmountFromOil",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "collateral",
-          "type": "address"
-        },
+        { "internalType": "address", "name": "collateral", "type": "address" },
         {
           "internalType": "uint256",
           "name": "tokenAmountInWei",
@@ -643,28 +476,14 @@
         }
       ],
       "name": "getUsdAmountFromToken",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "collateral",
-          "type": "address"
-        },
+        { "internalType": "address", "name": "user", "type": "address" },
+        { "internalType": "address", "name": "collateral", "type": "address" },
         {
           "internalType": "uint256",
           "name": "oilAmountToCover",
@@ -678,11 +497,7 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "amountToMint",
-          "type": "uint256"
-        }
+        { "internalType": "uint256", "name": "amountToMint", "type": "uint256" }
       ],
       "name": "mintOil",
       "outputs": [],
@@ -692,23 +507,13 @@
     {
       "inputs": [],
       "name": "name",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
+      "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "collateral",
-          "type": "address"
-        },
+        { "internalType": "address", "name": "collateral", "type": "address" },
         {
           "internalType": "uint256",
           "name": "amountCollateralToRedeem",
@@ -722,11 +527,7 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "collateral",
-          "type": "address"
-        },
+        { "internalType": "address", "name": "collateral", "type": "address" },
         {
           "internalType": "uint256",
           "name": "amountCollateralToRedeem",
@@ -744,48 +545,16 @@
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "uint64",
-          "name": "destinationChainSelector",
-          "type": "uint64"
-        },
-        {
-          "internalType": "enum MessageSender.PayFeesIn",
-          "name": "payFeesIn",
-          "type": "uint8"
-        }
-      ],
-      "name": "requestCrudeOilPriceUpdateOnDestinationChain",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "inputs": [],
       "name": "s_chainSelector",
-      "outputs": [
-        {
-          "internalType": "uint64",
-          "name": "",
-          "type": "uint64"
-        }
-      ],
+      "outputs": [{ "internalType": "uint64", "name": "", "type": "uint64" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "collateral",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "user", "type": "address" },
+        { "internalType": "address", "name": "collateral", "type": "address" }
       ],
       "name": "s_collateralPerUser",
       "outputs": [
@@ -800,19 +569,11 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "user", "type": "address" }
       ],
       "name": "s_oilMintedPerUser",
       "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "oilMinted",
-          "type": "uint256"
-        }
+        { "internalType": "uint256", "name": "oilMinted", "type": "uint256" }
       ],
       "stateMutability": "view",
       "type": "function"
@@ -820,84 +581,51 @@
     {
       "inputs": [],
       "name": "symbol",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
+      "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [],
       "name": "totalSupply",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "to",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "value",
-          "type": "uint256"
-        }
+        { "internalType": "address", "name": "to", "type": "address" },
+        { "internalType": "uint256", "name": "value", "type": "uint256" }
       ],
       "name": "transfer",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "from", "type": "address" },
+        { "internalType": "address", "name": "to", "type": "address" },
+        { "internalType": "uint256", "name": "value", "type": "uint256" }
       ],
+      "name": "transferFrom",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "from",
-          "type": "address"
+          "internalType": "uint64",
+          "name": "destinationChainSelector",
+          "type": "uint64"
         },
         {
-          "internalType": "address",
-          "name": "to",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "value",
-          "type": "uint256"
+          "internalType": "enum MessageSender.PayFeesIn",
+          "name": "payFeesIn",
+          "type": "uint8"
         }
       ],
-      "name": "transferFrom",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
       "name": "updateCrudeOilPriceOnDestinationChain",
       "outputs": [],
       "stateMutability": "nonpayable",
