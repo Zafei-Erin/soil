@@ -29,13 +29,15 @@ export function useHealthFactor() {
       setHealthFactor(0);
       return;
     }
-    
+
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
     const soilAddress = TokenAddress[chainId].SOIL;
     const contract = new Contract(soilAddress, SOIL.abi, signer);
     const result = await contract.getHealthFactor(address);
-    const healthFactor = Math.min(parseFloat(formatUnits(result, 18)), 100);
+    const data = parseFloat(formatUnits(result, 18));
+    const healthFactor = data > 1_000_000 ? Infinity : data;
+
     console.log("health factor", healthFactor);
     setHealthFactor(healthFactor);
   };
