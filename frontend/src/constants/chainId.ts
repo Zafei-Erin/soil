@@ -21,19 +21,23 @@ export type ChainID = (typeof ChainID)[keyof typeof ChainID];
 type ChainInfo = {
   chainId: ChainID;
   name: string;
+  token: string;
 };
 
 export const ChainInfo: Record<ChainID, ChainInfo> = {
   [ChainID.Polygon]: {
     chainId: ChainID.Polygon,
-    name: "POLYGON",
+    name: "Polygon",
+    token: "MATIC",
   },
   [ChainID.Avalanche]: {
     chainId: ChainID.Avalanche,
-    name: "AVALANCHE",
+    name: "Avalanche",
+    token: "AVAX",
   },
   [ChainID.Optimism]: {
     chainId: ChainID.Optimism,
     name: "Optimism",
+    token: "ETH",
   },
 };
