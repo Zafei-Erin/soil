@@ -27,7 +27,7 @@ export const SoilComponent: React.FC<Props> = ({
           <div className="flex items-center justify-between">
             <p className="text-xs text-gray-600">
               price: $
-              {prices["SOIL"].toLocaleString(undefined, {
+              {prices.SOIL_ON_CHAIN.toLocaleString(undefined, {
                 maximumFractionDigits: 2,
               })}
             </p>
