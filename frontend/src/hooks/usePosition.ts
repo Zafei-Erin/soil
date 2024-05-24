@@ -1,4 +1,5 @@
 import SOIL from "@/abis/SOIL.json";
+import { DEFAULT_POSITION, Position } from "@/constants/position";
 import { TokenAddress } from "@/constants/token";
 import { isValidChain } from "@/lib/utils";
 import {
@@ -7,16 +8,6 @@ import {
 } from "@web3modal/ethers/react";
 import { BrowserProvider, Contract, formatUnits } from "ethers";
 import { useCallback, useEffect, useState } from "react";
-
-type Position = {
-  deposited: number;
-  borrowed: number;
-};
-
-const DEFAULT_POSITION: Position = {
-  deposited: 0,
-  borrowed: 0,
-};
 
 export function usePosition() {
   const [position, setPosition] = useState<Position>(DEFAULT_POSITION);

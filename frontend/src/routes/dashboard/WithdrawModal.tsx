@@ -10,16 +10,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
+import { Position } from "@/constants/position";
+import { DepositToken } from "@/constants/token";
 import { useCollaterals } from "@/hooks/useCollaterals";
-import { usePosition } from "@/hooks/usePosition";
 import { useWithDraw } from "@/hooks/useWithdraw";
 import { Loader } from "@/icons";
 import { cn } from "@/lib/utils";
+import { useHealthFactor } from "@/provider/healthFactorProvider";
 import { usePrices } from "@/provider/priceProvider";
-import { DepositToken } from "@/constants/token";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useHealthFactor } from "@/provider/healthFactorProvider";
 
 type Withdraw = {
   token: DepositToken;
@@ -28,6 +28,8 @@ type Withdraw = {
 
 type Props = {
   className?: string;
+  position: Position;
+  refreshPosition: () => Promise<void>;
 };
 
 const DEFAULT_WITHDRAW: Withdraw = {
@@ -35,14 +37,17 @@ const DEFAULT_WITHDRAW: Withdraw = {
   amount: 0,
 };
 
-export const WithdrawModal: React.FC<Props> = ({ className }) => {
+export const WithdrawModal: React.FC<Props> = ({
+  className,
+  position,
+  refreshPosition,
+}) => {
   const [withdraw, setWithdraw] = useState<Withdraw>(DEFAULT_WITHDRAW);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
   const { healthFactor } = useHealthFactor();
   const { prices } = usePrices();
-  const { position } = usePosition();
   const { withDraw } = useWithDraw();
   const { collaterals } = useCollaterals();
 
@@ -77,6 +82,7 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
     setLoading(true);
     try {
       await withDraw(withdraw.token, withdraw.amount);
+      refreshPosition();
       toast({
         duration: 1500,
         title: "Withdraw Successfully",

@@ -6,7 +6,7 @@ import { RepayModal } from "./RepayModal";
 import { WithdrawModal } from "./WithdrawModal";
 
 export const Dashboard = () => {
-  const { position } = usePosition();
+  const { position, refreshPosition } = usePosition();
   const { isConnected } = useWeb3ModalAccount();
   return (
     <div className="h-full py-16">
@@ -33,7 +33,11 @@ export const Dashboard = () => {
                   minimumFractionDigits: 2,
                 })}
               </div>
-              <WithdrawModal className="w-full" />
+              <WithdrawModal
+                position={position}
+                refreshPosition={refreshPosition}
+                className="w-full"
+              />
             </div>
 
             <div className="space-y-3 mt-10">
