@@ -11,9 +11,9 @@ export const Dashboard = () => {
   return (
     <div className="h-full py-16">
       <div className="flex flex-col items-center justify-center">
-        <div className="relative w-96 h-[30rem] bg-white rounded-lg border border-gray-200">
+        <div className="relative w-96 h-[30rem] rounded-lg border border-gray-200">
           {!isConnected && (
-            <div className="backdrop-blur-md w-full h-full absolute bg-white/60 rounded-lg flex flex-col gap-6 items-center justify-center">
+            <div className="backdrop-blur-md w-full h-full absolute bg-white/30 rounded-lg flex flex-col gap-6 items-center justify-center">
               <h1 className="text-2xl font-semibold">
                 Please connect your wallet
               </h1>
