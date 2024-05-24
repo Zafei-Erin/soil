@@ -43,7 +43,7 @@ export const BorrowModal = () => {
 
   const setLoanToValue = async (depositAmount: number, soilAmount: number) => {
     const depositValue = prices[deposit.token] * depositAmount;
-    const soilValue = prices["SOIL"] * soilAmount;
+    const soilValue = prices.SOIL_ON_CHAIN * soilAmount;
     let loanToValue = soilValue / depositValue;
 
     loanToValue =
@@ -62,7 +62,7 @@ export const BorrowModal = () => {
     _setLoanToValue(value[0]);
 
     let s =
-      (value[0] * deposit.amount * prices[deposit.token]) / prices["SOIL"];
+      (value[0] * deposit.amount * prices[deposit.token]) / prices.SOIL_ON_CHAIN;
     s = isNaN(s) ? 0 : s;
     s = roundTo(s, 2);
     setSoilAmount(s);

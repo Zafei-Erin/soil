@@ -1,5 +1,6 @@
 import { useBalances } from "@/provider/balanceProvider";
 import { usePrices } from "@/provider/priceProvider";
+import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -17,6 +18,7 @@ export const SoilComponent: React.FC<Props> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState<string>("");
+  const { isConnected } = useWeb3ModalAccount();
   const { prices } = usePrices();
   const { getBalances } = useBalances();
 
@@ -53,9 +55,14 @@ export const SoilComponent: React.FC<Props> = ({
           <div className="flex items-center justify-between">
             <p className="text-xs text-gray-600">
               price: $
-              {prices["SOIL"].toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })}
+              {!isConnected
+                ? prices.SOIL.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                  })
+                : prices.SOIL_ON_CHAIN.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 2,
+                  })}
             </p>
             <p className="text-xs text-gray-600">
               balance: {getBalances("SOIL")}
