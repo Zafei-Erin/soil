@@ -96,7 +96,6 @@ export const WithdrawModal: React.FC<Props> = ({
       });
     } finally {
       setLoading(false);
-      setWithdraw(DEFAULT_WITHDRAW);
       setOpen(false);
     }
   };

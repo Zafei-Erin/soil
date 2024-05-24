@@ -49,7 +49,11 @@ export const Dashboard = () => {
                   minimumFractionDigits: 2,
                 })}
               </div>
-              <RepayModal className="w-full" />
+              <RepayModal
+                position={position}
+                refreshPosition={refreshPosition}
+                className="w-full"
+              />
             </div>
           </div>
         </div>

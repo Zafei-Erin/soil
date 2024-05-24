@@ -9,27 +9,32 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
-import { usePosition } from "@/hooks/usePosition";
+import { Position } from "@/constants/position";
 import { useRepay } from "@/hooks/useRepay";
 import { Loader } from "@/icons";
 import { cn } from "@/lib/utils";
+import { useBalances } from "@/provider/balanceProvider";
+import { useHealthFactor } from "@/provider/healthFactorProvider";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SoilComponent } from "./SoilComponent";
-import { useBalances } from "@/provider/balanceProvider";
-import { useHealthFactor } from "@/provider/healthFactorProvider";
 
 type Props = {
   className?: string;
+  position: Position;
+  refreshPosition: () => Promise<void>;
 };
 
-export const RepayModal: React.FC<Props> = ({ className }) => {
+export const RepayModal: React.FC<Props> = ({
+  className,
+  position,
+  refreshPosition,
+}) => {
   const [amount, setAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
   const { healthFactor } = useHealthFactor();
-  const { position } = usePosition();
   const { getBalances } = useBalances();
   const { repay } = useRepay();
 
@@ -48,12 +53,10 @@ export const RepayModal: React.FC<Props> = ({ className }) => {
   const disabled = error || amount <= 0 || loading;
 
   const repayWrapped = async () => {
-    if (amount <= 0) {
-      return;
-    }
     setLoading(true);
     try {
       await repay(amount);
+      refreshPosition();
       toast({
         duration: 1500,
         title: "Repay Successfully",
