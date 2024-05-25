@@ -16,13 +16,16 @@ export const TokenIconWithName: React.FC<Props> = ({
 }) => {
   return (
     <div
-      className={cn("flex items-center justify-center gap-1.5", className)}
+      className={cn(
+        "flex items-center justify-center gap-1.5 w-full h-full",
+        className
+      )}
       {...props}
     >
       <div className="bg-white rounded-full p-1 border border-green-bright">
         <TokenIcon token={token} className={iconClass} />
       </div>
-      <div>{token}</div>
+      <div className="flex items-center h-10">{token}</div>
     </div>
   );
 };

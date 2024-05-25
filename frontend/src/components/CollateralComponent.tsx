@@ -55,14 +55,14 @@ export const CollateralComponent: React.FC<Props> = ({
             onTokenChange?.(token);
           }}
         >
-          <SelectTrigger className="flex items-center justify-between rounded-full h-11 w-[12rem] pl-1.5 pr-3 font-satoshi">
+          <SelectTrigger className="flex items-center justify-between rounded-full h-11 w-[8.5rem] pl-1.5 pr-3 font-satoshi">
             <SelectValue />
           </SelectTrigger>
 
           <SelectContent>
             {DepositTokens.map((token) => (
               <SelectItem value={token} key={token}>
-                <TokenIconWithName token={token} />
+                <TokenIconWithName token={token}/>
               </SelectItem>
             ))}
           </SelectContent>
