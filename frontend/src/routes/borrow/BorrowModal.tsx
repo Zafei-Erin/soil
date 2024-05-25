@@ -121,7 +121,7 @@ export const BorrowModal = () => {
           errorMessage={"Exceeds your balance"}
         />
         <div className="rounded-full bg-black aspect-square w-fit p-1 flex items-center justify-center">
-          <SwapIcon className="w-5 h-5 md:rotate-90 stroke-white fill-white transition-all" />
+          <SwapIcon className="w-5 h-5 md:rotate-90  fill-white transition-all" />
         </div>
         <SoilComponent amount={soilAmount} onAmountChange={changeSoilAmount} />
       </div>
