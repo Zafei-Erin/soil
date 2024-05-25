@@ -5,15 +5,15 @@ import { Link } from "react-router-dom";
 import { CollateralComponent } from "@/components/CollateralComponent";
 import { ConnectButton } from "@/components/ConnectButton";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
 import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 import { DepositToken } from "@/constants/token";
 import { useApproveAndMint } from "@/hooks/useApproveAndMint";
 import { Loader } from "@/icons";
-import { cn, roundTo } from "@/lib/utils";
+import { roundTo } from "@/lib/utils";
 import { useBalances } from "@/provider/balanceProvider";
 import { usePrices } from "@/provider/priceProvider";
+import { LoanToValue } from "./LoanToValue";
 import { SoilComponent } from "./SoilComponent";
 
 export type Deposit = {
@@ -105,6 +105,7 @@ export const BorrowModal = () => {
   return (
     <div className="max-w-3xl w-full h-fit flex flex-col gap-8 max-md:items-center justify-between mx-4 p-8 rounded-lg border border-gray-200">
       <h1 className="text-2xl font-semibold">Borrow SOIL</h1>
+
       <div className="md:flex max-md:space-y-6 justify-between md:gap-6">
         <CollateralComponent
           onTokenChange={(token: DepositToken) => {
@@ -121,33 +122,9 @@ export const BorrowModal = () => {
         />
         <SoilComponent amount={soilAmount} onAmountChange={changeSoilAmount} />
       </div>
-      {/* LoanToValue */}
-      <div className="space-y-3 w-full">
-        <h3 className="font-semibold">LoanToValue %</h3>
-        <div>
-          <input
-            value={loanToValue == 0 ? "" : (loanToValue * 100).toFixed(2)}
-            disabled
-            className="bg-green-dim h-12 rounded-lg px-4 appearance-none focus:outline-none"
-          />
-          <p
-            className={cn(
-              "text-xs text-red-600 mt-2 hidden",
-              loanToValue > 0.8 && "block"
-            )}
-          >
-            LoanToValue must be less than 80% to place a transaction
-          </p>
-        </div>
-        <Slider
-          defaultValue={[0]}
-          value={[loanToValue]}
-          max={1}
-          min={0}
-          step={0.01}
-          onValueChange={changeHF}
-        />
-      </div>
+
+      <LoanToValue loanToValue={loanToValue} changeHF={changeHF} />
+
       {!isConnected ? (
         <ConnectButton className="w-full mt-3" />
       ) : (
