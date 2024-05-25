@@ -55,7 +55,7 @@ export const CollateralComponent: React.FC<Props> = ({
             onTokenChange?.(token);
           }}
         >
-          <SelectTrigger className="flex items-center justify-between rounded-full h-11 w-[7.5rem] pl-1.5 pr-3 font-satoshi">
+          <SelectTrigger className="flex items-center justify-between rounded-full h-11 w-[8rem] pl-1.5 pr-3 font-satoshi">
             <SelectValue />
           </SelectTrigger>
 
