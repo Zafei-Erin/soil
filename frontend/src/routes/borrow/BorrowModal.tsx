@@ -130,12 +130,12 @@ export const BorrowModal = () => {
       <div className="mt-6 w-full">
         {!isConnected ? (
           <ConnectButton
-            className="w-full bg-green-bright rounded-full text-black transition-all hover:bg-green-bright/90"
+            className="w-full rounded-full bg-gradient-to-r from-green-bright to-green-bright/60 text-black transition-all hover:bg-green-bright/90"
             iconClass="stroke-black"
           />
         ) : (
           <Button
-            className="w-full rounded-full flex items-center justify-center gap-2 bg-green-bright text-black transition-all hover:bg-green-bright/90 disabled:cursor-not-allowed"
+            className="w-full rounded-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-bright to-green-bright/60 text-black transition-all hover:bg-green-bright/90 disabled:cursor-not-allowed"
             onClick={borrow}
             disabled={disabled}
           >
