@@ -104,8 +104,8 @@ export const BorrowModal = () => {
   };
 
   return (
-    <div className="max-w-3xl sm:min-w-[30rem] w-fit h-fit flex flex-col md:gap-8 max-md:items-center justify-between mx-4 p-8 rounded-lg border border-gray-200">
-      <h1 className="text-2xl font-semibold mb-6">Borrow SOIL</h1>
+    <div className="max-w-3xl sm:min-w-[30rem] bg-black-dim w-fit h-fit flex flex-col md:gap-8 justify-between mx-4 p-8 rounded-lg">
+      <h1 className="text-xl font-semibold mb-3">Borrow SOIL</h1>
       <div className="flex max-md:flex-col items-center justify-between md:gap-6 w-full">
         <CollateralComponent
           onTokenChange={(token: DepositToken) => {

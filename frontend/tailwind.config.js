@@ -17,6 +17,7 @@ export default {
       colors: {
         "green-dim": "hsl(var(--green-dim))",
         "green-bright": "hsl(var(--green-bright))",
+        "black-dim": "hsl(var(--black-dim))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

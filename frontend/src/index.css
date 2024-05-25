@@ -46,6 +46,7 @@ input[type="number"] {
 
     --green-dim: 180 52% 12%;
     --green-bright: 138 100% 50%;
+    --black-dim: 228 22% 8%;
 
     --radius: 0.5rem;
   }
