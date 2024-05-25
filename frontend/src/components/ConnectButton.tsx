@@ -1,10 +1,16 @@
+import { cn } from "@/lib/utils";
 import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { Wallet } from "lucide-react";
 import { Button, ButtonProps } from "./ui/button";
-import { cn } from "@/lib/utils";
 
-type Props = Omit<ButtonProps, "onClick">;
-export const ConnectButton: React.FC<Props> = ({ className, ...props }) => {
+type Props = Omit<ButtonProps, "onClick"> & {
+  iconClass?: string;
+};
+export const ConnectButton: React.FC<Props> = ({
+  className,
+  iconClass,
+  ...props
+}) => {
   const { open } = useWeb3Modal();
   const { isConnected, address } = useWeb3ModalAccount();
   return (
@@ -18,7 +24,7 @@ export const ConnectButton: React.FC<Props> = ({ className, ...props }) => {
           )}
           {...props}
         >
-          <Wallet className="h-4 w-4 stroke-emerald-500" />
+          <Wallet className={cn("h-4 w-4 stroke-emerald-500", iconClass)} />
           <span>
             {address?.slice(0, 4)}...{address?.slice(-4)}
           </span>
@@ -32,7 +38,7 @@ export const ConnectButton: React.FC<Props> = ({ className, ...props }) => {
           )}
           {...props}
         >
-          <Wallet className="h-4 w-4 stroke-zinc-500" />
+          <Wallet className={cn("h-4 w-4 stroke-zinc-500", iconClass)} />
           <span>Connect Wallet</span>
         </Button>
       )}
