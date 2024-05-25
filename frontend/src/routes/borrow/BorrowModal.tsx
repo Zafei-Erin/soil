@@ -104,10 +104,9 @@ export const BorrowModal = () => {
   };
 
   return (
-    <div className="max-w-3xl w-full h-fit flex flex-col gap-8 max-md:items-center justify-between mx-4 p-8 rounded-lg border border-gray-200">
+    <div className="max-w-3xl min-w-[30rem] w-fit h-fit flex flex-col gap-8 max-md:items-center justify-between mx-4 p-8 rounded-lg border border-gray-200">
       <h1 className="text-2xl font-semibold">Borrow SOIL</h1>
-
-      <div className="flex max-md:flex-col items-center justify-between gap-6">
+      <div className="flex max-md:flex-col items-center justify-between md:gap-6 w-full">
         <CollateralComponent
           onTokenChange={(token: DepositToken) => {
             setDeposit((prev) => ({
@@ -119,7 +118,7 @@ export const BorrowModal = () => {
           onAmountChange={changeDepositAmount}
           deposit={deposit}
           isError={deposit.amount > getBalances(deposit.token)}
-          errorMessage={"You dont have enough balance!"}
+          errorMessage={"Exceeds your balance"}
         />
         <div className="rounded-full bg-black aspect-square w-fit p-1 flex items-center justify-center">
           <SwapIcon className="w-5 h-5 md:rotate-90 stroke-white fill-white transition-all" />
@@ -130,10 +129,10 @@ export const BorrowModal = () => {
       <LoanToValue loanToValue={loanToValue} changeHF={changeHF} />
 
       {!isConnected ? (
-        <ConnectButton className="w-full mt-3" />
+        <ConnectButton className="w-full" />
       ) : (
         <Button
-          className="w-full mt-3 flex items-center justify-center gap-2 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 disabled:cursor-not-allowed"
           onClick={borrow}
           disabled={disabled}
         >

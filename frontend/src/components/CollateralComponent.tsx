@@ -85,9 +85,11 @@ export const CollateralComponent: React.FC<Props> = ({
         </div>
       </label>
 
-      {isError && (
-        <p className="text-xs text-red-600 mt-2 block">{errorMessage}</p>
-      )}
+      <div className="mt-2 h-4">
+        {isError && (
+          <span className="text-xs text-red-600">{errorMessage}</span>
+        )}
+      </div>
     </div>
   );
 };

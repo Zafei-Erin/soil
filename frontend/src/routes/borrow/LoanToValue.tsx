@@ -30,9 +30,13 @@ export const LoanToValue: React.FC<Props> = ({ loanToValue, changeHF }) => {
         onValueChange={changeHF}
         isError={isError}
       />
-      <p className={cn("text-xs text-red-600 mt-2 hidden", isError && "block")}>
-        LoanToValue must be less than 80% to place a transaction
-      </p>
+      <div className="mt-2 h-4">
+        {isError && (
+          <span className="text-xs text-red-600">
+            LoanToValue must be less than 80% to place a transaction
+          </span>
+        )}
+      </div>
     </div>
   );
 };
