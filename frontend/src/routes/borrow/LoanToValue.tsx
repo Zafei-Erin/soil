@@ -9,8 +9,8 @@ type Props = {
 export const LoanToValue: React.FC<Props> = ({ loanToValue, changeHF }) => {
   const isError = loanToValue > 0.8;
   return (
-    <div className="space-y-3 w-full">
-      <div className="flex items-center justify-between">
+    <div className="w-full">
+      <div className="flex items-center justify-between mb-3">
         <h3 className="font-satoshi">LoanToValue %</h3>
         <span
           className={cn(
@@ -30,10 +30,10 @@ export const LoanToValue: React.FC<Props> = ({ loanToValue, changeHF }) => {
         onValueChange={changeHF}
         isError={isError}
       />
-      <div className="mt-2 h-4">
+      <div className="sm:mt-2 h-4">
         {isError && (
           <span className="text-xs text-red-600">
-            LoanToValue must be less than 80% to place a transaction
+            LoanToValue must be less than 80%
           </span>
         )}
       </div>

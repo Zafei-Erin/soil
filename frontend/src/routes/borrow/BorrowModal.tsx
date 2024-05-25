@@ -104,7 +104,7 @@ export const BorrowModal = () => {
   };
 
   return (
-    <div className="max-w-3xl sm:min-w-[30rem] w-fit h-fit flex flex-col gap-3 md:gap-8 max-md:items-center justify-between mx-4 p-8 rounded-lg border border-gray-200">
+    <div className="max-w-3xl sm:min-w-[30rem] w-fit h-fit flex flex-col md:gap-8 max-md:items-center justify-between mx-4 p-8 rounded-lg border border-gray-200">
       <h1 className="text-2xl font-semibold mb-6">Borrow SOIL</h1>
       <div className="flex max-md:flex-col items-center justify-between md:gap-6 w-full">
         <CollateralComponent
@@ -127,19 +127,25 @@ export const BorrowModal = () => {
       </div>
 
       <LoanToValue loanToValue={loanToValue} changeHF={changeHF} />
-
-      {!isConnected ? (
-        <ConnectButton className="w-full" />
-      ) : (
-        <Button
-          className="w-full flex items-center justify-center gap-2 disabled:cursor-not-allowed"
-          onClick={borrow}
-          disabled={disabled}
-        >
-          <span>Borrow</span>
-          {borrowing && <Loader className="w-7 h-6 stroke-white fill-white" />}
-        </Button>
-      )}
+      <div className="mt-6 w-full">
+        {!isConnected ? (
+          <ConnectButton
+            className="w-full bg-green-bright rounded-full text-black transition-all hover:bg-green-bright/90"
+            iconClass="stroke-black"
+          />
+        ) : (
+          <Button
+            className="w-full rounded-full flex items-center justify-center gap-2 bg-green-bright text-black transition-all hover:bg-green-bright/90 disabled:cursor-not-allowed"
+            onClick={borrow}
+            disabled={disabled}
+          >
+            <span>Borrow</span>
+            {borrowing && (
+              <Loader className="w-7 h-6 stroke-white fill-white" />
+            )}
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
