@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 export const Header = () => {
   const { pathname } = useLocation();
   return (
-    <div className="h-20 flex items-center justify-center sm:justify-end sm:pr-32 py-3">
+    <div className="h-20 flex items-center justify-center sm:justify-end sm:pr-32 p-3">
       <div className="flex gap-3 items-center text-gray-400 font-satoshi">
         <Link to="/">
           <span
@@ -14,7 +14,7 @@ export const Header = () => {
               pathname == "/" && "text-white font-medium"
             )}
           >
-            Mint / Borrow
+            Borrow
           </span>
         </Link>
         <Link to="/dashboard">
@@ -37,7 +37,7 @@ export const Header = () => {
             Liquidate
           </span>
         </Link>
-        <ConnectButton />
+        <ConnectButton className="p-2 sm:p-4" />
       </div>
     </div>
   );
