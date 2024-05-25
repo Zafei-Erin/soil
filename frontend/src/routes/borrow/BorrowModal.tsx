@@ -10,6 +10,7 @@ import { toast } from "@/components/ui/use-toast";
 import { DepositToken } from "@/constants/token";
 import { useApproveAndMint } from "@/hooks/useApproveAndMint";
 import { Loader } from "@/icons";
+import { SwapIcon } from "@/icons/SwapIcon";
 import { roundTo } from "@/lib/utils";
 import { useBalances } from "@/provider/balanceProvider";
 import { usePrices } from "@/provider/priceProvider";
@@ -106,7 +107,7 @@ export const BorrowModal = () => {
     <div className="max-w-3xl w-full h-fit flex flex-col gap-8 max-md:items-center justify-between mx-4 p-8 rounded-lg border border-gray-200">
       <h1 className="text-2xl font-semibold">Borrow SOIL</h1>
 
-      <div className="md:flex max-md:space-y-6 justify-between md:gap-6">
+      <div className="flex max-md:flex-col items-center justify-between gap-6">
         <CollateralComponent
           onTokenChange={(token: DepositToken) => {
             setDeposit((prev) => ({
@@ -120,6 +121,9 @@ export const BorrowModal = () => {
           isError={deposit.amount > getBalances(deposit.token)}
           errorMessage={"You dont have enough balance!"}
         />
+        <div className="rounded-full bg-black aspect-square w-fit p-1 flex items-center justify-center">
+          <SwapIcon className="w-5 h-5 md:rotate-90 stroke-white fill-white transition-all" />
+        </div>
         <SoilComponent amount={soilAmount} onAmountChange={changeSoilAmount} />
       </div>
 
