@@ -1,10 +1,19 @@
 import { ChainID } from "./chainId";
 
-export const DepositToken = ["WETH", "DAI"] as const;
-export type DepositToken = (typeof DepositToken)[number];
+export const DepositToken = {
+  DAI: "DAI",
+  WETH: "WETH",
+} as const;
+export type DepositToken = (typeof DepositToken)[keyof typeof DepositToken];
 
-export const Token = [...DepositToken, "SOIL"] as const;
-export type Token = (typeof Token)[number];
+export const Token = {
+  ...DepositToken,
+  SOIL: "SOIL",
+} as const;
+export type Token = (typeof Token)[keyof typeof Token];
+
+export const Tokens: Token[] = Object.values(Token);
+export const DepositTokens: DepositToken[] = Object.values(DepositToken);
 
 export type TokenAddress = {
   [token in Token]: string;

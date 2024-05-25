@@ -2,8 +2,8 @@ import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import { CollateralComponent } from "@/components/CollateralComponent";
 import { ConnectButton } from "@/components/ConnectButton";
-import { DepositComponent } from "@/components/DepositComponent";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { ToastAction } from "@/components/ui/toast";
@@ -62,7 +62,8 @@ export const BorrowModal = () => {
     _setLoanToValue(value[0]);
 
     let s =
-      (value[0] * deposit.amount * prices[deposit.token]) / prices.SOIL_ON_CHAIN;
+      (value[0] * deposit.amount * prices[deposit.token]) /
+      prices.SOIL_ON_CHAIN;
     s = isNaN(s) ? 0 : s;
     s = roundTo(s, 2);
     setSoilAmount(s);
@@ -104,34 +105,21 @@ export const BorrowModal = () => {
   return (
     <div className="max-w-3xl w-full h-fit flex flex-col gap-8 max-md:items-center justify-between mx-4 p-8 rounded-lg border border-gray-200">
       <h1 className="text-2xl font-semibold">Borrow SOIL</h1>
-      <div className="md:flex max-md:space-y-6 justify-between md:gap-3">
-        {/* deposit */}
-        <div className="space-y-3">
-          <h3 className="font-semibold">Deposit required</h3>
-
-          <DepositComponent
-            onTokenChange={(token: DepositToken) => {
-              setDeposit((prev) => ({
-                ...prev,
-                token: token,
-              }));
-              _setLoanToValue(0);
-            }}
-            onAmountChange={changeDepositAmount}
-            deposit={deposit}
-            isError={deposit.amount > getBalances(deposit.token)}
-            errorMessage={"You dont have enough balance!"}
-          />
-        </div>
-
-        {/* borrow */}
-        <div className="space-y-3">
-          <h3 className="font-semibold">Borrow</h3>
-          <SoilComponent
-            amount={soilAmount}
-            onAmountChange={changeSoilAmount}
-          />
-        </div>
+      <div className="md:flex max-md:space-y-6 justify-between md:gap-6">
+        <CollateralComponent
+          onTokenChange={(token: DepositToken) => {
+            setDeposit((prev) => ({
+              ...prev,
+              token: token,
+            }));
+            _setLoanToValue(0);
+          }}
+          onAmountChange={changeDepositAmount}
+          deposit={deposit}
+          isError={deposit.amount > getBalances(deposit.token)}
+          errorMessage={"You dont have enough balance!"}
+        />
+        <SoilComponent amount={soilAmount} onAmountChange={changeSoilAmount} />
       </div>
       {/* LoanToValue */}
       <div className="space-y-3 w-full">
@@ -140,7 +128,7 @@ export const BorrowModal = () => {
           <input
             value={loanToValue == 0 ? "" : (loanToValue * 100).toFixed(2)}
             disabled
-            className="bg-gray-100 h-12 rounded-lg border border-gray-200 px-4 appearance-none focus:outline-none"
+            className="bg-green-dim h-12 rounded-lg px-4 appearance-none focus:outline-none"
           />
           <p
             className={cn(

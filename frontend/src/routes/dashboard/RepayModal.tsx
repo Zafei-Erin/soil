@@ -88,12 +88,13 @@ export const RepayModal: React.FC<Props> = ({
         </DialogHeader>
 
         <SoilComponent
+          title="Repay"
           onAmountChange={setAmount}
           isError={error}
           errorMessage="Exceeds your debt"
         />
 
-        <div className="bg-gray-100 w-full flex flex-col items-center px-4 rounded-lg border border-gray-200">
+        <div className="bg-green-dim w-full flex flex-col items-center px-4 rounded-lg">
           <div className="flex items-center justify-between w-full h-12">
             <span>Remaining debt</span>
             <span>

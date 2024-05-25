@@ -1,4 +1,4 @@
-import { DepositComponent } from "@/components/DepositComponent";
+import { CollateralComponent } from "@/components/CollateralComponent";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -113,7 +113,7 @@ export const WithdrawModal: React.FC<Props> = ({
           <DialogTitle>Withdraw {withdraw.token}</DialogTitle>
         </DialogHeader>
 
-        <DepositComponent
+        <CollateralComponent
           onTokenChange={(token: DepositToken) => {
             setWithdraw((prev) => ({
               ...prev,
@@ -126,7 +126,7 @@ export const WithdrawModal: React.FC<Props> = ({
           errorMessage={errorMessage}
         />
 
-        <div className="bg-gray-100 w-full flex flex-col items-center px-4 rounded-lg border border-gray-200">
+        <div className="bg-green-dim w-full flex flex-col items-center px-4 rounded-lg">
           <div className="flex items-center justify-between w-full h-12">
             <span>Remaining supply</span>
             <span>{collaterals[withdraw.token]}</span>

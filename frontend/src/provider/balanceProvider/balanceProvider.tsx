@@ -1,6 +1,6 @@
 import ERC20 from "@/abis/ERC20.json";
 import { Balances, DEFAULT_BALANCES } from "@/constants/balance";
-import { Token, TokenAddress } from "@/constants/token";
+import { Token, TokenAddress, Tokens } from "@/constants/token";
 import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
@@ -41,7 +41,7 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
     const signer = await ethersProvider.getSigner();
 
     const newBalances = { ...DEFAULT_BALANCES };
-    for (const token of Token) {
+    for (const token of Tokens) {
       const tokenAddress = TokenAddress[chainId][token];
       const balance = await fetchBalance(signer, tokenAddress);
       newBalances[token] = balance;

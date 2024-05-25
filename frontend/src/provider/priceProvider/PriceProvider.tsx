@@ -7,7 +7,7 @@ import {
   PricesOnChain,
   priceAddress,
 } from "@/constants/price";
-import { Token, TokenAddress } from "@/constants/token";
+import { Token, TokenAddress, Tokens } from "@/constants/token";
 import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
@@ -71,7 +71,7 @@ export const PriceProvider = ({ children }: { children: ReactNode }) => {
     const web3 = new Web3(new Web3.providers.HttpProvider(INFURA_API_KEY));
 
     // price on optimism
-    for (const token of Token) {
+    for (const token of Tokens) {
       await fetchPrice(web3, token)
         .then((price) => (newPrices[token] = price))
         .catch((error) => console.log(error));
