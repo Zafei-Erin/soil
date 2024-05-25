@@ -28,7 +28,7 @@ export const SoilComponent: React.FC<Props> = ({
   return (
     <div className={cn("w-full font-satoshi", className)}>
       <div className="flex items-end justify-between mb-2 font-satoshi">
-        <h3 className="font-normal ">{title}</h3>
+        <h3>{title}</h3>
         <span className="text-xs text-gray-400">
           {`Balance:
           ${getBalances(Token.SOIL).toLocaleString(undefined, {
@@ -42,7 +42,7 @@ export const SoilComponent: React.FC<Props> = ({
         htmlFor="borrowInput"
         className="flex items-center justify-between h-[4.5rem] gap-2 bg-green-dim rounded-md px-2"
       >
-        <div className="flex bg-black items-center justify-between rounded-full h-11 w-[7.5rem] pl-1.5 pr-3 font-satoshi font-normal">
+        <div className="flex bg-black items-center justify-between rounded-full h-11 pl-1.5 pr-3 font-satoshi font-normal">
           <TokenIconWithName token={Token.SOIL} />
         </div>
 
