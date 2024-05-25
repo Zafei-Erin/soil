@@ -35,7 +35,7 @@ export const CollateralComponent: React.FC<Props> = ({
   return (
     <div className={cn("w-full font-satoshi", className)}>
       <div className="flex items-end justify-between mb-2 font-satoshi">
-        <h3 className="font-normal ">Collaterals</h3>
+        <h3>Collaterals</h3>
         <span className="text-xs text-gray-400">
           {`Balance:
           ${getBalances(deposit.token).toLocaleString(undefined, {
@@ -55,7 +55,7 @@ export const CollateralComponent: React.FC<Props> = ({
             onTokenChange?.(token);
           }}
         >
-          <SelectTrigger className="flex items-center justify-between rounded-full h-11 w-[7.5rem] pl-1.5 pr-3 font-satoshi font-normal">
+          <SelectTrigger className="flex items-center justify-between rounded-full h-11 w-[7.5rem] pl-1.5 pr-3 font-satoshi">
             <SelectValue />
           </SelectTrigger>
 
