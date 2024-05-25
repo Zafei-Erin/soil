@@ -17,7 +17,7 @@ export const TokenIconWithName: React.FC<Props> = ({
   return (
     <div
       className={cn(
-        "flex items-center justify-center gap-1.5 w-full",
+        "flex items-center justify-center gap-1.5 w-full h-full",
         className
       )}
       {...props}
