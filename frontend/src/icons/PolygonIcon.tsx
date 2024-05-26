@@ -23,9 +23,9 @@ export const PolygonIcon: React.FC<IconProps> = (props) => {
           y2="49.9609"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#A726C1" />
-          <stop offset="0.88" stop-color="#803BDF" />
-          <stop offset="1" stop-color="#7B3FE4" />
+          <stop stopColor="#A726C1" />
+          <stop offset="0.88" stopColor="#803BDF" />
+          <stop offset="1" stopColor="#7B3FE4" />
         </linearGradient>
       </defs>
     </svg>
