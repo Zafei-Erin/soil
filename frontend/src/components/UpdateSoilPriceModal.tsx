@@ -50,7 +50,11 @@ export const UpdateSoilPriceModal: React.FC = () => {
         >
           <TabsList className="w-full bg-green-dim text-white">
             {DestinationChainIDs.map((chainId) => (
-              <TabsTrigger value={ChainInfo[chainId].name} className="text-sm">
+              <TabsTrigger
+                key={ChainInfo[chainId].name}
+                value={ChainInfo[chainId].name}
+                className="text-sm"
+              >
                 <div className="hidden md:block">{ChainInfo[chainId].name}</div>
                 <ChainIcon
                   chain={ChainInfo[chainId].name}
