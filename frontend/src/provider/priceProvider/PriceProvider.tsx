@@ -1,6 +1,5 @@
 import PriceFeed from "@/abis/PriceFeed.json";
 import SOIL from "@/abis/SOIL.json";
-import { ChainID } from "@/constants/chainId";
 
 import {
   DEFAULT_PRICES_ON_CHAIN,
@@ -53,16 +52,15 @@ export const PriceProvider = ({ children }: { children: ReactNode }) => {
       console.log("User disconnected");
       return DEFAULT_PRICES_ON_CHAIN.SOIL_ON_CHAIN;
     }
-    if (!chainId || !isValidChain(chainId) || chainId == ChainID.Optimism) {
+    if (!chainId || !isValidChain(chainId)) {
       console.log("Chain not support");
       return DEFAULT_PRICES_ON_CHAIN.SOIL_ON_CHAIN;
     }
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
-
     const contract = new Contract(TokenAddress[chainId].SOIL, SOIL.abi, signer);
     const result = await contract.getCrudeOilPrice();
-    const price = parseFloat(formatUnits(result));
+    const price = parseFloat(formatUnits(result, 8));
     return price;
   }, [chainId, isConnected, walletProvider]);
 
