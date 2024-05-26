@@ -12,6 +12,9 @@ export const DestinationChainID = {
 export type DestinationChainID =
   (typeof DestinationChainID)[keyof typeof DestinationChainID];
 
+export const DestinationChainIDs: DestinationChainID[] =
+  Object.values(DestinationChainID);
+
 export const ChainID = {
   ...SourceChainID,
   ...DestinationChainID,
@@ -20,7 +23,7 @@ export type ChainID = (typeof ChainID)[keyof typeof ChainID];
 
 type ChainInfo = {
   chainId: ChainID;
-  name: string;
+  name: Chain;
   token: string;
 };
 
