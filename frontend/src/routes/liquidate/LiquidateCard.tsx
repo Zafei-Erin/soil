@@ -36,7 +36,11 @@ export function LiquidateCard() {
   const { getBalances } = useBalances();
   const soilBalance = getBalances("SOIL");
   const { showSuccessToast, showFailToast } = useShowToast();
-  const disabled = loading || soilBalance < inputs.soilAmount;
+  const inValidAmount =
+    inputs.soilAmount <= 0 || soilBalance < inputs.soilAmount;
+  const inValidAddress =
+    inputs.userAddress.length != 42 || !inputs.userAddress.startsWith("0x");
+  const disabled = loading || inValidAmount || inValidAddress;
 
   const liquidateWrapped = async () => {
     try {
@@ -98,6 +102,9 @@ export function LiquidateCard() {
                   }))
                 }
               />
+              {inValidAddress && (
+                <p className="text-red-600 text-xs">Invalid User Address</p>
+              )}
             </div>
             <div className="flex flex-col space-y-1.5">
               <label htmlFor="soilAmount">sOIL Amount</label>
