@@ -69,7 +69,9 @@ export const RepayModal: React.FC<Props> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={className}>Repay</Button>
+        <Button className={className} variant={"secondary"}>
+          Repay
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="border-0 bg-black-dim sm:w-96">
@@ -121,7 +123,8 @@ export const RepayModal: React.FC<Props> = ({
           <Button
             disabled={disabled}
             onClick={repayWrapped}
-            className="rounded-full w-full bg-green-bright/90 hover:bg-green-bright/80 transition-all px-6"
+            variant={"main"}
+            className="w-full"
           >
             <span>Repay</span>
             {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}

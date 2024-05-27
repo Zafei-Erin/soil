@@ -101,7 +101,9 @@ export const WithdrawModal: React.FC<Props> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={className}>Withdraw</Button>
+        <Button className={className} variant={"secondary"}>
+          Withdraw
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="border-0 bg-black-dim sm:w-96">
@@ -160,7 +162,8 @@ export const WithdrawModal: React.FC<Props> = ({
           <Button
             disabled={disabled}
             onClick={withDrawWrapped}
-            className="rounded-full w-full bg-green-bright/90 hover:bg-green-bright/80 transition-all px-6"
+            variant={"main"}
+            className="w-full"
           >
             <span>WithDraw</span>
             {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}

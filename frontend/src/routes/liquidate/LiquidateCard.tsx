@@ -126,7 +126,8 @@ export function LiquidateCard() {
         <Button
           type="submit"
           disabled={disabled}
-          className="w-full bg-gradient-to-r from-green-bright/60 to-green-bright rounded-full"
+          variant={"main"}
+          className="w-full"
           onClick={liquidateWrapped}
         >
           Liquidate

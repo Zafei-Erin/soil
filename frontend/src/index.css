@@ -45,8 +45,9 @@ input[type="number"] {
     --ring: 212.7 26.8% 83.9%;
 
     --green-dim: 180 52% 12%;
+    --green-light: 157 100% 55%;
     --green-bright: 138 100% 50%;
-    --black-dim: 228 22% 10%;
+    --black-dim: 228 22% 8%;
 
     --radius: 0.5rem;
   }

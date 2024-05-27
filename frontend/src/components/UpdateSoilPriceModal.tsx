@@ -34,9 +34,9 @@ export const UpdateSoilPriceModal: React.FC = () => {
     }
   };
   return (
-    <div className="bg-black-dim w-full h-fit md:gap-4 flex max-md:flex-col p-8 rounded-lg font-satoshi max-md:gap-6">
-      <div className="flex md:flex-col items-center justify-between md:justify-center min-w-48">
-        <h1 className="sm:text-xl font-semibold mb-3">Update SOIL Price</h1>
+    <div className="bg-black-dim w-full h-fit md:gap-4 flex max-md:flex-col px-3 py-6 sm:p-8 rounded-lg font-satoshi max-md:gap-6">
+      <div className="flex md:flex-col md:gap-3 items-center justify-between md:justify-center min-w-48">
+        <h1 className="sm:text-xl font-semibold">Update SOIL Price</h1>
         <Tabs
           defaultValue={DEFAULT_CHAIN_TO_UPDATE}
           onValueChange={(token) => setChainToUpdate(token as DestinationChain)}
@@ -46,12 +46,12 @@ export const UpdateSoilPriceModal: React.FC = () => {
               <TabsTrigger
                 key={ChainInfo[chainId].name}
                 value={ChainInfo[chainId].name}
-                className="text-sm"
+                className="text-sm px-3 "
               >
                 <div className="hidden md:block">{ChainInfo[chainId].name}</div>
                 <ChainIcon
                   chain={ChainInfo[chainId].name}
-                  className="md:hidden"
+                  className="md:hidden w-4 h-4"
                 />
               </TabsTrigger>
             ))}
@@ -87,9 +87,10 @@ export const UpdateSoilPriceModal: React.FC = () => {
         <Button
           disabled={disabled}
           onClick={updatePrice}
-          className="w-full md:w-fit rounded-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-bright to-green-bright/60 text-black transition-all hover:bg-green-bright/90 disabled:cursor-not-allowed"
+          variant={"main"}
+          className="w-full md:w-fit rounded-full flex items-center justify-center gap-2 disabled:cursor-not-allowed"
         >
-          Update SOIL Price
+          Update Price
           {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
         </Button>
       </div>

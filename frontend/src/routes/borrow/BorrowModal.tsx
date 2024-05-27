@@ -88,7 +88,7 @@ export const BorrowModal = () => {
   };
 
   return (
-    <div className="bg-black-dim w-full h-fit flex flex-col md:gap-8 justify-between p-8 rounded-lg">
+    <div className="bg-black-dim w-full h-fit flex flex-col md:gap-8 justify-between px-3 py-6 sm:p-8 rounded-lg">
       <h1 className="text-xl font-semibold mb-3">Borrow SOIL</h1>
       <div className="flex max-md:flex-col items-center justify-between md:gap-6 w-full">
         <CollateralComponent
@@ -105,7 +105,7 @@ export const BorrowModal = () => {
           errorMessage={"Exceeds your balance"}
         />
         <div className="rounded-full bg-black aspect-square w-fit p-1 flex items-center justify-center">
-          <SwapIcon className="w-5 h-5 md:rotate-90  fill-white transition-all" />
+          <SwapIcon className="w-5 h-5 md:rotate-90 fill-gray-400 transition-all" />
         </div>
         <SoilComponent amount={soilAmount} onAmountChange={changeSoilAmount} />
       </div>
@@ -114,12 +114,14 @@ export const BorrowModal = () => {
       <div className="mt-6 w-full">
         {!isConnected ? (
           <ConnectButton
-            className="w-full rounded-full bg-gradient-to-r from-green-bright to-green-bright/60 text-black transition-all hover:bg-green-bright/90"
+            variant={"main"}
+            className="w-full rounded-full text-black"
             iconClass="stroke-black"
           />
         ) : (
           <Button
-            className="w-full rounded-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-bright to-green-bright/60 text-black transition-all hover:bg-green-bright/90 disabled:cursor-not-allowed"
+            variant={"main"}
+            className="w-full"
             onClick={borrow}
             disabled={disabled}
           >

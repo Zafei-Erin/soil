@@ -12,14 +12,15 @@ export const Dashboard = () => {
   const { isConnected } = useWeb3ModalAccount();
   return (
     <div className="pt-16 px-6 flex items-center justify-center">
-      <div className="relative w-96 min-h-[32rem] bg-black-dim rounded-lg font-satoshi">
+      <div className="relative w-96 min-h-[30rem] bg-black-dim rounded-lg font-satoshi">
         {!isConnected && (
-          <div className="backdrop-blur-md w-full h-full absolute bg-green-bright/5 rounded-lg flex flex-col gap-6 items-center justify-center">
+          <div className="backdrop-blur-md w-full h-full absolute bg-green-bright/5 rounded-lg flex flex-col gap-16 items-center justify-center">
             <h1 className="text-2xl font-semibold">
               Please connect your wallet
             </h1>
             <ConnectButton
-              className="w-full rounded-full bg-gradient-to-r from-green-bright to-green-bright/60 text-black transition-all hover:bg-green-bright/90"
+              variant={"main"}
+              className="w-full rounded-full text-black"
               iconClass="stroke-black"
             />
           </div>
@@ -28,7 +29,7 @@ export const Dashboard = () => {
         <div className="py-8 px-6">
           <HealthFactor />
 
-          <hr className="h-0.5 mt-6 mb-10 bg-gradient-to-r from-gray-400" />
+          <hr className="h-0.5 mt-7 mb-5 bg-gradient-to-r from-gray-400" />
 
           {/* Collateral deposited */}
           <div className="space-y-2 flex items-center justify-between">
@@ -45,7 +46,7 @@ export const Dashboard = () => {
             <WithdrawModal
               position={position}
               refreshPosition={refreshPosition}
-              className="w-fit min-w-20 bg-green-bright text-black rounded-full hover:bg-green-bright/90"
+              className="w-fit min-w-20"
             />
           </div>
 
@@ -64,12 +65,12 @@ export const Dashboard = () => {
             <RepayModal
               position={position}
               refreshPosition={refreshPosition}
-              className="w-fit min-w-20 rounded-full bg-green-bright text-black hover:bg-green-bright/90"
+              className="w-fit min-w-20"
             />
           </div>
 
           {/* Home Button */}
-          <Button className="mt-16 w-full rounded-full bg-gradient-to-r from-green-bright/80 transition-all to-green-bright/60 hover:from-green-bright/40 hover:to-green-bright/60">
+          <Button variant={"main"} className="mt-12 w-full rounded-full">
             <Link to={"/"}>Borrow / Update SOIL Price</Link>
           </Button>
         </div>
