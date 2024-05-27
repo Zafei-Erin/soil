@@ -59,9 +59,9 @@ export const UpdateSoilPriceModal: React.FC = () => {
         </Tabs>
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-4 flex-1 pr-6">
+      <div className="flex flex-col items-center justify-center gap-4 flex-1 pr-3">
         {/* price on chain */}
-        <div className="w-full flex items-center justify-between">
+        <div className="w-full flex items-center justify-between gap-2">
           <h3 className="text-gray-400">Price of Soil on {chainToUpdate}:</h3>
           <div className="text-right">
             {`$ ${prices.SOIL_ON_CHAIN.toLocaleString(undefined, {
@@ -72,7 +72,7 @@ export const UpdateSoilPriceModal: React.FC = () => {
         </div>
 
         {/* realtime price */}
-        <div className="w-full flex items-center justify-between">
+        <div className="w-full flex items-center justify-between gap-2">
           <h3 className="text-gray-400">Realtime Price of Soil:</h3>
           <div className="text-right">
             {`$ ${prices.SOIL.toLocaleString(undefined, {
