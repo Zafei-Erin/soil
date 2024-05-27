@@ -1,10 +1,10 @@
+import { ControlledNumberInput } from "@/components/ControlledNumberInput";
 import { TokenIconWithName } from "@/components/TokenIconWithName";
 import { Token } from "@/constants/token";
 import { cn } from "@/lib/utils";
 import { useBalances } from "@/provider/balanceProvider";
 import { usePrices } from "@/provider/priceProvider";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
-import { useEffect, useRef, useState } from "react";
 
 type Props = {
   amount?: number;
@@ -21,16 +21,9 @@ export const SoilComponent: React.FC<Props> = ({
   errorMessage,
   className,
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState<string>("");
   const { isConnected } = useWeb3ModalAccount();
   const { prices } = usePrices();
   const { getBalances } = useBalances();
-
-  useEffect(() => {
-    setValue(amount == 0 ? "" : amount == undefined ? "" : amount.toString());
-  }, [amount]);
-
   return (
     <div className={cn("w-full font-satoshi", className)}>
       <div className="flex items-end justify-between mb-2 font-satoshi">
@@ -53,26 +46,11 @@ export const SoilComponent: React.FC<Props> = ({
         </div>
 
         <div className="flex flex-col items-end justify-center pt-1 pr-3">
-          <input
-            className="bg-transparent appearance-none focus:outline-none block w-full text-right text-lg"
-            ref={inputRef}
-            type="text"
+          <ControlledNumberInput
             id="borrowInput"
-            inputMode="decimal"
-            value={value}
-            autoComplete="off"
-            onChange={(e) => {
-              if (e.target.value == "") {
-                setValue("");
-                onAmountChange?.(0);
-                return;
-              }
-              const n = Number(e.target.value);
-              if (!isNaN(n)) {
-                setValue(e.target.value);
-                onAmountChange?.(n);
-              }
-            }}
+            className="text-right"
+            amount={amount}
+            onAmountChange={onAmountChange}
           />
 
           <span className="text-xs text-gray-400 right-3 bottom-2">

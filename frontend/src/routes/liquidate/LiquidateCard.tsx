@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { NumberInput } from "@/components/NumberInput";
+import { ControlledNumberInput } from "@/components/ControlledNumberInput";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -34,12 +34,14 @@ export function LiquidateCard() {
   const [loading, setLoading] = useState<boolean>(false);
   const { liquidate } = useLiquidate();
   const { getBalances } = useBalances();
-  const soilBalance = getBalances("SOIL");
   const { showSuccessToast, showFailToast } = useShowToast();
+
+  const soilBalance = getBalances("SOIL");
   const inValidAmount =
     inputs.soilAmount <= 0 || soilBalance < inputs.soilAmount;
   const inValidAddress =
-    inputs.userAddress.length != 42 || !inputs.userAddress.startsWith("0x");
+    inputs.userAddress.length != 0 &&
+    (inputs.userAddress.length != 42 || !inputs.userAddress.startsWith("0x"));
   const disabled = loading || inValidAmount || inValidAddress;
 
   const liquidateWrapped = async () => {
@@ -95,6 +97,7 @@ export function LiquidateCard() {
                 id="userAddress"
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm appearance-none placeholder:text-muted-foreground focus-visible:outline-none"
                 placeholder="Address to liquidate from"
+                value={inputs.userAddress}
                 onChange={(e) =>
                   setInputs((prev) => ({
                     ...prev,
@@ -108,10 +111,11 @@ export function LiquidateCard() {
             </div>
             <div className="flex flex-col space-y-1.5">
               <label htmlFor="soilAmount">sOIL Amount</label>
-              <NumberInput
+              <ControlledNumberInput
                 id="soilAmount"
-                className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm appearance-none placeholder:text-muted-foreground focus-visible:outline-none"
+                className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none"
                 placeholder="Number of sOIL to be covered"
+                amount={inputs.soilAmount}
                 onAmountChange={(amount) =>
                   setInputs((prev) => ({ ...prev, soilAmount: amount }))
                 }
