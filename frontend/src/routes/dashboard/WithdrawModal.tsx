@@ -2,12 +2,11 @@ import { CollateralComponent } from "@/components/CollateralComponent";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
 import { Position } from "@/constants/position";
