@@ -9,50 +9,61 @@ export const Dashboard = () => {
   const { position, refreshPosition } = usePosition();
   const { isConnected } = useWeb3ModalAccount();
   return (
-    <div className="h-full py-16">
-      <div className="flex flex-col items-center justify-center">
-        <div className="relative w-96 h-[30rem] rounded-lg border border-gray-200">
+    <div className="pt-16 px-6 flex items-center justify-center">
+      <div className="w-96 min-h-[32rem] px-2 bg-black-dim rounded-lg font-satoshi">
+        <div className="relative">
           {!isConnected && (
-            <div className="backdrop-blur-md w-full h-full absolute bg-white/30 rounded-lg flex flex-col gap-6 items-center justify-center">
+            <div className="backdrop-blur-md w-full h-full absolute bg-green-bright/5 rounded-lg flex flex-col gap-6 items-center justify-center">
               <h1 className="text-2xl font-semibold">
                 Please connect your wallet
               </h1>
-              <ConnectButton />
+              <ConnectButton
+                className="w-full rounded-full bg-gradient-to-r from-green-bright to-green-bright/60 text-black transition-all hover:bg-green-bright/90"
+                iconClass="stroke-black"
+              />
             </div>
           )}
 
-          <div className=" mx-4 p-8 ">
+          <div className="py-8 px-6">
             <HealthFactor />
 
-            <div className="space-y-3 mt-10">
-              <h3 className="font-semibold">Collateral deposited</h3>
+            <hr className="h-0.5 mt-6 mb-10 bg-gradient-to-r from-gray-400" />
+
+            {/* Collateral deposited */}
+            <div className="space-y-2 flex items-center justify-between">
               <div>
-                $
-                {position.deposited.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                  minimumFractionDigits: 2,
-                })}
+                <h3 className="text-gray-400">Collateral deposited</h3>
+                <div>
+                  $
+                  {position.deposited.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 2,
+                  })}
+                </div>
               </div>
               <WithdrawModal
                 position={position}
                 refreshPosition={refreshPosition}
-                className="w-full"
+                className="w-fit min-w-20 bg-green-bright text-black rounded-full hover:bg-green-bright/90"
               />
             </div>
 
-            <div className="space-y-3 mt-10">
-              <h3 className="font-semibold">Borrow</h3>
+            {/* Borrowed */}
+            <div className="space-y-2 mt-10 flex items-center justify-between">
               <div>
-                $
-                {position.borrowed.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                  minimumFractionDigits: 2,
-                })}
+                <h3 className="text-gray-400">Borrowed</h3>
+                <div>
+                  $
+                  {position.borrowed.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 2,
+                  })}
+                </div>
               </div>
               <RepayModal
                 position={position}
                 refreshPosition={refreshPosition}
-                className="w-full"
+                className="w-fit min-w-20 rounded-full bg-green-bright text-black hover:bg-green-bright/90"
               />
             </div>
           </div>
