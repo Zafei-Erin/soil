@@ -55,6 +55,10 @@ export const WithdrawModal: React.FC<Props> = ({
     position.deposited - prices[withdraw.token] * withdraw.amount;
   const estimatedHealthFactor =
     (Math.max(estimatedRemainDeposit, 0) / position.borrowed) * 0.67;
+  const remainingSupply = Math.max(
+    collaterals[withdraw.token] - withdraw.amount,
+    0
+  );
 
   const disabled =
     estimatedHealthFactor < 1 ||
@@ -108,7 +112,7 @@ export const WithdrawModal: React.FC<Props> = ({
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="border-0 bg-black-dim sm:w-96">
         <DialogHeader>
           <DialogTitle>Withdraw {withdraw.token}</DialogTitle>
         </DialogHeader>
@@ -126,12 +130,13 @@ export const WithdrawModal: React.FC<Props> = ({
           errorMessage={errorMessage}
         />
 
-        <div className="bg-green-dim w-full flex flex-col items-center px-4 rounded-lg">
-          <div className="flex items-center justify-between w-full h-12">
+        <hr className="h-0.5 bg-gradient-to-r from-gray-400" />
+
+        <div className="w-full flex flex-col items-center rounded-lg font-satoshi">
+          <div className="flex items-center justify-between w-full h-10">
             <span>Remaining supply</span>
-            <span>{collaterals[withdraw.token]}</span>
+            <span>{remainingSupply}</span>
           </div>
-          <hr className="h-0.5 w-full bg-gray-200 " />
           <div className="flex items-center justify-between w-full h-12">
             <span>Health factor</span>
             <div className="flex items-center justify-normal gap-1">
@@ -154,16 +159,15 @@ export const WithdrawModal: React.FC<Props> = ({
           </div>
         </div>
 
-        <DialogFooter className="flex-col gap-2 sm:space-x-0">
-          <Button disabled={disabled} onClick={withDrawWrapped}>
+        <DialogFooter className="mx-auto w-full">
+          <Button
+            disabled={disabled}
+            onClick={withDrawWrapped}
+            className="rounded-full w-full bg-green-bright/90 hover:bg-green-bright/80 transition-all px-6"
+          >
             <span>WithDraw</span>
             {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
           </Button>
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
-            </Button>
-          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
