@@ -33,7 +33,7 @@ export const RepayModal: React.FC<Props> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
-  const { healthFactor } = useHealthFactor();
+  const { healthFactor, refreshHealthFactor } = useHealthFactor();
   const { getBalances } = useBalances();
   const { repay } = useRepay();
   const { showSuccessToast, showFailToast } = useShowToast();
@@ -57,6 +57,7 @@ export const RepayModal: React.FC<Props> = ({
     try {
       await repay(amount);
       refreshPosition();
+      refreshHealthFactor();
       showSuccessToast(`You have Repay ${amount} SOIL!`);
     } catch (error) {
       showFailToast("Failed to repay SOIL");

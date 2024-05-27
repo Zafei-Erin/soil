@@ -45,7 +45,7 @@ export const WithdrawModal: React.FC<Props> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
-  const { healthFactor } = useHealthFactor();
+  const { healthFactor, refreshHealthFactor } = useHealthFactor();
   const { prices } = usePrices();
   const { withDraw } = useWithDraw();
   const { collaterals } = useCollaterals();
@@ -87,6 +87,7 @@ export const WithdrawModal: React.FC<Props> = ({
     try {
       await withDraw(withdraw.token, withdraw.amount);
       refreshPosition();
+      refreshHealthFactor();
       showSuccessToast(
         `You have Withdraw ${withdraw.amount} ${withdraw.token}!`
       );
