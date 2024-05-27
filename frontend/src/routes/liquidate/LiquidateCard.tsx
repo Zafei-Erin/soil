@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { NumberInput } from "@/components/NumberInput";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,13 +10,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { toast } from "@/components/ui/use-toast";
+import { useShowToast } from "@/components/useShowToast";
 import { DepositToken } from "@/constants/token";
 import { useLiquidate } from "@/hooks/useLiquidate";
 import { DaiIcon, Loader, WethIcon } from "@/icons";
 import { cn } from "@/lib/utils";
 import { useBalances } from "@/provider/balanceProvider";
-import { useState } from "react";
 
 export type LiquidateInfo = {
   userAddress: string;
@@ -34,22 +35,15 @@ export function LiquidateCard() {
   const { liquidate } = useLiquidate();
   const { getBalances } = useBalances();
   const soilBalance = getBalances("SOIL");
+  const { showSuccessToast, showFailToast } = useShowToast();
   const disabled = loading || soilBalance < inputs.soilAmount;
 
   const liquidateWrapped = async () => {
     try {
       await liquidate(inputs);
-      toast({
-        duration: 1500,
-        title: "Liquidate Successfully",
-        description: `You have Liquidate ${inputs.soilAmount} SOIL!`,
-      });
+      showSuccessToast(`You have Liquidate ${inputs.soilAmount} SOIL!`);
     } catch (error) {
-      toast({
-        duration: 1500,
-        title: "Liquidate Failed",
-        description: `${error}`,
-      });
+      showFailToast(`Failed to Liquidate ${inputs.collateral}`);
     } finally {
       setLoading(false);
       setInputs(DEFAULT_INFO);

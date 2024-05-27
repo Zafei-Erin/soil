@@ -1,12 +1,10 @@
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 import { CollateralComponent } from "@/components/CollateralComponent";
 import { ConnectButton } from "@/components/ConnectButton";
 import { Button } from "@/components/ui/button";
-import { ToastAction } from "@/components/ui/toast";
-import { toast } from "@/components/ui/use-toast";
+import { useShowToast } from "@/components/useShowToast";
 import { DepositToken } from "@/constants/token";
 import { useApproveAndMint } from "@/hooks/useApproveAndMint";
 import { Loader } from "@/icons";
@@ -34,6 +32,7 @@ export const BorrowModal = () => {
   const { getBalances, refreshBalances } = useBalances();
   const { approvalAndMint } = useApproveAndMint();
   const { isConnected } = useWeb3ModalAccount();
+  const { showSuccessToast, showFailToast } = useShowToast();
 
   const disabled =
     loanToValue > 0.8 ||
@@ -79,25 +78,10 @@ export const BorrowModal = () => {
     try {
       await approvalAndMint(deposit.token, deposit.amount, soilAmount);
       refreshBalances();
-      toast({
-        duration: 1500,
-        title: "Borrow Successfully",
-        description: `You have borrow ${soilAmount} SOIL!`,
-        action: (
-          <ToastAction altText="View in dashboard">
-            <Link to="dashboard" className="text-xs">
-              View in dashboard
-            </Link>
-          </ToastAction>
-        ),
-      });
+      showSuccessToast(`You have borrow ${soilAmount} SOIL!`);
     } catch (error) {
       console.log(error);
-      toast({
-        duration: 1500,
-        title: "Borrow Failed",
-        description: `${error}`,
-      });
+      showFailToast("Failed to borrow SOIL");
     } finally {
       setBorrowing(false);
     }

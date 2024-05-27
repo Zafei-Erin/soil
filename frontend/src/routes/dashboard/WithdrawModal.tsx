@@ -1,3 +1,6 @@
+import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+
 import { CollateralComponent } from "@/components/CollateralComponent";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast } from "@/components/ui/use-toast";
+import { useShowToast } from "@/components/useShowToast";
 import { Position } from "@/constants/position";
 import { DepositToken } from "@/constants/token";
 import { useCollaterals } from "@/hooks/useCollaterals";
@@ -16,8 +19,6 @@ import { useWithDraw } from "@/hooks/useWithdraw";
 import { Loader } from "@/icons";
 import { useHealthFactor } from "@/provider/healthFactorProvider";
 import { usePrices } from "@/provider/priceProvider";
-import { ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
 
 type Withdraw = {
   token: DepositToken;
@@ -48,6 +49,7 @@ export const WithdrawModal: React.FC<Props> = ({
   const { prices } = usePrices();
   const { withDraw } = useWithDraw();
   const { collaterals } = useCollaterals();
+  const { showSuccessToast, showFailToast } = useShowToast();
 
   const estimatedRemainDeposit =
     position.deposited - prices[withdraw.token] * withdraw.amount;
@@ -85,17 +87,11 @@ export const WithdrawModal: React.FC<Props> = ({
     try {
       await withDraw(withdraw.token, withdraw.amount);
       refreshPosition();
-      toast({
-        duration: 1500,
-        title: "Withdraw Successfully",
-        description: `You have Withdraw ${withdraw.amount} ${withdraw.token}!`,
-      });
+      showSuccessToast(
+        `You have Withdraw ${withdraw.amount} ${withdraw.token}!`
+      );
     } catch (error) {
-      toast({
-        duration: 1500,
-        title: "Withdraw Failed",
-        description: `${error}`,
-      });
+      showFailToast(`Failed to widthdraw ${withdraw.token}`);
     } finally {
       setLoading(false);
       setOpen(false);

@@ -2,7 +2,7 @@ import { createWeb3Modal } from "@web3modal/ethers/react";
 import { Route, Routes } from "react-router-dom";
 
 import { Header } from "./components/Header";
-import { Toaster } from "./components/ui/toaster";
+import { Toaster } from "./components/ui/toast/toaster";
 import { walletOptions } from "./config/walletConfig";
 import { BalanceProvider } from "./provider/balanceProvider";
 import { HealthFactorProvider } from "./provider/healthFactorProvider";

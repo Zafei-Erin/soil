@@ -11,13 +11,14 @@ import { isValidChain } from "@/lib/utils";
 import { useBalances } from "@/provider/balanceProvider";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { toast } from "./ui/use-toast";
+import { useShowToast } from "./useShowToast";
 
 export const MintTokenButton = ({ token }: { token: DepositToken }) => {
   const { isConnected, address, chainId } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
   const { refreshBalances } = useBalances();
   const [loading, setLoading] = useState<boolean>(false);
+  const { showSuccessToast, showFailToast } = useShowToast();
 
   const disabled = !isConnected || !address || !chainId || loading;
 
@@ -46,15 +47,9 @@ export const MintTokenButton = ({ token }: { token: DepositToken }) => {
     try {
       await mint();
       refreshBalances();
-      toast({
-        duration: 1500,
-        title: `Mint 10 ${token} Successfully`,
-      });
+      showSuccessToast(`Mint 10 ${token} Successfully`);
     } catch (error) {
-      toast({
-        duration: 1500,
-        title: `Mint ${token} Failed`,
-      });
+      showFailToast(`Failed to Mint ${token}`);
     } finally {
       setLoading(false);
     }

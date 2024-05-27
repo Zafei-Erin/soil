@@ -1,3 +1,6 @@
+import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -7,14 +10,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast } from "@/components/ui/use-toast";
+import { useShowToast } from "@/components/useShowToast";
 import { Position } from "@/constants/position";
 import { useRepay } from "@/hooks/useRepay";
 import { Loader } from "@/icons";
 import { useBalances } from "@/provider/balanceProvider";
 import { useHealthFactor } from "@/provider/healthFactorProvider";
-import { ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
 import { SoilComponent } from "./SoilComponent";
 
 type Props = {
@@ -35,6 +36,7 @@ export const RepayModal: React.FC<Props> = ({
   const { healthFactor } = useHealthFactor();
   const { getBalances } = useBalances();
   const { repay } = useRepay();
+  const { showSuccessToast, showFailToast } = useShowToast();
 
   const soilPrice =
     (position.deposited * 0.67) / (healthFactor * getBalances("SOIL"));
@@ -55,17 +57,9 @@ export const RepayModal: React.FC<Props> = ({
     try {
       await repay(amount);
       refreshPosition();
-      toast({
-        duration: 1500,
-        title: "Repay Successfully",
-        description: `You have Repay ${amount} SOIL!`,
-      });
+      showSuccessToast(`You have Repay ${amount} SOIL!`);
     } catch (error) {
-      toast({
-        duration: 1500,
-        title: "Repay Failed",
-        description: `${error}`,
-      });
+      showFailToast("Failed to repay SOIL");
     } finally {
       setLoading(false);
       setOpen(false);

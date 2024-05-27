@@ -6,8 +6,8 @@ import { usePrices } from "@/provider/priceProvider";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { useState } from "react";
 import { ChainIcon } from "./ChainIcon";
+import { useShowToast } from "./useShowToast";
 import { Button } from "./ui/button";
-import { toast } from "./ui/use-toast";
 
 const DEFAULT_CHAIN_TO_UPDATE: DestinationChain = DestinationChain.POLYGON;
 
@@ -15,6 +15,7 @@ export const UpdateSoilPriceModal: React.FC = () => {
   const { isConnected } = useWeb3ModalAccount();
   const { prices } = usePrices();
   const [loading, setLoading] = useState<boolean>(false);
+  const { showSuccessToast, showFailToast } = useShowToast();
 
   const [chainToUpdate, setChainToUpdate] = useState<DestinationChain>(
     DEFAULT_CHAIN_TO_UPDATE
@@ -24,18 +25,10 @@ export const UpdateSoilPriceModal: React.FC = () => {
   const updatePrice = async () => {
     setLoading(true);
     try {
-      toast({
-        duration: 1500,
-        title: "Update SOIL Price Successfully",
-        description: `You have updated the price successfully!`,
-      });
+      showSuccessToast("Update SOIL Price Successfully");
     } catch (error) {
       console.log(error);
-      toast({
-        duration: 1500,
-        title: "Failed to Update SOIL Price",
-        description: `${error}`,
-      });
+      showFailToast("Failed to Update SOIL Price");
     } finally {
       setLoading(false);
     }
