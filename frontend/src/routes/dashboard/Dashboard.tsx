@@ -4,6 +4,8 @@ import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { HealthFactor } from "./HealthFactor";
 import { RepayModal } from "./RepayModal";
 import { WithdrawModal } from "./WithdrawModal";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export const Dashboard = () => {
   const { position, refreshPosition } = usePosition();
@@ -65,6 +67,11 @@ export const Dashboard = () => {
               className="w-fit min-w-20 rounded-full bg-green-bright text-black hover:bg-green-bright/90"
             />
           </div>
+
+          {/* Home Button */}
+          <Button className="mt-16 w-full bg-gradient-to-r from-green-bright/80 transition-all to-green-bright/60 hover:from-green-bright/40 hover:to-green-bright/60">
+            <Link to={"/"}>Borrow / Update SOIL Price</Link>
+          </Button>
         </div>
       </div>
     </div>
