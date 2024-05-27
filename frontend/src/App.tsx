@@ -16,9 +16,9 @@ function App() {
   createWeb3Modal(walletOptions);
   return (
     <div className="relative w-full min-h-screen">
-      <div className="absolute rounded-full h-0 w-0 translate-x-[24rem] translate-y-[6rem] shadow-[0_0_140px_140px_rgba(16,185,129,0.3)]" />
-      <div className="absolute rounded-full h-0 w-0 translate-x-[80rem] translate-y-[20rem] shadow-[0_0_150px_150px_rgba(16,185,129,0.3)] " />
-      <div className="absolute rounded-full h-0 w-0 translate-x-[50rem] translate-y-[42rem] shadow-[0_0_130px_130px_rgba(16,185,129,0.3)]" />
+      <div className="absolute z-10 rounded-full h-0 w-0 translate-x-[24rem] translate-y-[6rem] shadow-[0_0_140px_140px_rgba(16,185,129,0.3)]" />
+      <div className="absolute z-10 rounded-full h-0 w-0 translate-x-[80rem] translate-y-[20rem] shadow-[0_0_150px_150px_rgba(16,185,129,0.3)] " />
+      <div className="absolute z-10 rounded-full h-0 w-0 translate-x-[50rem] translate-y-[42rem] shadow-[0_0_130px_130px_rgba(16,185,129,0.3)]" />
       <Header />
 
       <PriceProvider>
