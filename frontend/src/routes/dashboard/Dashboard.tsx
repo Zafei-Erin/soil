@@ -69,7 +69,7 @@ export const Dashboard = () => {
           </div>
 
           {/* Home Button */}
-          <Button className="mt-16 w-full bg-gradient-to-r from-green-bright/80 transition-all to-green-bright/60 hover:from-green-bright/40 hover:to-green-bright/60">
+          <Button className="mt-16 w-full rounded-full bg-gradient-to-r from-green-bright/80 transition-all to-green-bright/60 hover:from-green-bright/40 hover:to-green-bright/60">
             <Link to={"/"}>Borrow / Update SOIL Price</Link>
           </Button>
         </div>

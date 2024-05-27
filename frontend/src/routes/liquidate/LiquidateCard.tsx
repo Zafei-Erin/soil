@@ -103,7 +103,7 @@ export function LiquidateCard() {
               <label htmlFor="soilAmount">sOIL Amount</label>
               <NumberInput
                 id="soilAmount"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm appearance-none placeholder:text-muted-foreground focus-visible:outline-none"
+                className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm appearance-none placeholder:text-muted-foreground focus-visible:outline-none"
                 placeholder="Number of sOIL to be covered"
                 onAmountChange={(amount) =>
                   setInputs((prev) => ({ ...prev, soilAmount: amount }))
@@ -126,7 +126,7 @@ export function LiquidateCard() {
         <Button
           type="submit"
           disabled={disabled}
-          className="w-full"
+          className="w-full bg-gradient-to-r from-green-bright/60 to-green-bright rounded-full"
           onClick={liquidateWrapped}
         >
           Liquidate
