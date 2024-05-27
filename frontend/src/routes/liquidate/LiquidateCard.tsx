@@ -50,7 +50,7 @@ export function LiquidateCard() {
     }
   };
   return (
-    <Card className="w-full h-full">
+    <Card className="w-full h-full border-0 bg-black-dim font-satoshi">
       <CardHeader>
         <CardTitle>Liquidate</CardTitle>
         <CardDescription>
@@ -65,7 +65,7 @@ export function LiquidateCard() {
               <div
                 className={cn(
                   "border rounded-lg aspect-square w-fit p-2 hover:-translate-y-2 hover:shadow-lg transition-all",
-                  inputs.collateral == "WETH" && "border-2 border-gray-700"
+                  inputs.collateral == "WETH" && "border-2 border-gray-300"
                 )}
                 onClick={() =>
                   setInputs((prev) => ({ ...prev, collateral: "WETH" }))
@@ -110,7 +110,7 @@ export function LiquidateCard() {
                 }
               />
               {inputs.soilAmount <= soilBalance ? (
-                <span className="text-xs text-gray-600">
+                <span className="text-xs text-gray-400">
                   Your SOIL Balance: {soilBalance}
                 </span>
               ) : (
