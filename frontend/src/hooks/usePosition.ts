@@ -32,13 +32,16 @@ export function usePosition() {
 
     const borrowed = parseFloat(formatUnits(result[0], 18));
     const deposited = parseFloat(formatUnits(result[1], 18));
-    console.log("position: ", deposited, borrowed);
     setPosition({ deposited, borrowed });
   }, [isConnected, walletProvider, chainId, address]);
 
   useEffect(() => {
+    // init
+    if (!isConnected) {
+      return;
+    }
     refreshPosition();
-  }, [refreshPosition]);
+  }, [refreshPosition, isConnected]);
 
   return { position, refreshPosition };
 }

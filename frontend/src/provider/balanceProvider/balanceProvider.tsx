@@ -50,6 +50,10 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    // init
+    if (!isConnected) {
+      return;
+    }
     refreshBalances();
     const intervalId = setInterval(refreshBalances, 60 * 1000);
     return () => clearInterval(intervalId);

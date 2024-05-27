@@ -58,8 +58,12 @@ export function useCollaterals() {
   }, [isConnected, walletProvider, chainId, address]);
 
   useEffect(() => {
+    // init
+    if (!isConnected) {
+      return;
+    }
     refreshCollaterals();
-  }, [refreshCollaterals]);
+  }, [refreshCollaterals, isConnected]);
 
   return { collaterals, refreshCollaterals };
 }
