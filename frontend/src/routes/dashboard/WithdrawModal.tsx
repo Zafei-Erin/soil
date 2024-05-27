@@ -6,7 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
 import { Position } from "@/constants/position";
@@ -14,7 +14,6 @@ import { DepositToken } from "@/constants/token";
 import { useCollaterals } from "@/hooks/useCollaterals";
 import { useWithDraw } from "@/hooks/useWithdraw";
 import { Loader } from "@/icons";
-import { cn } from "@/lib/utils";
 import { useHealthFactor } from "@/provider/healthFactorProvider";
 import { usePrices } from "@/provider/priceProvider";
 import { ArrowRight } from "lucide-react";
@@ -106,9 +105,7 @@ export const WithdrawModal: React.FC<Props> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={"secondary"} className={cn("w-32", className)}>
-          Withdraw
-        </Button>
+        <Button className={className}>Withdraw</Button>
       </DialogTrigger>
 
       <DialogContent className="border-0 bg-black-dim sm:w-96">
@@ -134,7 +131,12 @@ export const WithdrawModal: React.FC<Props> = ({
         <div className="w-full flex flex-col items-center rounded-lg font-satoshi">
           <div className="flex items-center justify-between w-full h-10">
             <span>Remaining supply</span>
-            <span>{remainingSupply}</span>
+            <span>
+              {remainingSupply.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 2,
+              })}
+            </span>
           </div>
           <div className="flex items-center justify-between w-full h-12">
             <span>Health factor</span>

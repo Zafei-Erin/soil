@@ -47,7 +47,10 @@ export const SoilComponent: React.FC<Props> = ({
         </div>
 
         <div className="flex flex-col items-end justify-center pt-1 pr-3">
-          <NumberInput onAmountChange={onAmountChange} className="w-full" />
+          <NumberInput
+            onAmountChange={onAmountChange}
+            className="w-full text-right"
+          />
           <span className="text-xs text-gray-400 right-3 bottom-2">
             price: $
             {!isConnected

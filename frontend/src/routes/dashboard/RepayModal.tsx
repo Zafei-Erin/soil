@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -12,7 +11,6 @@ import { toast } from "@/components/ui/use-toast";
 import { Position } from "@/constants/position";
 import { useRepay } from "@/hooks/useRepay";
 import { Loader } from "@/icons";
-import { cn } from "@/lib/utils";
 import { useBalances } from "@/provider/balanceProvider";
 import { useHealthFactor } from "@/provider/healthFactorProvider";
 import { ArrowRight } from "lucide-react";
@@ -77,12 +75,10 @@ export const RepayModal: React.FC<Props> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={"secondary"} className={cn("w-32", className)}>
-          Repay
-        </Button>
+        <Button className={className}>Repay</Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="border-0 bg-black-dim sm:w-96">
         <DialogHeader>
           <DialogTitle>Repay SOIL</DialogTitle>
         </DialogHeader>
@@ -93,9 +89,10 @@ export const RepayModal: React.FC<Props> = ({
           isError={error}
           errorMessage="Exceeds your debt"
         />
+        <hr className="h-0.5 mt-2 bg-gradient-to-r from-gray-400" />
 
-        <div className="bg-green-dim w-full flex flex-col items-center px-4 rounded-lg">
-          <div className="flex items-center justify-between w-full h-12">
+        <div className="w-full flex flex-col items-center rounded-lg font-satoshi">
+          <div className="flex items-center justify-between w-full h-10">
             <span>Remaining debt</span>
             <span>
               {remainDebt.toLocaleString(undefined, {
@@ -104,7 +101,6 @@ export const RepayModal: React.FC<Props> = ({
               })}
             </span>
           </div>
-          <hr className="h-0.5 w-full bg-gray-200 " />
           <div className="flex items-center justify-between w-full h-12">
             <span>Health factor</span>
             <div className="flex items-center justify-normal gap-1">
@@ -127,15 +123,15 @@ export const RepayModal: React.FC<Props> = ({
           </div>
         </div>
 
-        <DialogFooter className="flex-col gap-2 sm:space-x-0">
-          <Button disabled={disabled} onClick={repayWrapped}>
-            Repay
+        <DialogFooter className="mx-auto w-full">
+          <Button
+            disabled={disabled}
+            onClick={repayWrapped}
+            className="rounded-full w-full bg-green-bright/90 hover:bg-green-bright/80 transition-all px-6"
+          >
+            <span>Repay</span>
             {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
           </Button>
-
-          <DialogClose asChild>
-            <Button variant="secondary">Close</Button>
-          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
