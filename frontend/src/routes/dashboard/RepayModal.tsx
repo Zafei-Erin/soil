@@ -1,37 +1,42 @@
+import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast } from "@/components/ui/use-toast";
-import { usePosition } from "@/hooks/usePosition";
+import { useShowToast } from "@/components/useShowToast";
+import { Position } from "@/constants/position";
 import { useRepay } from "@/hooks/useRepay";
 import { Loader } from "@/icons";
-import { cn } from "@/lib/utils";
-import { ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
-import { SoilComponent } from "./SoilComponent";
 import { useBalances } from "@/provider/balanceProvider";
 import { useHealthFactor } from "@/provider/healthFactorProvider";
+import { SoilComponent } from "./SoilComponent";
 
 type Props = {
   className?: string;
+  position: Position;
+  refreshPosition: () => Promise<void>;
 };
 
-export const RepayModal: React.FC<Props> = ({ className }) => {
+export const RepayModal: React.FC<Props> = ({
+  className,
+  position,
+  refreshPosition,
+}) => {
   const [amount, setAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
-  const { healthFactor } = useHealthFactor();
-  const { position } = usePosition();
+  const { healthFactor, refreshHealthFactor } = useHealthFactor();
   const { getBalances } = useBalances();
   const { repay } = useRepay();
+  const { showSuccessToast, showFailToast } = useShowToast();
 
   const soilPrice =
     (position.deposited * 0.67) / (healthFactor * getBalances("SOIL"));
@@ -48,23 +53,14 @@ export const RepayModal: React.FC<Props> = ({ className }) => {
   const disabled = error || amount <= 0 || loading;
 
   const repayWrapped = async () => {
-    if (amount <= 0) {
-      return;
-    }
     setLoading(true);
     try {
       await repay(amount);
-      toast({
-        duration: 1500,
-        title: "Repay Successfully",
-        description: `You have Repay ${amount} SOIL!`,
-      });
+      refreshPosition();
+      refreshHealthFactor();
+      showSuccessToast(`You have Repay ${amount} SOIL!`);
     } catch (error) {
-      toast({
-        duration: 1500,
-        title: "Repay Failed",
-        description: `${error}`,
-      });
+      showFailToast("Failed to repay SOIL");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -74,24 +70,26 @@ export const RepayModal: React.FC<Props> = ({ className }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={"secondary"} className={cn("w-32", className)}>
+        <Button className={className} variant={"secondary"}>
           Repay
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="border-0 bg-black-dim sm:w-96">
         <DialogHeader>
           <DialogTitle>Repay SOIL</DialogTitle>
         </DialogHeader>
 
         <SoilComponent
+          title="Repay"
           onAmountChange={setAmount}
           isError={error}
           errorMessage="Exceeds your debt"
         />
+        <hr className="h-0.5 mt-2 bg-gradient-to-r from-gray-400" />
 
-        <div className="bg-gray-100 w-full flex flex-col items-center px-4 rounded-lg border border-gray-200">
-          <div className="flex items-center justify-between w-full h-12">
+        <div className="w-full flex flex-col items-center rounded-lg font-satoshi">
+          <div className="flex items-center justify-between w-full h-10">
             <span>Remaining debt</span>
             <span>
               {remainDebt.toLocaleString(undefined, {
@@ -100,7 +98,6 @@ export const RepayModal: React.FC<Props> = ({ className }) => {
               })}
             </span>
           </div>
-          <hr className="h-0.5 w-full bg-gray-200 " />
           <div className="flex items-center justify-between w-full h-12">
             <span>Health factor</span>
             <div className="flex items-center justify-normal gap-1">
@@ -123,15 +120,16 @@ export const RepayModal: React.FC<Props> = ({ className }) => {
           </div>
         </div>
 
-        <DialogFooter className="flex-col gap-2 sm:space-x-0">
-          <Button disabled={disabled} onClick={repayWrapped}>
-            Repay
+        <DialogFooter className="mx-auto w-full">
+          <Button
+            disabled={disabled}
+            onClick={repayWrapped}
+            variant={"main"}
+            className="w-full"
+          >
+            <span>Repay</span>
             {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
           </Button>
-
-          <DialogClose asChild>
-            <Button variant="secondary">Close</Button>
-          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

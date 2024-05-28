@@ -1,109 +1,99 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Selector } from "@/constants/Selector";
-import { ChainInfo, DestinationChainID } from "@/constants/chainId";
-import { useUpdateSOILPrice } from "@/hooks/useUpdateSOILPrice";
+import { DestinationChain } from "@/constants/chain";
+import { ChainInfo, DestinationChainIDs } from "@/constants/chainId";
 import { Loader } from "@/icons";
-import { isValidChain } from "@/lib/utils";
 import { usePrices } from "@/provider/priceProvider";
+import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { useState } from "react";
+import { ChainIcon } from "./ChainIcon";
+import { useShowToast } from "./useShowToast";
 import { Button } from "./ui/button";
-import { toast } from "./ui/use-toast";
 
-type Props = {
-  chainId: DestinationChainID;
-};
+const DEFAULT_CHAIN_TO_UPDATE: DestinationChain = DestinationChain.POLYGON;
 
-const GasToken = {
-  NativeToken: {
-    name: "NativeToken",
-    value: 0,
-  },
-  Link: {
-    name: "Link",
-    value: 1,
-  },
-} as const;
-type GasToken = keyof typeof GasToken;
-
-const DEFAULT_GAS_TOKEN: GasToken = "NativeToken";
-
-export const UpdateSoilPriceModal: React.FC<Props> = ({ chainId }) => {
+export const UpdateSoilPriceModal: React.FC = () => {
+  const { isConnected } = useWeb3ModalAccount();
   const { prices } = usePrices();
-  const { updateSOILPrice } = useUpdateSOILPrice();
   const [loading, setLoading] = useState<boolean>(false);
-  const [gasToken, setGasToken] = useState<GasToken>(DEFAULT_GAS_TOKEN);
-  const disabled = !(chainId && isValidChain(chainId)) || loading;
+  const { showSuccessToast, showFailToast } = useShowToast();
+
+  const [chainToUpdate, setChainToUpdate] = useState<DestinationChain>(
+    DEFAULT_CHAIN_TO_UPDATE
+  );
+  const disabled = !isConnected || loading;
 
   const updatePrice = async () => {
     setLoading(true);
     try {
-      await updateSOILPrice(Selector[chainId], GasToken[gasToken].value);
-      toast({
-        duration: 1500,
-        title: "Update SOIL Price Successfully",
-        description: `You have updated the price successfully!`,
-      });
+      showSuccessToast("Update SOIL Price Successfully");
     } catch (error) {
       console.log(error);
-      toast({
-        duration: 1500,
-        title: "Failed to Update SOIL Price",
-        description: `${error}`,
-      });
+      showFailToast("Failed to Update SOIL Price");
     } finally {
       setLoading(false);
     }
   };
   return (
-    <div className="max-w-3xl w-full h-fit flex flex-col gap-6 max-md:items-center justify-between mx-4 p-8 rounded-lg border border-gray-200">
-      {/* price on chain */}
-      <div className="w-full flex items-center justify-between">
-        <h3 className="font-semibold">
-          Current Price of Soil on {ChainInfo[chainId].name}:
-        </h3>
-        <div className="font-semibold border-b border-black px-4 py-2 min-w-28 flex items-center justify-center">
-          {prices.SOIL_ON_CHAIN.toLocaleString(undefined, {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2,
-          })}
-        </div>
-      </div>
-
-      {/* realtime price */}
-      <div className="w-full flex items-center justify-between">
-        <h3 className="font-semibold">Realtime Price of Soil:</h3>
-        <div className="font-semibold border-b border-black px-4 py-2 min-w-28 flex items-center justify-center">
-          {prices.SOIL.toLocaleString(undefined, {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2,
-          })}
-        </div>
-      </div>
-
-      {/* chain to pay gas */}
-      <div className="w-full flex items-center justify-between">
-        <h3 className="font-semibold">Pay Gas in:</h3>
+    <div className="bg-black-dim w-full h-fit md:gap-4 flex max-md:flex-col px-3 py-6 sm:p-8 rounded-lg font-satoshi max-md:gap-6">
+      <div className="flex md:flex-col md:gap-3 items-center justify-between md:justify-center min-w-48">
+        <h1 className="sm:text-xl font-semibold">Update SOIL Price</h1>
         <Tabs
-          defaultValue={GasToken.NativeToken.name}
-          onValueChange={(token) => setGasToken(token as GasToken)}
+          defaultValue={DEFAULT_CHAIN_TO_UPDATE}
+          onValueChange={(token) => setChainToUpdate(token as DestinationChain)}
         >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value={GasToken.NativeToken.name}>
-              {ChainInfo[chainId].token}
-            </TabsTrigger>
-            <TabsTrigger value={GasToken.Link.name}>LINK</TabsTrigger>
+          <TabsList className="w-full bg-green-dim text-white">
+            {DestinationChainIDs.map((chainId) => (
+              <TabsTrigger
+                key={ChainInfo[chainId].name}
+                value={ChainInfo[chainId].name}
+                className="text-sm px-3 "
+              >
+                <div className="hidden md:block">{ChainInfo[chainId].name}</div>
+                <ChainIcon
+                  chain={ChainInfo[chainId].name}
+                  className="md:hidden w-4 h-4"
+                />
+              </TabsTrigger>
+            ))}
           </TabsList>
         </Tabs>
       </div>
 
-      <Button
-        disabled={disabled}
-        onClick={updatePrice}
-        className="w-full flex items-center justify-center gap-2 disabled:cursor-not-allowed"
-      >
-        Update SOIL Price
-        {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
-      </Button>
+      <div className="flex flex-col items-center justify-center gap-4 flex-1 pr-3">
+        {/* price on chain */}
+        <div className="w-full flex items-center justify-between gap-2">
+          <h3 className="text-gray-400">Price of Soil on {chainToUpdate}:</h3>
+          <div className="text-right">
+            {`$ ${prices.SOIL_ON_CHAIN.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })}`}
+          </div>
+        </div>
+
+        {/* realtime price */}
+        <div className="w-full flex items-center justify-between gap-2">
+          <h3 className="text-gray-400">Realtime Price of Soil:</h3>
+          <div className="text-right">
+            {`$ ${prices.SOIL.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })}`}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center">
+        <Button
+          disabled={disabled}
+          onClick={updatePrice}
+          variant={"main"}
+          className="w-full md:w-fit rounded-full flex items-center justify-center gap-2 disabled:cursor-not-allowed"
+        >
+          Update Price
+          {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
+        </Button>
+      </div>
     </div>
   );
 };

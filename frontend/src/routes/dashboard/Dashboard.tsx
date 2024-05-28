@@ -4,28 +4,37 @@ import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { HealthFactor } from "./HealthFactor";
 import { RepayModal } from "./RepayModal";
 import { WithdrawModal } from "./WithdrawModal";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export const Dashboard = () => {
-  const { position } = usePosition();
+  const { position, refreshPosition } = usePosition();
   const { isConnected } = useWeb3ModalAccount();
   return (
-    <div className="h-full py-16">
-      <div className="flex flex-col items-center justify-center">
-        <div className="relative w-96 h-[30rem] bg-white rounded-lg border border-gray-200">
-          {!isConnected && (
-            <div className="backdrop-blur-md w-full h-full absolute bg-white/60 rounded-lg flex flex-col gap-6 items-center justify-center">
-              <h1 className="text-2xl font-semibold">
-                Please connect your wallet
-              </h1>
-              <ConnectButton />
-            </div>
-          )}
+    <div className="pt-16 px-6 flex items-center justify-center">
+      <div className="relative w-96 min-h-[30rem] bg-black-dim rounded-lg font-satoshi">
+        {!isConnected && (
+          <div className="backdrop-blur-md w-full h-full absolute bg-green-bright/5 rounded-lg flex flex-col gap-16 items-center justify-center">
+            <h1 className="text-2xl font-semibold">
+              Please connect your wallet
+            </h1>
+            <ConnectButton
+              variant={"main"}
+              className="w-full rounded-full text-black"
+              iconClass="stroke-black"
+            />
+          </div>
+        )}
 
-          <div className=" mx-4 p-8 ">
-            <HealthFactor />
+        <div className="py-8 px-6">
+          <HealthFactor />
 
-            <div className="space-y-3 mt-10">
-              <h3 className="font-semibold">Collateral deposited</h3>
+          <hr className="h-0.5 mt-7 mb-5 bg-gradient-to-r from-gray-400" />
+
+          {/* Collateral deposited */}
+          <div className="space-y-2 flex items-center justify-between">
+            <div>
+              <h3 className="text-gray-400">Collateral deposited</h3>
               <div>
                 $
                 {position.deposited.toLocaleString(undefined, {
@@ -33,11 +42,18 @@ export const Dashboard = () => {
                   minimumFractionDigits: 2,
                 })}
               </div>
-              <WithdrawModal className="w-full" />
             </div>
+            <WithdrawModal
+              position={position}
+              refreshPosition={refreshPosition}
+              className="w-fit min-w-20"
+            />
+          </div>
 
-            <div className="space-y-3 mt-10">
-              <h3 className="font-semibold">Borrow</h3>
+          {/* Borrowed */}
+          <div className="space-y-2 mt-10 flex items-center justify-between">
+            <div>
+              <h3 className="text-gray-400">Borrowed</h3>
               <div>
                 $
                 {position.borrowed.toLocaleString(undefined, {
@@ -45,9 +61,18 @@ export const Dashboard = () => {
                   minimumFractionDigits: 2,
                 })}
               </div>
-              <RepayModal className="w-full" />
             </div>
+            <RepayModal
+              position={position}
+              refreshPosition={refreshPosition}
+              className="w-fit min-w-20"
+            />
           </div>
+
+          {/* Home Button */}
+          <Button variant={"main"} className="mt-12 w-full rounded-full">
+            <Link to={"/"}>Borrow / Update SOIL Price</Link>
+          </Button>
         </div>
       </div>
     </div>

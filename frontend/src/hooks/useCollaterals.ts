@@ -1,6 +1,6 @@
 import SOIL from "@/abis/SOIL.json";
 import { Collaterals, DEFAULT_COLLATERALS } from "@/constants/collateral";
-import { DepositToken, TokenAddress } from "@/constants/token";
+import { DepositTokens, TokenAddress } from "@/constants/token";
 import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
@@ -43,7 +43,7 @@ export function useCollaterals() {
     const signer = await ethersProvider.getSigner();
 
     const newCollaterals = { ...DEFAULT_COLLATERALS };
-    for (const token of DepositToken) {
+    for (const token of DepositTokens) {
       const soilAddress = TokenAddress[chainId].SOIL;
       const tokenAddress = TokenAddress[chainId][token];
       const collateral = await fetchCollateral(
@@ -58,8 +58,12 @@ export function useCollaterals() {
   }, [isConnected, walletProvider, chainId, address]);
 
   useEffect(() => {
+    // init
+    if (!isConnected) {
+      return;
+    }
     refreshCollaterals();
-  }, [refreshCollaterals]);
+  }, [refreshCollaterals, isConnected]);
 
   return { collaterals, refreshCollaterals };
 }

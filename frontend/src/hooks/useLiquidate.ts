@@ -31,12 +31,11 @@ export function useLiquidate() {
     const soilAddress = TokenAddress[chainId].SOIL;
     const tokenAddress = TokenAddress[chainId][collateral];
     const contract = new Contract(soilAddress, SOIL.abi, signer);
-    const result = await contract.liquidate(
+    await contract.liquidate(
       userAddress,
       tokenAddress,
       parseUnits(soilAmount.toString())
     );
-    console.log("liquidate result", result);
   };
 
   return { liquidate };

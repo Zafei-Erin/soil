@@ -29,11 +29,7 @@ export function useWithDraw() {
     const soilAddress = TokenAddress[chainId].SOIL;
     const tokenAddress = TokenAddress[chainId][withDrawToken];
     const contract = new Contract(soilAddress, SOIL.abi, signer);
-    const result = await contract.redeem(
-      tokenAddress,
-      parseUnits(withDrawAmount.toString())
-    );
-    console.log("redeem result", result);
+    await contract.redeem(tokenAddress, parseUnits(withDrawAmount.toString()));
   };
 
   return { withDraw };

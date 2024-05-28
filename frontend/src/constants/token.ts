@@ -1,10 +1,19 @@
 import { ChainID } from "./chainId";
 
-export const DepositToken = ["WETH", "DAI"] as const;
-export type DepositToken = (typeof DepositToken)[number];
+export const DepositToken = {
+  DAI: "DAI",
+  WETH: "WETH",
+} as const;
+export type DepositToken = (typeof DepositToken)[keyof typeof DepositToken];
 
-export const Token = [...DepositToken, "SOIL"] as const;
-export type Token = (typeof Token)[number];
+export const Token = {
+  ...DepositToken,
+  SOIL: "SOIL",
+} as const;
+export type Token = (typeof Token)[keyof typeof Token];
+
+export const Tokens: Token[] = Object.values(Token);
+export const DepositTokens: DepositToken[] = Object.values(DepositToken);
 
 export type TokenAddress = {
   [token in Token]: string;
@@ -15,16 +24,16 @@ export const TokenAddress: Record<ChainID, TokenAddress> = {
   [ChainID.Polygon]: {
     WETH: "0x387FD5E4Ea72cF66f8eA453Ed648e64908f64104",
     DAI: "0xaf9B15aA0557cff606a0616d9B76B94887423022",
-    SOIL: "0xcA69f332B143f4D39cCF4dc395F33F40c0fA0a5E",
+    SOIL: "0x0cCe7D1668C3A72E8d5F6f3bDF7Bc6606f03D262",
   },
   [ChainID.Optimism]: {
     WETH: "0x387FD5E4Ea72cF66f8eA453Ed648e64908f64104",
     DAI: "0xaf9B15aA0557cff606a0616d9B76B94887423022",
-    SOIL: "0xe561dc0f64A9f02a532B41e23dB8BBCD0b6285a7",
+    SOIL: "0x929072C633F56E61391cB183EFbb5f1dA86Dc56a",
   },
   [ChainID.Avalanche]: {
     WETH: "",
     DAI: "",
-    SOIL: "0xa6646Ef4b5d51D92aCF9811e85C2E0B36776249e",
+    SOIL: "0x9774c3ed1dEC3F0829290E0616e2BFb1Cc26A75D",
   },
 };

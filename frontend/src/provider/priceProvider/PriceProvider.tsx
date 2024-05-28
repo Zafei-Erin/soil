@@ -1,13 +1,12 @@
 import PriceFeed from "@/abis/PriceFeed.json";
 import SOIL from "@/abis/SOIL.json";
-import { ChainID } from "@/constants/chainId";
 
 import {
   DEFAULT_PRICES_ON_CHAIN,
   PricesOnChain,
   priceAddress,
 } from "@/constants/price";
-import { Token, TokenAddress } from "@/constants/token";
+import { Token, TokenAddress, Tokens } from "@/constants/token";
 import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
@@ -53,16 +52,15 @@ export const PriceProvider = ({ children }: { children: ReactNode }) => {
       console.log("User disconnected");
       return DEFAULT_PRICES_ON_CHAIN.SOIL_ON_CHAIN;
     }
-    if (!chainId || !isValidChain(chainId) || chainId == ChainID.Optimism) {
+    if (!chainId || !isValidChain(chainId)) {
       console.log("Chain not support");
       return DEFAULT_PRICES_ON_CHAIN.SOIL_ON_CHAIN;
     }
     const ethersProvider = new BrowserProvider(walletProvider);
     const signer = await ethersProvider.getSigner();
-
     const contract = new Contract(TokenAddress[chainId].SOIL, SOIL.abi, signer);
     const result = await contract.getCrudeOilPrice();
-    const price = parseFloat(formatUnits(result));
+    const price = parseFloat(formatUnits(result, 8));
     return price;
   }, [chainId, isConnected, walletProvider]);
 
@@ -71,7 +69,7 @@ export const PriceProvider = ({ children }: { children: ReactNode }) => {
     const web3 = new Web3(new Web3.providers.HttpProvider(INFURA_API_KEY));
 
     // price on optimism
-    for (const token of Token) {
+    for (const token of Tokens) {
       await fetchPrice(web3, token)
         .then((price) => (newPrices[token] = price))
         .catch((error) => console.log(error));

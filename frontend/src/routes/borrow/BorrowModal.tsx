@@ -1,19 +1,18 @@
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
+import { CollateralComponent } from "@/components/CollateralComponent";
 import { ConnectButton } from "@/components/ConnectButton";
-import { DepositComponent } from "@/components/DepositComponent";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
-import { ToastAction } from "@/components/ui/toast";
-import { toast } from "@/components/ui/use-toast";
+import { useShowToast } from "@/components/useShowToast";
 import { DepositToken } from "@/constants/token";
 import { useApproveAndMint } from "@/hooks/useApproveAndMint";
 import { Loader } from "@/icons";
-import { cn, roundTo } from "@/lib/utils";
+import { SwapIcon } from "@/icons/SwapIcon";
+import { roundTo } from "@/lib/utils";
 import { useBalances } from "@/provider/balanceProvider";
 import { usePrices } from "@/provider/priceProvider";
+import { LoanToValue } from "./LoanToValue";
 import { SoilComponent } from "./SoilComponent";
 
 export type Deposit = {
@@ -33,6 +32,7 @@ export const BorrowModal = () => {
   const { getBalances, refreshBalances } = useBalances();
   const { approvalAndMint } = useApproveAndMint();
   const { isConnected } = useWeb3ModalAccount();
+  const { showSuccessToast, showFailToast } = useShowToast();
 
   const disabled =
     loanToValue > 0.8 ||
@@ -43,7 +43,7 @@ export const BorrowModal = () => {
 
   const setLoanToValue = async (depositAmount: number, soilAmount: number) => {
     const depositValue = prices[deposit.token] * depositAmount;
-    const soilValue = prices["SOIL"] * soilAmount;
+    const soilValue = prices.SOIL_ON_CHAIN * soilAmount;
     let loanToValue = soilValue / depositValue;
 
     loanToValue =
@@ -62,7 +62,8 @@ export const BorrowModal = () => {
     _setLoanToValue(value[0]);
 
     let s =
-      (value[0] * deposit.amount * prices[deposit.token]) / prices["SOIL"];
+      (value[0] * deposit.amount * prices[deposit.token]) /
+      prices.SOIL_ON_CHAIN;
     s = isNaN(s) ? 0 : s;
     s = roundTo(s, 2);
     setSoilAmount(s);
@@ -77,101 +78,60 @@ export const BorrowModal = () => {
     try {
       await approvalAndMint(deposit.token, deposit.amount, soilAmount);
       refreshBalances();
-      toast({
-        duration: 1500,
-        title: "Borrow Successfully",
-        description: `You have borrow ${soilAmount} SOIL!`,
-        action: (
-          <ToastAction altText="View in dashboard">
-            <Link to="dashboard" className="text-xs">
-              View in dashboard
-            </Link>
-          </ToastAction>
-        ),
-      });
+      showSuccessToast(`You have borrow ${soilAmount} SOIL!`);
     } catch (error) {
       console.log(error);
-      toast({
-        duration: 1500,
-        title: "Borrow Failed",
-        description: `${error}`,
-      });
+      showFailToast("Failed to borrow SOIL");
     } finally {
       setBorrowing(false);
     }
   };
 
   return (
-    <div className="max-w-3xl w-full h-fit flex flex-col gap-8 max-md:items-center justify-between mx-4 p-8 rounded-lg border border-gray-200">
-      <h1 className="text-2xl font-semibold">Borrow SOIL</h1>
-      <div className="md:flex max-md:space-y-6 justify-between md:gap-3">
-        {/* deposit */}
-        <div className="space-y-3">
-          <h3 className="font-semibold">Deposit required</h3>
-
-          <DepositComponent
-            onTokenChange={(token: DepositToken) => {
-              setDeposit((prev) => ({
-                ...prev,
-                token: token,
-              }));
-              _setLoanToValue(0);
-            }}
-            onAmountChange={changeDepositAmount}
-            deposit={deposit}
-            isError={deposit.amount > getBalances(deposit.token)}
-            errorMessage={"You dont have enough balance!"}
-          />
-        </div>
-
-        {/* borrow */}
-        <div className="space-y-3">
-          <h3 className="font-semibold">Borrow</h3>
-          <SoilComponent
-            amount={soilAmount}
-            onAmountChange={changeSoilAmount}
-          />
-        </div>
-      </div>
-      {/* LoanToValue */}
-      <div className="space-y-3 w-full">
-        <h3 className="font-semibold">LoanToValue %</h3>
-        <div>
-          <input
-            value={loanToValue == 0 ? "" : (loanToValue * 100).toFixed(2)}
-            disabled
-            className="bg-gray-100 h-12 rounded-lg border border-gray-200 px-4 appearance-none focus:outline-none"
-          />
-          <p
-            className={cn(
-              "text-xs text-red-600 mt-2 hidden",
-              loanToValue > 0.8 && "block"
-            )}
-          >
-            LoanToValue must be less than 80% to place a transaction
-          </p>
-        </div>
-        <Slider
-          defaultValue={[0]}
-          value={[loanToValue]}
-          max={1}
-          min={0}
-          step={0.01}
-          onValueChange={changeHF}
+    <div className="bg-black-dim w-full h-fit flex flex-col md:gap-8 justify-between px-3 py-6 sm:p-8 rounded-lg">
+      <h1 className="text-xl font-semibold mb-3">Borrow SOIL</h1>
+      <div className="flex max-md:flex-col items-center justify-between md:gap-6 w-full">
+        <CollateralComponent
+          onTokenChange={(token: DepositToken) => {
+            setDeposit((prev) => ({
+              ...prev,
+              token: token,
+            }));
+            _setLoanToValue(0);
+          }}
+          onAmountChange={changeDepositAmount}
+          deposit={deposit}
+          isError={deposit.amount > getBalances(deposit.token)}
+          errorMessage={"Exceeds your balance"}
         />
+        <div className="rounded-full bg-black aspect-square w-fit p-1 flex items-center justify-center">
+          <SwapIcon className="w-5 h-5 md:rotate-90 fill-gray-400 transition-all" />
+        </div>
+        <SoilComponent amount={soilAmount} onAmountChange={changeSoilAmount} />
       </div>
-      {!isConnected ? (
-        <ConnectButton className="w-full mt-3" />
-      ) : (
-        <Button
-          className="w-full mt-3 flex items-center justify-center gap-2 disabled:cursor-not-allowed"
-          onClick={borrow}
-          disabled={disabled}
-        >
-          <span>Borrow</span>
-          {borrowing && <Loader className="w-7 h-6 stroke-white fill-white" />}
-        </Button>
-      )}
+
+      <LoanToValue loanToValue={loanToValue} changeHF={changeHF} />
+      <div className="mt-6 w-full">
+        {!isConnected ? (
+          <ConnectButton
+            variant={"main"}
+            className="w-full rounded-full text-black"
+            iconClass="stroke-black"
+          />
+        ) : (
+          <Button
+            variant={"main"}
+            className="w-full"
+            onClick={borrow}
+            disabled={disabled}
+          >
+            <span>Borrow</span>
+            {borrowing && (
+              <Loader className="w-7 h-6 stroke-white fill-white" />
+            )}
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

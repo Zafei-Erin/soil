@@ -24,8 +24,7 @@ export function useRepay() {
 
     const soilAddress = TokenAddress[chainId].SOIL;
     const contract = new Contract(soilAddress, SOIL.abi, signer);
-    const result = await contract.burn(parseUnits(amount.toString()));
-    console.log("redeem result", result);
+    await contract.burn(parseUnits(amount.toString()));
   };
 
   return { repay };

@@ -1,25 +1,24 @@
-import { DepositComponent } from "@/components/DepositComponent";
+import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import { CollateralComponent } from "@/components/CollateralComponent";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast } from "@/components/ui/use-toast";
+import { useShowToast } from "@/components/useShowToast";
+import { Position } from "@/constants/position";
+import { DepositToken } from "@/constants/token";
 import { useCollaterals } from "@/hooks/useCollaterals";
-import { usePosition } from "@/hooks/usePosition";
 import { useWithDraw } from "@/hooks/useWithdraw";
 import { Loader } from "@/icons";
-import { cn } from "@/lib/utils";
-import { usePrices } from "@/provider/priceProvider";
-import { DepositToken } from "@/constants/token";
-import { ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
 import { useHealthFactor } from "@/provider/healthFactorProvider";
+import { usePrices } from "@/provider/priceProvider";
 
 type Withdraw = {
   token: DepositToken;
@@ -28,6 +27,8 @@ type Withdraw = {
 
 type Props = {
   className?: string;
+  position: Position;
+  refreshPosition: () => Promise<void>;
 };
 
 const DEFAULT_WITHDRAW: Withdraw = {
@@ -35,21 +36,29 @@ const DEFAULT_WITHDRAW: Withdraw = {
   amount: 0,
 };
 
-export const WithdrawModal: React.FC<Props> = ({ className }) => {
+export const WithdrawModal: React.FC<Props> = ({
+  className,
+  position,
+  refreshPosition,
+}) => {
   const [withdraw, setWithdraw] = useState<Withdraw>(DEFAULT_WITHDRAW);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
-  const { healthFactor } = useHealthFactor();
+  const { healthFactor, refreshHealthFactor } = useHealthFactor();
   const { prices } = usePrices();
-  const { position } = usePosition();
   const { withDraw } = useWithDraw();
   const { collaterals } = useCollaterals();
+  const { showSuccessToast, showFailToast } = useShowToast();
 
   const estimatedRemainDeposit =
     position.deposited - prices[withdraw.token] * withdraw.amount;
   const estimatedHealthFactor =
     (Math.max(estimatedRemainDeposit, 0) / position.borrowed) * 0.67;
+  const remainingSupply = Math.max(
+    collaterals[withdraw.token] - withdraw.amount,
+    0
+  );
 
   const disabled =
     estimatedHealthFactor < 1 ||
@@ -77,20 +86,15 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
     setLoading(true);
     try {
       await withDraw(withdraw.token, withdraw.amount);
-      toast({
-        duration: 1500,
-        title: "Withdraw Successfully",
-        description: `You have Withdraw ${withdraw.amount} ${withdraw.token}!`,
-      });
+      refreshPosition();
+      refreshHealthFactor();
+      showSuccessToast(
+        `You have Withdraw ${withdraw.amount} ${withdraw.token}!`
+      );
     } catch (error) {
-      toast({
-        duration: 1500,
-        title: "Withdraw Failed",
-        description: `${error}`,
-      });
+      showFailToast(`Failed to widthdraw ${withdraw.token}`);
     } finally {
       setLoading(false);
-      setWithdraw(DEFAULT_WITHDRAW);
       setOpen(false);
     }
   };
@@ -98,17 +102,17 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={"secondary"} className={cn("w-32", className)}>
+        <Button className={className} variant={"secondary"}>
           Withdraw
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="border-0 bg-black-dim sm:w-96">
         <DialogHeader>
           <DialogTitle>Withdraw {withdraw.token}</DialogTitle>
         </DialogHeader>
 
-        <DepositComponent
+        <CollateralComponent
           onTokenChange={(token: DepositToken) => {
             setWithdraw((prev) => ({
               ...prev,
@@ -121,12 +125,18 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
           errorMessage={errorMessage}
         />
 
-        <div className="bg-gray-100 w-full flex flex-col items-center px-4 rounded-lg border border-gray-200">
-          <div className="flex items-center justify-between w-full h-12">
+        <hr className="h-0.5 bg-gradient-to-r from-gray-400" />
+
+        <div className="w-full flex flex-col items-center rounded-lg font-satoshi">
+          <div className="flex items-center justify-between w-full h-10">
             <span>Remaining supply</span>
-            <span>{collaterals[withdraw.token]}</span>
+            <span>
+              {remainingSupply.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 2,
+              })}
+            </span>
           </div>
-          <hr className="h-0.5 w-full bg-gray-200 " />
           <div className="flex items-center justify-between w-full h-12">
             <span>Health factor</span>
             <div className="flex items-center justify-normal gap-1">
@@ -149,16 +159,16 @@ export const WithdrawModal: React.FC<Props> = ({ className }) => {
           </div>
         </div>
 
-        <DialogFooter className="flex-col gap-2 sm:space-x-0">
-          <Button disabled={disabled} onClick={withDrawWrapped}>
+        <DialogFooter className="mx-auto w-full">
+          <Button
+            disabled={disabled}
+            onClick={withDrawWrapped}
+            variant={"main"}
+            className="w-full"
+          >
             <span>WithDraw</span>
             {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
           </Button>
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
-            </Button>
-          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

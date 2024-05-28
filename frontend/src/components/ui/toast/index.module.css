@@ -1,0 +1,26 @@
+.ToastRoot[data-state="open"] {
+  animation: slideIn 100ms ease-in-out;
+}
+
+.ToastRoot[data-state="close"] {
+  animation: hide 100ms ease-in-out;
+}
+
+@keyframes hide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(calc(-3rem));
+  }
+  to {
+    /* 0.75rem is the p-3 padding of the toast region */
+    transform: translateY(0);
+  }
+}

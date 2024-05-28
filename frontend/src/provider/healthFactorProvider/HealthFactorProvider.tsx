@@ -54,13 +54,16 @@ export const HealthFactorProvider = ({ children }: { children: ReactNode }) => {
     const data = parseFloat(formatUnits(result, 18));
     const healthFactor = data > 1_000_000 ? Infinity : data;
 
-    console.log("health factor", healthFactor);
     setHealthFactor(healthFactor);
   }, [isConnected, walletProvider, address, chainId, soilBalance]);
 
   useEffect(() => {
+    // init
+    if (!isConnected) {
+      return;
+    }
     refreshHealthFactor();
-  }, [refreshHealthFactor]);
+  }, [refreshHealthFactor, isConnected]);
 
   return (
     <HealthFactorContext.Provider value={{ healthFactor, refreshHealthFactor }}>
