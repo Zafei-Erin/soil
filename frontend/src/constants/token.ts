@@ -32,8 +32,8 @@ export const TokenAddress: Record<ChainID, TokenAddress> = {
     SOIL: "0x929072C633F56E61391cB183EFbb5f1dA86Dc56a",
   },
   [ChainID.Avalanche]: {
-    WETH: "",
-    DAI: "",
+    WETH: "0x9991D14b93CD58fE8dD1A5a901608f18664225Ff",
+    DAI: "0xC49E3c2b119026500cC442DA8D7c34316a1D3cF1",
     SOIL: "0x9774c3ed1dEC3F0829290E0616e2BFb1Cc26A75D",
   },
 };
