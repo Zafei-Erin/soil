@@ -1,4 +1,4 @@
-import SOIL from "@/abis/SOIL.json";
+import SoilSource from "@/abis/SoilSource.json";
 import { Selector } from "@/constants/Selector";
 import { ChainID } from "@/constants/chainId";
 import { TokenAddress } from "@/constants/token";
@@ -7,11 +7,15 @@ import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
-import { BrowserProvider, Contract } from "ethers";
+import { BrowserProvider, Contract, JsonRpcSigner, formatUnits } from "ethers";
 
 export function useUpdatePrice() {
   const { isConnected, chainId } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
+
+  let ethersProvider: BrowserProvider;
+  let signer: JsonRpcSigner;
+  let contract: Contract;
 
   const getEstimatedFee = async (selector: Selector) => {
     if (!isConnected || !walletProvider) {
@@ -21,16 +25,33 @@ export function useUpdatePrice() {
     if (!chainId || !isValidChain(chainId) || chainId !== ChainID.Optimism) {
       throw Error("Chain not support");
     }
-    const ethersProvider = new BrowserProvider(walletProvider);
-    const signer = await ethersProvider.getSigner();
+    ethersProvider = new BrowserProvider(walletProvider);
+    signer = await ethersProvider.getSigner();
 
     const soilAddress = TokenAddress[chainId].SOIL;
-    const contract = new Contract(soilAddress, SOIL.abi, signer);
+    contract = new Contract(soilAddress, SoilSource.abi, signer);
     const result = await contract.getEstimatedFeeAmount(selector);
-    console.log(result);
-    // const fee = parseFloat(formatUnits(result, 18));
-    return 0;
+    const fee = parseFloat(formatUnits(result));
+    return fee;
   };
 
-  return { getEstimatedFee };
+  const updatePrice = async (selector: Selector, gas: bigint) => {
+    if (!isConnected || !walletProvider) {
+      throw Error("User disconnected");
+    }
+
+    if (!chainId || !isValidChain(chainId) || chainId !== ChainID.Optimism) {
+      throw Error("Chain not support");
+    }
+    ethersProvider = new BrowserProvider(walletProvider);
+    signer = await ethersProvider.getSigner();
+
+    const soilAddress = TokenAddress[chainId].SOIL;
+    contract = new Contract(soilAddress, SoilSource.abi, signer);
+    await contract.updateCrudeOilPriceOnDestinationChain(selector, {
+      value: gas,
+    });
+  };
+
+  return { getEstimatedFee, updatePrice };
 }

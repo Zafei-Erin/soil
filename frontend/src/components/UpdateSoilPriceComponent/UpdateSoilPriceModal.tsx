@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Selector } from "@/constants/Selector";
 import { DestinationChain } from "@/constants/chain";
-import { ChainID } from "@/constants/chainId";
+import { ChainID, ChainInfo } from "@/constants/chainId";
 import { useUpdatePrice } from "@/hooks/useGetEstimatedPrice";
 import { Loader } from "@/icons";
 import { cn, isValidChain } from "@/lib/utils";
@@ -20,6 +20,7 @@ import { Button } from "../ui/button";
 import { useShowToast } from "../useShowToast";
 import { ChainTab } from "./ChainTab";
 import { DEFAULT_CHAIN_TO_UPDATE } from "./config";
+import { parseUnits } from "ethers";
 
 type Props = DialogTriggerProps;
 
@@ -37,7 +38,7 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
   const { open: openWallet } = useWeb3Modal();
   const { chainId } = useWeb3ModalAccount();
   const { showSuccessToast, showFailToast } = useShowToast();
-  const { getEstimatedFee } = useUpdatePrice();
+  const { getEstimatedFee, updatePrice } = useUpdatePrice();
 
   const shouldSwitchNetwork =
     !chainId || !isValidChain(chainId) || chainId !== ChainID.Optimism;
@@ -50,6 +51,10 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
       setCurrentStep(2);
     }
   }, [shouldSwitchNetwork]);
+
+  useEffect(() => {
+    setFee(0);
+  }, [open]);
 
   const getEstimatedFeeWrapped = async () => {
     setLoading(true);
@@ -65,12 +70,16 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
     }
   };
 
-  const updatePrice = async () => {
+  const updatePriceWrapped = async () => {
     setLoading(true);
     try {
       if (!chainId || !isValidChain(chainId) || chainId !== ChainID.Optimism) {
         throw new Error();
       }
+      await updatePrice(
+        Selector[ChainID[chainToUpdate]],
+        parseUnits(fee.toString())
+      );
       showSuccessToast("Update SOIL Price Successfully");
       setOpen(false);
     } catch (error) {
@@ -87,12 +96,11 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
         <Button
           variant={"main"}
           className={cn(
-            "w-full md:w-fit rounded-full flex items-center justify-center gap-2 disabled:cursor-not-allowed",
+            "w-full md:w-fit rounded-full disabled:cursor-not-allowed",
             className
           )}
         >
           Update Price
-          {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
         </Button>
       </DialogTrigger>
 
@@ -113,11 +121,11 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
               disabled={currentStep != 1}
               onClick={() => openWallet({ view: "Networks" })}
               variant={"secondary"}
-              className="w-full"
+              className="w-fit justify-self-end space-x-2 min-w-24"
             >
               <span>Switch</span>
               {loading && currentStep == 1 && (
-                <Loader className="w-7 h-6 stroke-white fill-white" />
+                <Loader className="w-6 h-6 stroke-white fill-white" />
               )}
             </Button>
           </div>
@@ -138,11 +146,11 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
                 </div>
                 <div className="mt-2 space-x-2">
                   <span>Fee:</span>
-                  <span>
-                    {fee.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                      minimumFractionDigits: 2,
-                    })}
+                  <span className="text-xs">
+                    {fee !== 0 &&
+                      `${fee.toFixed(8)} ${
+                        ChainInfo[ChainID[chainToUpdate]].token
+                      }`}
                   </span>
                 </div>
               </div>
@@ -151,26 +159,26 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
               disabled={currentStep != 2}
               onClick={getEstimatedFeeWrapped}
               variant={"secondary"}
-              className=""
+              className="w-fit justify-self-end space-x-2 min-w-24"
             >
               <span>Action</span>
               {loading && currentStep == 2 && (
-                <Loader className="w-7 h-6 stroke-white fill-white" />
+                <Loader className="w-6 h-6 stroke-white fill-white" />
               )}
             </Button>
           </div>
 
-          <div className="grid grid-cols-3 items-center gap-x-6">
-            <span className=" col-span-2">3. Update Price</span>
+          <div className="grid grid-cols-2 items-center gap-x-6">
+            <span className=" col-span-1">3. Update Price</span>
             <Button
               disabled={currentStep != 3}
-              onClick={updatePrice}
+              onClick={updatePriceWrapped}
               variant={"secondary"}
-              className="w-full"
+              className="w-fit justify-self-end space-x-2 min-w-24"
             >
               <span>Update</span>
               {loading && currentStep == 3 && (
-                <Loader className="w-7 h-6 stroke-white fill-white" />
+                <Loader className="w-6 h-6 stroke-white fill-white" />
               )}
             </Button>
           </div>
