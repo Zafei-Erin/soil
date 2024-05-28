@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import router from "./router";
 
 dotenv.config();
 const port = process.env.PORT || 4000;
@@ -19,10 +20,7 @@ app.use((req, res, next) => {
   );
   next();
 });
-
-app.get("/", (req, res) => {
-  res.send("Welcome to use sOIL backend.");
-});
+app.use(router);
 
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
