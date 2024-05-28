@@ -58,7 +58,11 @@ export const HealthFactor = () => {
             minimumFractionDigits: 2,
           })}
         </div>
-        <span className={cn("text-lg text-gray-400", textColor)}>{state}</span>
+        {state != "Init" && (
+          <span className={cn("text-lg text-gray-400", textColor)}>
+            {state}
+          </span>
+        )}
       </div>
       <div className={cn("h-3 w-full rounded-full bg-gray-600")}>
         <div
