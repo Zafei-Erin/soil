@@ -1,3 +1,5 @@
+import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
+
 import {
   Dialog,
   DialogContent,
@@ -6,21 +8,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
-import { DialogTriggerProps } from "@radix-ui/react-dialog";
-import { Loader } from "@/icons";
-import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
-import { useShowToast } from "../useShowToast";
-import { cn, isValidChain } from "@/lib/utils";
+import { Selector } from "@/constants/Selector";
+import { DestinationChain } from "@/constants/chain";
 import { ChainID } from "@/constants/chainId";
 import { useUpdatePrice } from "@/hooks/useGetEstimatedPrice";
-import { Selector } from "@/constants/Selector";
+import { Loader } from "@/icons";
+import { cn, isValidChain } from "@/lib/utils";
+import { DialogTriggerProps } from "@radix-ui/react-dialog";
+import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import { useShowToast } from "../useShowToast";
 import { ChainTab } from "./ChainTab";
-import { DestinationChain } from "@/constants/chain";
+import { DEFAULT_CHAIN_TO_UPDATE } from "./config";
 
 type Props = DialogTriggerProps;
-const DEFAULT_CHAIN_TO_UPDATE: DestinationChain = DestinationChain.POLYGON;
 
 export const UpdateSoilPriceModal: React.FC<Props> = ({
   className,

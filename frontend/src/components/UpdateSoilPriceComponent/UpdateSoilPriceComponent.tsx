@@ -1,10 +1,10 @@
+import { useState } from "react";
+
 import { DestinationChain } from "@/constants/chain";
 import { usePrices } from "@/provider/priceProvider";
-import { useState } from "react";
 import { ChainTab } from "./ChainTab";
 import { UpdateSoilPriceModal } from "./UpdateSoilPriceModal";
-
-const DEFAULT_CHAIN_TO_UPDATE: DestinationChain = DestinationChain.POLYGON;
+import { DEFAULT_CHAIN_TO_UPDATE } from "./config";
 
 export const UpdateSoilPriceComponent: React.FC = () => {
   const { prices } = usePrices();

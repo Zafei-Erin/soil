@@ -1,10 +1,9 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DestinationChain } from "@/constants/chain";
 import { ChainInfo, DestinationChainIDs } from "@/constants/chainId";
-import { ChainIcon } from "../ChainIcon";
 import { cn } from "@/lib/utils";
-
-const DEFAULT_CHAIN_TO_UPDATE: DestinationChain = DestinationChain.POLYGON;
+import { ChainIcon } from "../ChainIcon";
+import { DEFAULT_CHAIN_TO_UPDATE } from "./config";
 
 type Props = {
   setChainToUpdate: (token: DestinationChain) => void;
