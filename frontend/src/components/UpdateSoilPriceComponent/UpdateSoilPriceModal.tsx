@@ -11,7 +11,7 @@ import {
 import { Selector } from "@/constants/Selector";
 import { DestinationChain } from "@/constants/chain";
 import { ChainID, ChainInfo } from "@/constants/chainId";
-import { useUpdatePrice } from "@/hooks/useGetEstimatedPrice";
+import { useUpdateSOILPrice } from "@/hooks/useUpdateSOILPrice";
 import { Loader } from "@/icons";
 import { cn, isValidChain } from "@/lib/utils";
 import { DialogTriggerProps } from "@radix-ui/react-dialog";
@@ -38,7 +38,7 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
   const { open: openWallet } = useWeb3Modal();
   const { chainId } = useWeb3ModalAccount();
   const { showSuccessToast, showFailToast } = useShowToast();
-  const { getEstimatedFee, updatePrice } = useUpdatePrice();
+  const { getEstimatedFee, updatePrice } = useUpdateSOILPrice();
 
   const shouldSwitchNetwork =
     !chainId || !isValidChain(chainId) || chainId !== ChainID.Optimism;
