@@ -1,5 +1,5 @@
 import { MintTokenButton } from "@/components/MintTokenButton";
-import { UpdateSoilPriceModal } from "@/components/UpdateSoilPriceModal";
+import { UpdateSoilPriceComponent } from "@/components/UpdateSoilPriceComponent/UpdateSoilPriceComponent";
 import { BorrowModal } from "./BorrowModal";
 
 export const Borrow = () => {
@@ -18,7 +18,7 @@ export const Borrow = () => {
       <div className="flex flex-col gap-3 w-full items-center justify-center">
         <BorrowModal />
 
-        <UpdateSoilPriceModal />
+        <UpdateSoilPriceComponent />
       </div>
     </div>
   );
