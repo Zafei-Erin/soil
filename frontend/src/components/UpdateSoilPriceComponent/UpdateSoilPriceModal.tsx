@@ -1,5 +1,9 @@
 import { DialogTriggerProps } from "@radix-ui/react-dialog";
-import { useSwitchNetwork, useWeb3ModalAccount } from "@web3modal/ethers/react";
+import {
+  useSwitchNetwork,
+  useWeb3Modal,
+  useWeb3ModalAccount,
+} from "@web3modal/ethers/react";
 import { parseUnits } from "ethers";
 import { useEffect, useState } from "react";
 
@@ -26,15 +30,17 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
   className,
   ...props
 }) => {
+  const [fee, setFee] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [chainToUpdate, setChainToUpdate] = useState<DestinationChain>(
     DEFAULT_CHAIN_TO_UPDATE
   );
-  const [fee, setFee] = useState<number>(0);
+
+  const { open: openWallet } = useWeb3Modal();
   const { switchNetwork } = useSwitchNetwork();
-  const { chainId } = useWeb3ModalAccount();
+  const { isConnected, chainId } = useWeb3ModalAccount();
   const { showSuccessToast, showFailToast } = useShowToast();
   const { getEstimatedFee, updatePrice } = useUpdateSOILPrice();
 
@@ -42,7 +48,6 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
     !chainId || !isValidChain(chainId) || chainId !== ChainID.Optimism;
 
   useEffect(() => {
-    setFee(0);
     // Should Switch Network to Optimism
     if (shouldSwitchNetwork) {
       setCurrentStep(1);
@@ -51,6 +56,11 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
     }
   }, [shouldSwitchNetwork, open]);
 
+  useEffect(() => {
+    setFee(0);
+    setChainToUpdate(DEFAULT_CHAIN_TO_UPDATE);
+  }, [open]);
+
   const getEstimatedFeeWrapped = async () => {
     setLoading(true);
     try {
@@ -58,7 +68,7 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
       setFee(fee);
       setCurrentStep(3);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       showFailToast("Failed to get estimated fee!");
     } finally {
       setLoading(false);
@@ -78,7 +88,7 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
       showSuccessToast("Price will be update in a while.");
       setOpen(false);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       showFailToast("Failed to Update SOIL Price");
     } finally {
       setLoading(false);
@@ -87,7 +97,9 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
 
   const onChainChange = (chain: DestinationChain) => {
     setChainToUpdate(chain);
-    setCurrentStep(2);
+    if (currentStep >= 2) {
+      setCurrentStep(2);
+    }
     setFee(0);
   };
 
@@ -120,7 +132,13 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
             <span className="col-span-2">1. Switch to Optimism chain</span>
             <Button
               disabled={currentStep != 1}
-              onClick={() => switchNetwork(ChainID.Optimism)}
+              onClick={() => {
+                if (!isConnected) {
+                  openWallet({ view: "Connect" });
+                } else {
+                  switchNetwork(ChainID.Optimism);
+                }
+              }}
               variant={"secondary"}
               className="w-fit min-w-24 space-x-2 justify-self-end"
             >
