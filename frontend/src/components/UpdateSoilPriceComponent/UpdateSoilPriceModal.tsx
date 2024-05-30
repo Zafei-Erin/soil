@@ -1,5 +1,8 @@
 import { DialogTriggerProps } from "@radix-ui/react-dialog";
-import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
+import {
+  useSwitchNetwork,
+  useWeb3ModalAccount
+} from "@web3modal/ethers/react";
 import { parseUnits } from "ethers";
 import { useEffect, useState } from "react";
 
@@ -33,7 +36,7 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
     DEFAULT_CHAIN_TO_UPDATE
   );
   const [fee, setFee] = useState<number>(0);
-  const { open: openWallet } = useWeb3Modal();
+  const { switchNetwork } = useSwitchNetwork();
   const { chainId } = useWeb3ModalAccount();
   const { showSuccessToast, showFailToast } = useShowToast();
   const { getEstimatedFee, updatePrice } = useUpdateSOILPrice();
@@ -94,7 +97,7 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
         <Button
           variant={"main"}
           className={cn(
-            "w-full md:w-fit rounded-full disabled:cursor-not-allowed",
+            "w-full rounded-full disabled:cursor-not-allowed md:w-fit",
             className
           )}
         >
@@ -103,7 +106,7 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
       </DialogTrigger>
 
       <DialogContent
-        className="border-0 bg-black-dim sm:w-96 font-satoshi"
+        className="border-0 bg-black-dim font-satoshi sm:w-96"
         onPointerDownOutside={(e) => {
           e.preventDefault();
         }}
@@ -112,27 +115,27 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
           <DialogTitle>Update SOIL Price</DialogTitle>
         </DialogHeader>
 
-        <div className="w-full flex flex-col gap-6 p-2">
+        <div className="flex w-full flex-col gap-6 p-2">
           <div className="grid grid-cols-3 items-center gap-x-6">
             <span className="col-span-2">1. Switch to Optimism chain</span>
             <Button
               disabled={currentStep != 1}
-              onClick={() => openWallet({ view: "Networks" })}
+              onClick={() => switchNetwork(ChainID.Optimism)}
               variant={"secondary"}
-              className="w-fit justify-self-end space-x-2 min-w-24"
+              className="w-fit min-w-24 space-x-2 justify-self-end"
             >
               <span>Switch</span>
               {loading && currentStep == 1 && (
-                <Loader className="w-6 h-6 stroke-white fill-white" />
+                <Loader className="h-6 w-6 fill-white stroke-white" />
               )}
             </Button>
           </div>
 
-          <div className="grid grid-cols-3 items-center gap-x-6 content-between">
+          <div className="grid grid-cols-3 content-between items-center gap-x-6">
             <div className="col-span-2 space-y-2">
               <span>2. Get Estimated Fee</span>
-              <div className="pl-5 w-full">
-                <div className="flex items-center gap-2 w-full">
+              <div className="w-full pl-5">
+                <div className="flex w-full items-center gap-2">
                   <span>Chain:</span>
                   <div className="flex-1">
                     <ChainTab
@@ -157,11 +160,11 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
               disabled={currentStep != 2}
               onClick={getEstimatedFeeWrapped}
               variant={"secondary"}
-              className="w-fit justify-self-end space-x-2 min-w-24"
+              className="w-fit min-w-24 space-x-2 justify-self-end"
             >
               <span>Action</span>
               {loading && currentStep == 2 && (
-                <Loader className="w-6 h-6 stroke-white fill-white" />
+                <Loader className="h-6 w-6 fill-white stroke-white" />
               )}
             </Button>
           </div>
@@ -172,11 +175,11 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
               disabled={currentStep != 3}
               onClick={updatePriceWrapped}
               variant={"secondary"}
-              className="w-fit justify-self-end space-x-2 min-w-24"
+              className="w-fit min-w-24 space-x-2 justify-self-end"
             >
               <span>Update</span>
               {loading && currentStep == 3 && (
-                <Loader className="w-6 h-6 stroke-white fill-white" />
+                <Loader className="h-6 w-6 fill-white stroke-white" />
               )}
             </Button>
           </div>

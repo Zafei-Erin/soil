@@ -46,7 +46,7 @@ const ethersConfig = defaultConfig({
   enableInjected: true, // true by default
   enableCoinbase: true, // true by default
   rpcUrl: "...", // used for the Coinbase SDK
-  defaultChainId: 1, // used for the Coinbase SDK
+  defaultChainId: 11155420, // used for the Coinbase SDK
 });
 
 export const walletOptions: Web3ModalOptions = {

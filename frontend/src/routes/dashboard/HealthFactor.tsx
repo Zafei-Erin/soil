@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+import { ChainSelector } from "@/components";
 import { cn } from "@/lib/utils";
 import { useHealthFactor } from "@/provider";
 
@@ -45,7 +46,10 @@ export const HealthFactor = () => {
   return (
     <div className="space-y-3">
       <div>
-        <h1 className="text-2xl font-semibold">Health Factor</h1>
+        <div className="mb-2 flex items-start justify-between">
+          <h1 className="text-2xl font-semibold">Health Factor</h1>
+          <ChainSelector />
+        </div>
         <p className="text-xs text-gray-400">
           If the health factor drops below 1, the liquidation of your collateral
           might be triggered.

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { ControlledNumberInput } from "@/components";
+import { ChainSelector, ControlledNumberInput } from "@/components";
 import { DepositToken } from "@/constants";
 import { useLiquidate } from "@/hooks/useLiquidate";
 import { useShowToast } from "@/hooks/useShowToast";
@@ -58,7 +58,10 @@ export function LiquidateCard() {
   return (
     <Card className="h-full w-full border-0 bg-black-dim font-satoshi">
       <CardHeader>
-        <CardTitle>Liquidate</CardTitle>
+        <div className="mb-1 flex items-start justify-between">
+          <CardTitle>Liquidate</CardTitle>
+          <ChainSelector />
+        </div>
         <CardDescription>
           By repaying sOIL for borrowers, liquidators receive extra bonus of
           underlying collaterals.

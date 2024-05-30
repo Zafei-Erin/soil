@@ -15,3 +15,4 @@ export const Chain = {
   ...DestinationChain,
 };
 export type Chain = (typeof Chain)[keyof typeof Chain];
+export const Chains = Object.values(Chain)

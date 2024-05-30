@@ -1,7 +1,12 @@
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { useState } from "react";
 
-import { Collateral, CollateralComponent, ConnectButton } from "@/components";
+import {
+  ChainSelector,
+  Collateral,
+  CollateralComponent,
+  ConnectButton,
+} from "@/components";
 import { Chain, ChainInfo, DepositToken, Token } from "@/constants";
 import { useApproveAndMint } from "@/hooks/useApproveAndMint";
 import { useShowToast } from "@/hooks/useShowToast";
@@ -86,7 +91,11 @@ export const BorrowModal = () => {
 
   return (
     <div className="flex h-fit w-full flex-col justify-between rounded-lg bg-black-dim px-3 py-6 sm:p-8 md:gap-8">
-      <h1 className="mb-3 text-xl font-semibold">Borrow SOIL</h1>
+      <div className="flex items-start justify-between">
+        <h1 className="mb-3 text-xl font-semibold">Borrow SOIL</h1>
+        <ChainSelector />
+      </div>
+
       <div className="flex w-full items-center justify-between max-md:flex-col md:gap-6">
         <CollateralComponent
           onTokenChange={(token: DepositToken) => {
