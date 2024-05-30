@@ -3,10 +3,9 @@ import { providers } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import Web3 from "web3";
 
+import { setInterval } from "timers";
 import PriceFeed from "../abis/PriceFeed.json";
 import { Token, Tokens, priceAddress } from "../constants";
-
-dotenv.config();
 
 type Price = {
   [token in Token]: number;
@@ -26,6 +25,11 @@ export class OptimismPriceProvider {
   }
 
   public static async init() {
+    this.fetchPrices();
+    setInterval(this.fetchPrices, 60 * 1_000);
+  }
+
+  private static async fetchPrices() {
     for (const token of Tokens) {
       this._PRICE[token] = await this.fetchPrice(token);
     }
@@ -33,6 +37,7 @@ export class OptimismPriceProvider {
 
   // query latest price of 3 tokens on optimism
   private static async fetchPrice(token: Token) {
+    dotenv.config();
     const web3 = new Web3(
       new Web3.providers.HttpProvider(
         `https://optimism-sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`
