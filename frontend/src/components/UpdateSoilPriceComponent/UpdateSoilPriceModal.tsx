@@ -1,8 +1,5 @@
 import { DialogTriggerProps } from "@radix-ui/react-dialog";
-import {
-  useSwitchNetwork,
-  useWeb3ModalAccount
-} from "@web3modal/ethers/react";
+import { useSwitchNetwork, useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { parseUnits } from "ethers";
 import { useEffect, useState } from "react";
 
@@ -81,7 +78,7 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
         Selector[ChainID[chainToUpdate]],
         parseUnits(fee.toString())
       );
-      showSuccessToast("Update SOIL Price Successfully");
+      showSuccessToast("Price will be update in a while.");
       setOpen(false);
     } catch (error) {
       console.log(error);
