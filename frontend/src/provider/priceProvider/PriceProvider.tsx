@@ -20,7 +20,7 @@ export const PriceProvider = ({ children }: { children: ReactNode }) => {
   const [prices, setPrices] = useState<Prices>(DEFAULT_PRICES);
 
   const refreshPrices = useCallback(async () => {
-    const response = await fetch("http://localhost:4000/price");
+    const response = await fetch(`${import.meta.env.VITE_SERVER}/price`);
     const data = await response.json();
     setPrices(data);
   }, []);
