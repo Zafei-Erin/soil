@@ -2,11 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "build": "echo vercel deploy",
-    "test": "jest --setupFiles dotenv/config"
+    "build": "echo vercel deploy"
   },
   "keywords": [],
   "author": "",
