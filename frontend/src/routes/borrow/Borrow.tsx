@@ -1,5 +1,4 @@
-import { MintTokenButton } from "@/components/MintTokenButton";
-import { UpdateSoilPriceComponent } from "@/components/UpdateSoilPriceComponent/UpdateSoilPriceComponent";
+import { MintTokenButton, UpdateSoilPriceComponent } from "@/components";
 import { BorrowModal } from "./BorrowModal";
 
 export const Borrow = () => {

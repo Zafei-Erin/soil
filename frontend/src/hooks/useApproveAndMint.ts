@@ -1,15 +1,16 @@
-import SOIL from "@/abis/SOIL.json";
-import ERC20 from "@/abis/ERC20.json";
-import { DepositToken, TokenAddress } from "@/constants/token";
-import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import { BrowserProvider, Contract, parseUnits } from "ethers";
 
+import ERC20 from "@/abis/ERC20.json";
+import SOIL from "@/abis/SOIL.json";
+import { DepositToken, TokenAddress } from "@/constants/token";
+import { isValidChain } from "@/lib/utils";
+
 export function useApproveAndMint() {
-  const { isConnected, chainId } = useWeb3ModalAccount();
+  const { chainId } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
   const approvalAndMint = async (
@@ -17,7 +18,7 @@ export function useApproveAndMint() {
     depositAmount: number,
     soilAmount: number
   ) => {
-    if (!isConnected || !walletProvider) {
+    if (!walletProvider) {
       throw Error("User disconnected");
     }
 

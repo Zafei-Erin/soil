@@ -1,6 +1,7 @@
-import { ChainID } from "@/constants/chainId";
-import { type ClassValue, clsx } from "clsx";
+import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+
+import { ChainID } from "@/constants/chainId";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

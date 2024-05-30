@@ -1,7 +1,13 @@
 import { useState } from "react";
 
-import { ControlledNumberInput } from "@/components/ControlledNumberInput";
-import { Button } from "@/components/ui/button";
+import { ControlledNumberInput } from "@/components";
+import { DepositToken } from "@/constants";
+import { useLiquidate } from "@/hooks/useLiquidate";
+import { useShowToast } from "@/hooks/useShowToast";
+import { DaiIcon, Loader, WethIcon } from "@/icons";
+import { cn } from "@/lib/utils";
+import { useBalances } from "@/provider";
+import { Button } from "@/ui/button";
 import {
   Card,
   CardContent,
@@ -9,13 +15,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { useShowToast } from "@/components/useShowToast";
-import { DepositToken } from "@/constants/token";
-import { useLiquidate } from "@/hooks/useLiquidate";
-import { DaiIcon, Loader, WethIcon } from "@/icons";
-import { cn } from "@/lib/utils";
-import { useBalances } from "@/provider/balanceProvider";
+} from "@/ui/card";
 
 export type LiquidateInfo = {
   userAddress: string;
@@ -56,7 +56,7 @@ export function LiquidateCard() {
     }
   };
   return (
-    <Card className="w-full h-full border-0 bg-black-dim font-satoshi">
+    <Card className="h-full w-full border-0 bg-black-dim font-satoshi">
       <CardHeader>
         <CardTitle>Liquidate</CardTitle>
         <CardDescription>
@@ -67,35 +67,35 @@ export function LiquidateCard() {
       <CardContent className="mt-4">
         <form onSubmit={liquidateWrapped}>
           <div className="grid w-full items-center gap-4">
-            <div className="flex items-center justify-center gap-6 mb-2">
+            <div className="mb-2 flex items-center justify-center gap-6">
               <div
                 className={cn(
-                  "border rounded-lg aspect-square w-fit p-2 hover:-translate-y-2 hover:shadow-lg transition-all",
+                  "aspect-square w-fit rounded-lg border p-2 transition-all hover:-translate-y-2 hover:shadow-lg",
                   inputs.collateral == "WETH" && "border-2 border-gray-300"
                 )}
                 onClick={() =>
                   setInputs((prev) => ({ ...prev, collateral: "WETH" }))
                 }
               >
-                <WethIcon className="w-16 h-16" />
+                <WethIcon className="h-16 w-16" />
               </div>
               <div
                 className={cn(
-                  "border rounded-lg aspect-square w-fit p-2 hover:-translate-y-2 hover:shadow-lg transition-all",
+                  "aspect-square w-fit rounded-lg border p-2 transition-all hover:-translate-y-2 hover:shadow-lg",
                   inputs.collateral == "DAI" && "border-2 border-yellow-500"
                 )}
                 onClick={() =>
                   setInputs((prev) => ({ ...prev, collateral: "DAI" }))
                 }
               >
-                <DaiIcon className="w-16 h-16" />
+                <DaiIcon className="h-16 w-16" />
               </div>
             </div>
             <div className="flex flex-col space-y-1.5">
               <label htmlFor="userAddress">User Address</label>
               <input
                 id="userAddress"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm appearance-none placeholder:text-muted-foreground focus-visible:outline-none"
+                className="flex h-10 w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none"
                 placeholder="Address to liquidate from"
                 value={inputs.userAddress}
                 onChange={(e) =>
@@ -106,7 +106,7 @@ export function LiquidateCard() {
                 }
               />
               {inValidAddress && (
-                <p className="text-red-600 text-xs">Invalid User Address</p>
+                <p className="text-xs text-red-600">Invalid User Address</p>
               )}
             </div>
             <div className="flex flex-col space-y-1.5">
@@ -133,7 +133,7 @@ export function LiquidateCard() {
           </div>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-between mt-6">
+      <CardFooter className="mt-6 flex justify-between">
         <Button
           type="submit"
           disabled={disabled}
@@ -142,7 +142,7 @@ export function LiquidateCard() {
           onClick={liquidateWrapped}
         >
           Liquidate
-          {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
+          {loading && <Loader className="h-6 w-7 fill-white stroke-white" />}
         </Button>
       </CardFooter>
     </Card>

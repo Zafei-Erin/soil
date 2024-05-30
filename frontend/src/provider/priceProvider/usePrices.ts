@@ -1,4 +1,5 @@
 import { useContext } from "react";
+
 import { PriceContext } from "./PriceProvider";
 
 export const usePrices = () => {

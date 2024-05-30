@@ -3,15 +3,15 @@ import {
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import { BrowserProvider, Contract, parseUnits } from "ethers";
+import { useState } from "react";
 
 import ERC20 from "@/abis/ERC20.json";
-import { DepositToken, TokenAddress } from "@/constants/token";
+import { DepositToken, TokenAddress } from "@/constants";
+import { useShowToast } from "@/hooks/useShowToast";
 import { Loader } from "@/icons";
 import { isValidChain } from "@/lib/utils";
-import { useBalances } from "@/provider/balanceProvider";
-import { useState } from "react";
-import { Button } from "./ui/button";
-import { useShowToast } from "./useShowToast";
+import { useBalances } from "@/provider";
+import { Button } from "@/ui/button";
 
 export const MintTokenButton = ({ token }: { token: DepositToken }) => {
   const { isConnected, address, chainId } = useWeb3ModalAccount();

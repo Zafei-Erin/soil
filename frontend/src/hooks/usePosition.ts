@@ -1,13 +1,13 @@
-import SOIL from "@/abis/SOIL.json";
-import { DEFAULT_POSITION, Position } from "@/constants/position";
-import { TokenAddress } from "@/constants/token";
-import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import { BrowserProvider, Contract, formatUnits } from "ethers";
 import { useCallback, useEffect, useState } from "react";
+
+import SOIL from "@/abis/SOIL.json";
+import { DEFAULT_POSITION, Position, TokenAddress } from "@/constants";
+import { isValidChain } from "@/lib/utils";
 
 export function usePosition() {
   const [position, setPosition] = useState<Position>(DEFAULT_POSITION);
@@ -36,11 +36,14 @@ export function usePosition() {
   }, [isConnected, walletProvider, chainId, address]);
 
   useEffect(() => {
-    // init
-    if (!isConnected) {
-      return;
-    }
-    refreshPosition();
+    const init = async () => {
+      try {
+        await refreshPosition();
+      } catch (error) {
+        return;
+      }
+    };
+    init();
   }, [refreshPosition, isConnected]);
 
   return { position, refreshPosition };

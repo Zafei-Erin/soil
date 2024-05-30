@@ -1,10 +1,9 @@
-import { NumberInput } from "@/components/NumberInput";
-import { TokenIconWithName } from "@/components/TokenIconWithName";
-import { Token } from "@/constants/token";
-import { cn } from "@/lib/utils";
-import { useBalances } from "@/provider/balanceProvider";
-import { usePrices } from "@/provider/priceProvider";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
+
+import { NumberInput, TokenIconWithName } from "@/components";
+import { Chain, ChainInfo, Token } from "@/constants";
+import { cn, isValidChain } from "@/lib/utils";
+import { useBalances, usePrices } from "@/provider";
 
 type Props = {
   title?: string;
@@ -21,13 +20,15 @@ export const SoilComponent: React.FC<Props> = ({
   errorMessage,
   className,
 }) => {
-  const { isConnected } = useWeb3ModalAccount();
+  const { isConnected, chainId } = useWeb3ModalAccount();
   const { prices } = usePrices();
   const { getBalances } = useBalances();
-
+  const currentChain =
+    (chainId && isValidChain(chainId) && ChainInfo[chainId].name) ||
+    Chain.OPTIMISM;
   return (
     <div className={cn("w-full font-satoshi", className)}>
-      <div className="flex items-end justify-between mb-2 font-satoshi">
+      <div className="mb-2 flex items-end justify-between font-satoshi">
         <h3>{title}</h3>
         <span className="text-xs text-gray-400">
           {`Balance:
@@ -40,24 +41,24 @@ export const SoilComponent: React.FC<Props> = ({
       </div>
       <label
         htmlFor="borrowInput"
-        className="flex items-center justify-between h-[4.5rem] gap-2 bg-green-dim rounded-md px-2"
+        className="flex h-[4.5rem] items-center justify-between gap-2 rounded-md bg-green-dim px-2"
       >
-        <div className="flex bg-black items-center justify-between rounded-full h-11 pl-1.5 pr-3 font-satoshi font-normal">
+        <div className="flex h-11 items-center justify-between rounded-full bg-black pl-1.5 pr-3 font-satoshi font-normal">
           <TokenIconWithName token={Token.SOIL} />
         </div>
 
-        <div className="flex flex-col items-end justify-center pt-1 pr-3">
+        <div className="flex flex-col items-end justify-center pr-3 pt-1">
           <NumberInput
             onAmountChange={onAmountChange}
             className="w-full text-right"
           />
-          <span className="text-xs text-gray-400 right-3 bottom-2">
+          <span className="bottom-2 right-3 text-xs text-gray-400">
             price: $
             {!isConnected
-              ? prices.SOIL.toLocaleString(undefined, {
+              ? prices.SOIL[Chain.OPTIMISM].toLocaleString(undefined, {
                   maximumFractionDigits: 2,
                 })
-              : prices.SOIL_ON_CHAIN.toLocaleString(undefined, {
+              : prices.SOIL[currentChain].toLocaleString(undefined, {
                   maximumFractionDigits: 2,
                   minimumFractionDigits: 2,
                 })}
@@ -66,7 +67,7 @@ export const SoilComponent: React.FC<Props> = ({
       </label>
 
       {isError && (
-        <p className="text-xs text-red-600 mt-2 block">{errorMessage}</p>
+        <p className="mt-2 block text-xs text-red-600">{errorMessage}</p>
       )}
     </div>
   );

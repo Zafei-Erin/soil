@@ -1,13 +1,25 @@
-import ERC20 from "@/abis/ERC20.json";
-import { Balances, DEFAULT_BALANCES } from "@/constants/balance";
-import { Token, TokenAddress, Tokens } from "@/constants/token";
-import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import { BrowserProvider, Contract, JsonRpcSigner, formatUnits } from "ethers";
-import { ReactNode, createContext, useEffect, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
+import ERC20 from "@/abis/ERC20.json";
+import {
+  Balances,
+  DEFAULT_BALANCES,
+  Token,
+  TokenAddress,
+  Tokens,
+} from "@/constants";
+import { isValidChain } from "@/lib/utils";
 
 type BalanceContext = {
   getBalances: (token: Token) => number;
@@ -16,19 +28,23 @@ type BalanceContext = {
 
 export const BalanceContext = createContext<BalanceContext | null>(null);
 
+const fetchBalance = async (
+  signer: JsonRpcSigner,
+  tokenAddress: string,
+  address: string
+) => {
+  const contract = new Contract(tokenAddress, ERC20.abi, signer);
+  const result = await contract.balanceOf(address);
+  const price = parseFloat(formatUnits(result));
+  return price;
+};
+
 export const BalanceProvider = ({ children }: { children: ReactNode }) => {
   const [balances, setBalances] = useState<Balances>(DEFAULT_BALANCES);
   const { isConnected, address, chainId } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
-  const fetchBalance = async (signer: JsonRpcSigner, tokenAddress: string) => {
-    const contract = new Contract(tokenAddress, ERC20.abi, signer);
-    const result = await contract.balanceOf(address);
-    const price = parseFloat(formatUnits(result));
-    return price;
-  };
-
-  const refreshBalances = async () => {
+  const refreshBalances = useCallback(async () => {
     if (!isConnected || !walletProvider || !address) {
       throw Error("User disconnected");
     }
@@ -43,25 +59,31 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
     const newBalances = { ...DEFAULT_BALANCES };
     for (const token of Tokens) {
       const tokenAddress = TokenAddress[chainId][token];
-      const balance = await fetchBalance(signer, tokenAddress);
+      const balance = await fetchBalance(signer, tokenAddress, address);
       newBalances[token] = balance;
     }
     setBalances(newBalances);
-  };
+  }, [isConnected, walletProvider, chainId, address]);
 
   useEffect(() => {
-    // init
-    if (!isConnected) {
-      return;
-    }
-    refreshBalances();
-    const intervalId = setInterval(refreshBalances, 60 * 1000);
+    let intervalId: NodeJS.Timeout;
+    const init = async () => {
+      try {
+        await refreshBalances();
+        intervalId = setInterval(refreshBalances, 60 * 1000);
+      } catch (error) {
+        return;
+      }
+    };
+    init();
+
     return () => clearInterval(intervalId);
-  }, [isConnected, walletProvider, chainId]);
+  }, [refreshBalances]);
 
   const getBalances = (token: Token) => {
     return balances[token];
   };
+  
   return (
     <BalanceContext.Provider value={{ getBalances, refreshBalances }}>
       {children}

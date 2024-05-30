@@ -1,5 +1,14 @@
+import { DialogTriggerProps } from "@radix-ui/react-dialog";
 import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
+import { parseUnits } from "ethers";
+import { useEffect, useState } from "react";
 
+import { ChainID, ChainInfo, DestinationChain, Selector } from "@/constants";
+import { useShowToast } from "@/hooks/useShowToast";
+import { useUpdateSOILPrice } from "@/hooks/useUpdateSOILPrice";
+import { Loader } from "@/icons";
+import { cn, isValidChain } from "@/lib/utils";
+import { Button } from "@/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,20 +16,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Selector } from "@/constants/Selector";
-import { DestinationChain } from "@/constants/chain";
-import { ChainID, ChainInfo } from "@/constants/chainId";
-import { useUpdateSOILPrice } from "@/hooks/useUpdateSOILPrice";
-import { Loader } from "@/icons";
-import { cn, isValidChain } from "@/lib/utils";
-import { DialogTriggerProps } from "@radix-ui/react-dialog";
-import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import { useShowToast } from "../useShowToast";
+} from "@/ui/dialog";
 import { ChainTab } from "./ChainTab";
-import { DEFAULT_CHAIN_TO_UPDATE } from "./config";
-import { parseUnits } from "ethers";
+import { DEFAULT_CHAIN_TO_UPDATE } from "./default";
 
 type Props = DialogTriggerProps;
 

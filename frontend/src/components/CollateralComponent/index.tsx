@@ -1,20 +1,22 @@
+import { NumberInput, TokenIconWithName } from "@/components";
+import { DepositToken, DepositTokens } from "@/constants";
+import { cn } from "@/lib/utils";
+import { useBalances, usePrices } from "@/provider";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { DepositToken, DepositTokens } from "@/constants/token";
-import { useBalances } from "@/provider/balanceProvider";
-import { usePrices } from "@/provider/priceProvider/usePrices";
-import { Deposit } from "@/routes/borrow/BorrowModal";
-import { NumberInput } from "./NumberInput";
-import { TokenIconWithName } from "./TokenIconWithName";
-import { cn } from "@/lib/utils";
+} from "@/ui/select";
+
+export type Collateral = {
+  token: DepositToken;
+  amount: number;
+};
 
 type Props = {
-  deposit: Deposit;
+  deposit: Collateral;
   isError?: boolean;
   errorMessage?: string;
   onTokenChange?: (token: DepositToken) => void;
@@ -34,7 +36,7 @@ export const CollateralComponent: React.FC<Props> = ({
   const { getBalances } = useBalances();
   return (
     <div className={cn("w-full font-satoshi", className)}>
-      <div className="flex items-end justify-between mb-2 font-satoshi">
+      <div className="mb-2 flex items-end justify-between font-satoshi">
         <h3>Collaterals</h3>
         <span className="text-xs text-gray-400">
           {`Balance:
@@ -47,7 +49,7 @@ export const CollateralComponent: React.FC<Props> = ({
       </div>
       <label
         htmlFor="collateralInput"
-        className="flex items-center justify-between h-[4.5rem] gap-2 bg-green-dim rounded-md px-2"
+        className="flex h-[4.5rem] items-center justify-between gap-2 rounded-md bg-green-dim px-2"
       >
         <Select
           defaultValue="WETH"
@@ -55,7 +57,7 @@ export const CollateralComponent: React.FC<Props> = ({
             onTokenChange?.(token);
           }}
         >
-          <SelectTrigger className="rounded-full h-11 w-[8.5rem] pl-1.5 pr-3 font-satoshi">
+          <SelectTrigger className="h-11 w-[8.5rem] rounded-full pl-1.5 pr-3 font-satoshi">
             <SelectValue />
           </SelectTrigger>
 
@@ -68,7 +70,7 @@ export const CollateralComponent: React.FC<Props> = ({
           </SelectContent>
         </Select>
 
-        <div className="flex flex-col items-end justify-center pt-1 pr-3">
+        <div className="flex flex-col items-end justify-center pr-3 pt-1">
           <NumberInput
             id="collateralInput"
             onAmountChange={onAmountChange}
@@ -76,16 +78,16 @@ export const CollateralComponent: React.FC<Props> = ({
             autoComplete="off"
           />
 
-          <p className="text-xs text-gray-400 right-3 bottom-2">
+          <p className="bottom-2 right-3 text-xs text-gray-400">
             price: $
-            {prices[deposit.token].toLocaleString(undefined, {
+            {(prices[deposit.token] || 0).toLocaleString(undefined, {
               maximumFractionDigits: 2,
             })}
           </p>
         </div>
       </label>
 
-      <div className="sm:mt-2 h-4">
+      <div className="h-4 sm:mt-2">
         {isError && (
           <span className="text-xs text-red-600">{errorMessage}</span>
         )}

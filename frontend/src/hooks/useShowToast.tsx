@@ -1,5 +1,6 @@
 import { Check, CircleAlert } from "lucide-react";
-import { useToast } from "./ui/toast/use-toast";
+
+import { useToast } from "../ui/toast/use-toast";
 
 export const useShowToast = () => {
   const { toast } = useToast();
