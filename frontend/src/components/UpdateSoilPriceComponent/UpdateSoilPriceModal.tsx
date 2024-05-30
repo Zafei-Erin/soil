@@ -42,17 +42,14 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
     !chainId || !isValidChain(chainId) || chainId !== ChainID.Optimism;
 
   useEffect(() => {
+    setFee(0);
     // Should Switch Network to Optimism
     if (shouldSwitchNetwork) {
       setCurrentStep(1);
     } else {
       setCurrentStep(2);
     }
-  }, [shouldSwitchNetwork]);
-
-  useEffect(() => {
-    setFee(0);
-  }, [open]);
+  }, [shouldSwitchNetwork, open]);
 
   const getEstimatedFeeWrapped = async () => {
     setLoading(true);
@@ -86,6 +83,12 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
     } finally {
       setLoading(false);
     }
+  };
+
+  const onChainChange = (chain: DestinationChain) => {
+    setChainToUpdate(chain);
+    setCurrentStep(2);
+    setFee(0);
   };
 
   return (
@@ -136,7 +139,7 @@ export const UpdateSoilPriceModal: React.FC<Props> = ({
                   <span>Chain:</span>
                   <div className="flex-1">
                     <ChainTab
-                      setChainToUpdate={setChainToUpdate}
+                      setChainToUpdate={onChainChange}
                       mode="small"
                       className="w-4/5"
                     />
