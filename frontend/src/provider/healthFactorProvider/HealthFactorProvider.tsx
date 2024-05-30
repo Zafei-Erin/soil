@@ -1,7 +1,3 @@
-import SOIL from "@/abis/SOIL.json";
-
-import { TokenAddress } from "@/constants/token";
-import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
@@ -14,6 +10,10 @@ import {
   useEffect,
   useState,
 } from "react";
+
+import SOIL from "@/abis/SOIL.json";
+import { TokenAddress } from "@/constants/token";
+import { isValidChain } from "@/lib/utils";
 import { useBalances } from "../balanceProvider";
 
 type HealthFactorContext = {
@@ -58,12 +58,15 @@ export const HealthFactorProvider = ({ children }: { children: ReactNode }) => {
   }, [isConnected, walletProvider, address, chainId, soilBalance]);
 
   useEffect(() => {
-    // init
-    if (!isConnected) {
-      return;
-    }
-    refreshHealthFactor();
-  }, [refreshHealthFactor, isConnected]);
+    const init = async () => {
+      try {
+        await refreshHealthFactor();
+      } catch (error) {
+        return;
+      }
+    };
+    init();
+  }, [refreshHealthFactor]);
 
   return (
     <HealthFactorContext.Provider value={{ healthFactor, refreshHealthFactor }}>

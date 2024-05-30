@@ -1,8 +1,5 @@
 import { Chain } from "@/constants/chain";
-import { IconProps } from "@/icons";
-import { AvalancheIcon } from "@/icons/AvalancheIcon";
-import { OptimismIcon } from "@/icons/OptimismIcon";
-import { PolygonIcon } from "@/icons/PolygonIcon";
+import { AvalancheIcon, IconProps, OptimismIcon, PolygonIcon } from "@/icons";
 import { cn } from "@/lib/utils";
 
 const ICONS: Record<Chain, React.FC<IconProps>> = {

@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import { ConnectButton } from "./ConnectButton";
+
+import { ConnectButton } from "@/components";
 import { cn } from "@/lib/utils";
 
 export const Header = () => {

@@ -1,8 +1,14 @@
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { CollateralComponent } from "@/components/CollateralComponent";
-import { Button } from "@/components/ui/button";
+import { CollateralComponent } from "@/components";
+import { DepositToken, Position } from "@/constants";
+import { useCollaterals } from "@/hooks/useCollaterals";
+import { useShowToast } from "@/hooks/useShowToast";
+import { useWithDraw } from "@/hooks/useWithdraw";
+import { Loader } from "@/icons";
+import { useHealthFactor, usePrices } from "@/provider";
+import { Button } from "@/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,15 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { useShowToast } from "@/components/useShowToast";
-import { Position } from "@/constants/position";
-import { DepositToken } from "@/constants/token";
-import { useCollaterals } from "@/hooks/useCollaterals";
-import { useWithDraw } from "@/hooks/useWithdraw";
-import { Loader } from "@/icons";
-import { useHealthFactor } from "@/provider/healthFactorProvider";
-import { usePrices } from "@/provider/priceProvider";
+} from "@/ui/dialog";
 
 type Withdraw = {
   token: DepositToken;
@@ -127,8 +125,8 @@ export const WithdrawModal: React.FC<Props> = ({
 
         <hr className="h-0.5 bg-gradient-to-r from-gray-400" />
 
-        <div className="w-full flex flex-col items-center rounded-lg font-satoshi">
-          <div className="flex items-center justify-between w-full h-10">
+        <div className="flex w-full flex-col items-center rounded-lg font-satoshi">
+          <div className="flex h-10 w-full items-center justify-between">
             <span>Remaining supply</span>
             <span>
               {remainingSupply.toLocaleString(undefined, {
@@ -137,7 +135,7 @@ export const WithdrawModal: React.FC<Props> = ({
               })}
             </span>
           </div>
-          <div className="flex items-center justify-between w-full h-12">
+          <div className="flex h-12 w-full items-center justify-between">
             <span>Health factor</span>
             <div className="flex items-center justify-normal gap-1">
               <div>
@@ -146,7 +144,7 @@ export const WithdrawModal: React.FC<Props> = ({
                   minimumFractionDigits: 2,
                 })}
               </div>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="h-4 w-4" />
               <div>
                 {isNaN(estimatedHealthFactor)
                   ? "0.00"
@@ -167,7 +165,7 @@ export const WithdrawModal: React.FC<Props> = ({
             className="w-full"
           >
             <span>WithDraw</span>
-            {loading && <Loader className="w-7 h-6 stroke-white fill-white" />}
+            {loading && <Loader className="h-6 w-7 fill-white stroke-white" />}
           </Button>
         </DialogFooter>
       </DialogContent>

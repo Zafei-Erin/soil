@@ -1,7 +1,8 @@
-import { Token } from "@/constants/token";
-import { cn } from "@/lib/utils";
 import { ComponentProps } from "react";
-import { TokenIcon } from "../TokenIcon";
+
+import { TokenIcon } from "@/components";
+import { Token } from "@/constants";
+import { cn } from "@/lib/utils";
 
 type Props = ComponentProps<"div"> & {
   token: Token;

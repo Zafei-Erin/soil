@@ -1,7 +1,8 @@
-import { cn } from "@/lib/utils";
 import { useWeb3Modal, useWeb3ModalAccount } from "@web3modal/ethers/react";
 import { Wallet } from "lucide-react";
-import { Button, ButtonProps } from "./ui/button";
+
+import { cn } from "@/lib/utils";
+import { Button, ButtonProps } from "@/ui/button";
 
 type Props = Omit<ButtonProps, "onClick"> & {
   iconClass?: string;

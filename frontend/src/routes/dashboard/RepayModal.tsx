@@ -1,7 +1,12 @@
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Position } from "@/constants";
+import { useRepay } from "@/hooks/useRepay";
+import { useShowToast } from "@/hooks/useShowToast";
+import { Loader } from "@/icons";
+import { useBalances, useHealthFactor } from "@/provider";
+import { Button } from "@/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,13 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { useShowToast } from "@/components/useShowToast";
-import { Position } from "@/constants/position";
-import { useRepay } from "@/hooks/useRepay";
-import { Loader } from "@/icons";
-import { useBalances } from "@/provider/balanceProvider";
-import { useHealthFactor } from "@/provider/healthFactorProvider";
+} from "@/ui/dialog";
 import { SoilComponent } from "./SoilComponent";
 
 type Props = {

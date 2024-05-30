@@ -1,4 +1,5 @@
-import { Token } from "./token";
+import { Chain } from "./chain";
+import { DepositToken, Token } from "./token";
 
 // on optimism chain
 export const priceAddress: Record<Token, string> = {
@@ -8,24 +9,17 @@ export const priceAddress: Record<Token, string> = {
 };
 
 export type Prices = {
-  [token in Token]: number;
+  [token in DepositToken]: number;
+} & {
+  SOIL: { [chain in Chain]: number };
 };
 
 export const DEFAULT_PRICES: Prices = {
   DAI: 0,
   WETH: 0,
-  SOIL: 0,
-};
-
-export type PricesOnChain = {
-  [token in Token]: number;
-} & {
-  SOIL_ON_CHAIN: number;
-};
-
-export const DEFAULT_PRICES_ON_CHAIN: PricesOnChain = {
-  DAI: 0,
-  WETH: 0,
-  SOIL: 0,
-  SOIL_ON_CHAIN: 0,
+  SOIL: {
+    Polygon: 0,
+    Avalanche: 0,
+    Optimism: 0,
+  },
 };

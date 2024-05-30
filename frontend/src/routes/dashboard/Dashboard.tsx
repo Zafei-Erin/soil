@@ -1,11 +1,12 @@
-import { ConnectButton } from "@/components/ConnectButton";
-import { usePosition } from "@/hooks/usePosition";
 import { useWeb3ModalAccount } from "@web3modal/ethers/react";
+import { Link } from "react-router-dom";
+
+import { ConnectButton } from "@/components";
+import { usePosition } from "@/hooks/usePosition";
+import { Button } from "@/ui/button";
 import { HealthFactor } from "./HealthFactor";
 import { RepayModal } from "./RepayModal";
 import { WithdrawModal } from "./WithdrawModal";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 
 export const Dashboard = () => {
   const { position, refreshPosition } = usePosition();

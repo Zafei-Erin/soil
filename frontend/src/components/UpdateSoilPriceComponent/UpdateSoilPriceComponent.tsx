@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-import { DestinationChain } from "@/constants/chain";
-import { usePrices } from "@/provider/priceProvider";
+import { DestinationChain } from "@/constants";
+import { usePrices } from "@/provider";
 import { ChainTab } from "./ChainTab";
 import { UpdateSoilPriceModal } from "./UpdateSoilPriceModal";
-import { DEFAULT_CHAIN_TO_UPDATE } from "./config";
+import { DEFAULT_CHAIN_TO_UPDATE } from "./default";
 
 export const UpdateSoilPriceComponent: React.FC = () => {
   const { prices } = usePrices();
@@ -25,7 +25,7 @@ export const UpdateSoilPriceComponent: React.FC = () => {
         <div className="w-full flex items-center justify-between gap-2">
           <h3 className="text-gray-400">Price on {chainToUpdate}:</h3>
           <div className="text-right">
-            {`$ ${prices.SOIL_ON_CHAIN.toLocaleString(undefined, {
+            {`$ ${prices.SOIL[chainToUpdate].toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             })}`}
@@ -36,7 +36,7 @@ export const UpdateSoilPriceComponent: React.FC = () => {
         <div className="w-full flex items-center justify-between gap-2">
           <h3 className="text-gray-400">Realtime Price:</h3>
           <div className="text-right">
-            {`$ ${prices.SOIL.toLocaleString(undefined, {
+            {`$ ${prices.SOIL.Optimism.toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             })}`}

@@ -1,6 +1,5 @@
-import { Token } from "@/constants/token";
-import { DaiIcon, IconProps, WethIcon } from "@/icons";
-import { SoilIcon } from "@/icons/SoilIcon";
+import { Token } from "@/constants";
+import { DaiIcon, IconProps, SoilIcon, WethIcon } from "@/icons";
 import { cn } from "@/lib/utils";
 
 const ICONS: Record<Token, React.FC<IconProps>> = {

@@ -1,4 +1,5 @@
 import { useContext } from "react";
+
 import { HealthFactorContext } from "./HealthFactorProvider";
 
 export const useHealthFactor = () => {

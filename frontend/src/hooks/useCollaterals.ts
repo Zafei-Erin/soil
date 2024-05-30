@@ -1,13 +1,18 @@
-import SOIL from "@/abis/SOIL.json";
-import { Collaterals, DEFAULT_COLLATERALS } from "@/constants/collateral";
-import { DepositTokens, TokenAddress } from "@/constants/token";
-import { isValidChain } from "@/lib/utils";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import { BrowserProvider, Contract, JsonRpcSigner, formatUnits } from "ethers";
 import { useCallback, useEffect, useState } from "react";
+
+import SOIL from "@/abis/SOIL.json";
+import {
+  Collaterals,
+  DEFAULT_COLLATERALS,
+  DepositTokens,
+  TokenAddress,
+} from "@/constants";
+import { isValidChain } from "@/lib/utils";
 
 export function useCollaterals() {
   const [collaterals, setCollaterals] =
@@ -58,12 +63,15 @@ export function useCollaterals() {
   }, [isConnected, walletProvider, chainId, address]);
 
   useEffect(() => {
-    // init
-    if (!isConnected) {
-      return;
-    }
-    refreshCollaterals();
-  }, [refreshCollaterals, isConnected]);
+    const init = async () => {
+      try {
+        await refreshCollaterals();
+      } catch (error) {
+        return;
+      }
+    };
+    init();
+  }, [refreshCollaterals]);
 
   return { collaterals, refreshCollaterals };
 }

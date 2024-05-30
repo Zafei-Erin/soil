@@ -4,9 +4,9 @@
 import * as React from "react";
 
 import type {
-  ToastActionElement,
-  ToastProps,
-} from "@/components/ui/toast/toast";
+    ToastActionElement,
+    ToastProps,
+} from "@/ui/toast/toast";
 
 const TOAST_LIMIT = 1;
 const TOAST_REMOVE_DELAY = 1000000;
@@ -194,4 +194,5 @@ function useToast() {
   };
 }
 
-export { useToast, toast };
+export { toast, useToast };
+

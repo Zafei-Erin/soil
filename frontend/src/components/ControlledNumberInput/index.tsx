@@ -1,5 +1,6 @@
-import { cn } from "@/lib/utils";
 import { ComponentProps, useEffect, useState } from "react";
+
+import { cn } from "@/lib/utils";
 
 type Props = Omit<
   ComponentProps<"input">,

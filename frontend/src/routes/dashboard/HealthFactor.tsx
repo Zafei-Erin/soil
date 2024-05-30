@@ -1,6 +1,7 @@
-import { cn } from "@/lib/utils";
-import { useHealthFactor } from "@/provider/healthFactorProvider";
 import { useEffect } from "react";
+
+import { cn } from "@/lib/utils";
+import { useHealthFactor } from "@/provider";
 
 type State = "Init" | "BROKE" | "Risky" | "Moderate" | "Healthy";
 
@@ -10,33 +11,33 @@ export const HealthFactor = () => {
     healthFactor == 0
       ? "Init"
       : healthFactor < 1
-      ? "BROKE"
-      : healthFactor < 2
-      ? "Risky"
-      : healthFactor < 3
-      ? "Moderate"
-      : "Healthy";
+        ? "BROKE"
+        : healthFactor < 2
+          ? "Risky"
+          : healthFactor < 3
+            ? "Moderate"
+            : "Healthy";
   const textColor: string =
     state == "Init"
       ? "text-gray-400/80"
       : state == "BROKE"
-      ? "text-red-600/80"
-      : state == "Risky"
-      ? "text-amber-600/80"
-      : state == "Moderate"
-      ? "text-amber-400/80"
-      : "text-emerald-600/80";
+        ? "text-red-600/80"
+        : state == "Risky"
+          ? "text-amber-600/80"
+          : state == "Moderate"
+            ? "text-amber-400/80"
+            : "text-emerald-600/80";
 
   const bgColor: string =
     state == "Init"
       ? "bg-gray-400/80"
       : state == "BROKE"
-      ? "bg-red-600/80"
-      : state == "Risky"
-      ? "bg-amber-600/80"
-      : state == "Moderate"
-      ? "bg-amber-400/80"
-      : "bg-emerald-600/80";
+        ? "bg-red-600/80"
+        : state == "Risky"
+          ? "bg-amber-600/80"
+          : state == "Moderate"
+            ? "bg-amber-400/80"
+            : "bg-emerald-600/80";
 
   const width = Math.min(healthFactor, 5) * 20;
 
@@ -52,7 +53,7 @@ export const HealthFactor = () => {
       </div>
 
       <div className="flex items-end justify-between">
-        <div className={cn("text-4xl text-gray-400 font-semibold", textColor)}>
+        <div className={cn("text-4xl font-semibold text-gray-400", textColor)}>
           {healthFactor.toLocaleString(undefined, {
             maximumFractionDigits: 2,
             minimumFractionDigits: 2,
