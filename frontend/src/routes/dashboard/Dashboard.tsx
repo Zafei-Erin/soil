@@ -12,10 +12,10 @@ export const Dashboard = () => {
   const { position, refreshPosition } = usePosition();
   const { isConnected } = useWeb3ModalAccount();
   return (
-    <div className="pt-16 px-6 flex items-center justify-center">
-      <div className="relative w-96 min-h-[30rem] bg-black-dim rounded-lg font-satoshi">
+    <div className="flex items-center justify-center px-6 pt-16">
+      <div className="relative min-h-[30rem] w-96 rounded-lg bg-black-dim font-satoshi">
         {!isConnected && (
-          <div className="backdrop-blur-md w-full h-full absolute bg-green-bright/5 rounded-lg flex flex-col gap-16 items-center justify-center">
+          <div className="absolute z-50 flex h-full w-full flex-col items-center justify-center gap-16 rounded-lg bg-green-bright/5 backdrop-blur-md">
             <h1 className="text-2xl font-semibold">
               Please connect your wallet
             </h1>
@@ -27,13 +27,13 @@ export const Dashboard = () => {
           </div>
         )}
 
-        <div className="py-8 px-6">
+        <div className="px-6 py-8">
           <HealthFactor />
 
-          <hr className="h-0.5 mt-7 mb-5 bg-gradient-to-r from-gray-400" />
+          <hr className="mb-5 mt-7 h-0.5 bg-gradient-to-r from-gray-400" />
 
           {/* Collateral deposited */}
-          <div className="space-y-2 flex items-center justify-between">
+          <div className="flex items-center justify-between space-y-2">
             <div>
               <h3 className="text-gray-400">Collateral deposited</h3>
               <div>
@@ -52,7 +52,7 @@ export const Dashboard = () => {
           </div>
 
           {/* Borrowed */}
-          <div className="space-y-2 mt-10 flex items-center justify-between">
+          <div className="mt-10 flex items-center justify-between space-y-2">
             <div>
               <h3 className="text-gray-400">Borrowed</h3>
               <div>
