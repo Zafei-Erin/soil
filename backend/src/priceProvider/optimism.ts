@@ -26,7 +26,9 @@ export class OptimismPriceProvider {
 
   public static async init() {
     this.fetchPrices();
-    setInterval(this.fetchPrices, 60 * 1_000);
+    setInterval(() => {
+      this.fetchPrices();
+    }, 60 * 1_000);
   }
 
   private static async fetchPrices() {
