@@ -1,0 +1,3 @@
+[submodule "onchain"]
+	path = onchain
+	url = git@github.com:allelementary/synthetic-crude-oil.git
