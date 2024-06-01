@@ -8,12 +8,28 @@
 
 Tokenized Crude Oil smart contract provides broader access to trading and investment opportunities. It enables fractional trading of crude oil assets, reducing barriers and bypassing bureaucratic restrictions, allowing for more efficient and inclusive participation.
 
+The project is available at https://soil-token.vercel.app/
+
 ## About
 
-- **Collateral**: WETH / DAI
-- **Stability Mechanism**: Algorithmic
-- **Using**: Chainlink price feeds, Chainlink CCIP
-- **Available at**: Optimism Sepolia, Avalanche Fuji, Polygon Amoy
+- [Synthetic Crude Oil Token](#synthetic-crude-oil-token)
+  - [About](#about)
+    - [Liquidation mechanism](#liquidation-mechanism)
+    - [Cross-chain data transfer](#cross-chain-data-transfer)
+- [Off-chain](#off-chain)
+  - [Set up](#set-up)
+  - [Instructions](#instructions)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
+- [On-chain](#on-chain)
+  - [Usage](#usage)
+    - [Requirements](#requirements)
+    - [Installation](#installation)
+    - [Run Tests](#run-tests)
+    - [Deploy Source (OP Sepolia) and Destination (Avalanche Fuji, Polygon Amoy) contracts](#deploy-source-op-sepolia-and-destination-avalanche-fuji-polygon-amoy-contracts)
+    - [sOIL Contract Addresses](#soil-contract-addresses)
+    - [Custom token addresses](#custom-token-addresses)
+    - [Mint WETH and DAI tokens](#mint-weth-and-dai-tokens)
 
 Synthetic Crude Oil Token (sOIL) is not backed by a real-world commodity but rather by other cryptocurrencies, specifically WETH and DAI. DAI was chosen over other stablecoins because of its decentralized nature.
 
@@ -34,6 +50,29 @@ The system is designed to be self-regulating, and we believe users will actively
 
 - Incentive for Liquidators: If the Crude Oil price increases or collateral asset price decreases, liquidators are incentivized to update the price to liquidate under-collateralized positions and receive a 10% bonus.
 - Incentive for Users: Conversely, if the Crude Oil price decreases or collateral asset price increases, users are motivated to update the price to improve their health factor, avoid liquidation, and free up extra collateral assets.
+
+# Off-chain
+
+## Set up
+
+1. Clone this repository: `git clone https://github.com/Zafei-Erin/soil.git`
+2. Install dependencies: go to frontend and backend directory and run `pnpm install` respectively
+
+## Instructions
+
+### Frontend
+
+- Go to frontend directory.
+- Copy **.env.example** file to create **.env** file. Replace `VITE_CONNECT_WALLET_PROJECTID` with your own Connect Wallet project id.
+- To start frontend app locally, run `pnpm run dev`.
+
+### Backend
+
+- Go to backend directory.
+- Copy **.env.example** file to create **.env** file. Replace `INFURA_API_KEY` with your own Infura API key.
+- To start backend app locally, run `pnpm run dev`.
+
+# On-chain
 
 ## Usage
 
@@ -123,7 +162,6 @@ For the project custom ERC-20 tokens are used to represent WETH and DAI
 **Polygon Amoy**
 - WETH: 0x387FD5E4Ea72cF66f8eA453Ed648e64908f64104
 - DAI: 0xaf9B15aA0557cff606a0616d9B76B94887423022
-
 
 
 ### Mint WETH and DAI tokens

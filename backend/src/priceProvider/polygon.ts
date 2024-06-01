@@ -62,7 +62,7 @@ export class PolygonPriceProvider {
     messageReceiverContract.on(
       "MessageReceived",
       (latestMessageId, latestSourceChainSelector, latestSender, oilPrice) => {
-        this._PRICE = oilPrice;
+        this._PRICE = parseFloat(formatUnits(oilPrice._hex, 8));
       }
     );
   }

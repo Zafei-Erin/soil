@@ -1,9 +1,10 @@
 import dotenv from "dotenv";
 import { Contract, providers } from "ethers";
+import { formatUnits } from "ethers/lib/utils";
 import Web3 from "web3";
+
 import Receiver from "../abis/Receiver.json";
 import { ReceiverAddress } from "../constants/address";
-import { formatUnits } from "ethers/lib/utils";
 import { ChainID } from "../constants/chain";
 
 export class AvalanchePriceProvider {
@@ -61,7 +62,7 @@ export class AvalanchePriceProvider {
     messageReceiverContract.on(
       "MessageReceived",
       (latestMessageId, latestSourceChainSelector, latestSender, oilPrice) => {
-        this._PRICE = oilPrice;
+        this._PRICE = parseFloat(formatUnits(oilPrice._hex, 8));
       }
     );
   }

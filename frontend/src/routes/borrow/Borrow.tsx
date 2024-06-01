@@ -1,20 +1,22 @@
-import { MintTokenButton, UpdateSoilPriceComponent } from "@/components";
+import { UpdateSoilPriceComponent } from "@/components";
 import { BorrowModal } from "./BorrowModal";
 
 export const Borrow = () => {
   return (
-    <div className="pb-36 max-w-3xl sm:min-w-[30rem] mx-auto px-6">
-      <div className="space-y-6 h-60 flex flex-col items-center justify-center">
-        <div className="text-5xl font-semibold text-center">Slogan1</div>
-        <div className="text-2xl font-semibold text-center text-gray-600">
-          Slogan2
+    <div className="mx-auto max-w-3xl px-6 pb-36 sm:min-w-[30rem]">
+      <div className="flex h-60 flex-col items-center justify-center space-y-6">
+        <div className="text-center text-5xl font-semibold">
+          Synthetic Crude Oil Token
         </div>
-        <div className="flex items-center justify-center gap-3 w-full">
+        <div className="text-center text-2xl text-gray-400">
+          Seamless Access to Global Commodities
+        </div>
+        {/* <div className="flex items-center justify-center gap-3 w-full">
           <MintTokenButton token="WETH" />
           <MintTokenButton token="DAI" />
-        </div>
+        </div> */}
       </div>
-      <div className="flex flex-col gap-3 w-full items-center justify-center">
+      <div className="flex w-full flex-col items-center justify-center gap-3">
         <BorrowModal />
 
         <UpdateSoilPriceComponent />
