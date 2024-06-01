@@ -22,6 +22,8 @@ const DEFAULT_COLLATERAL: Collateral = {
   amount: 0,
 };
 
+const LOAN_TO_VALUE_THRESHOLD: number = 0.66;
+
 export const BorrowModal = () => {
   const [deposit, setDeposit] = useState<Collateral>(DEFAULT_COLLATERAL);
   const [soilAmount, setSoilAmount] = useState<number>(0);
@@ -34,7 +36,7 @@ export const BorrowModal = () => {
   const { showSuccessToast, showFailToast } = useShowToast();
 
   const disabled =
-    loanToValue > 0.8 ||
+    loanToValue > LOAN_TO_VALUE_THRESHOLD ||
     deposit.amount <= 0 ||
     soilAmount <= 0 ||
     borrowing ||
@@ -60,11 +62,11 @@ export const BorrowModal = () => {
     setSoilAmount(amount);
     setLoanToValue(deposit.amount, amount);
   };
-  const changeHF = (value: number[]) => {
-    _setLoanToValue(value[0]);
+  const changeHF = (value: number) => {
+    _setLoanToValue(value);
 
     let s =
-      (value[0] * deposit.amount * prices[deposit.token]) /
+      (value * deposit.amount * prices[deposit.token]) /
       prices.SOIL[currentChain];
     s = isNaN(s) ? 0 : s;
     s = roundTo(s, 2);
@@ -72,7 +74,11 @@ export const BorrowModal = () => {
   };
 
   const borrow = async () => {
-    if (loanToValue > 0.8 || deposit.amount <= 0 || soilAmount <= 0) {
+    if (
+      loanToValue > LOAN_TO_VALUE_THRESHOLD ||
+      deposit.amount <= 0 ||
+      soilAmount <= 0
+    ) {
       return;
     }
     setBorrowing(true);
@@ -116,7 +122,11 @@ export const BorrowModal = () => {
         <SoilComponent amount={soilAmount} onAmountChange={changeSoilAmount} />
       </div>
 
-      <LoanToValue loanToValue={loanToValue} changeHF={changeHF} />
+      <LoanToValue
+        loanToValue={loanToValue}
+        changeHF={changeHF}
+        threshold={LOAN_TO_VALUE_THRESHOLD}
+      />
       <div className="mt-6 w-full">
         {!isConnected ? (
           <ConnectButton
