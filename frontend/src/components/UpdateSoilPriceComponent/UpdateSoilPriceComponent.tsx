@@ -14,15 +14,15 @@ export const UpdateSoilPriceComponent: React.FC = () => {
   );
 
   return (
-    <div className="bg-black-dim w-full h-fit md:gap-4 flex max-md:flex-col px-3 py-6 sm:p-8 rounded-lg font-satoshi max-md:gap-6">
-      <div className="flex md:flex-col md:gap-3 items-center justify-between md:justify-center min-w-48">
-        <h1 className="sm:text-xl font-semibold">Update SOIL Price</h1>
+    <div className="flex h-fit w-full rounded-lg bg-black-dim px-3 py-6 font-satoshi max-md:flex-col max-md:gap-6 sm:p-8 md:gap-4">
+      <div className="flex min-w-48 items-center justify-between md:flex-col md:justify-center md:gap-3">
+        <h1 className="font-semibold sm:text-xl">Update SOIL Price</h1>
         <ChainTab setChainToUpdate={setChainToUpdate} />
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-4 flex-1 pr-3">
+      <div className="flex flex-1 flex-col items-center justify-center gap-4 pr-3">
         {/* price on chain */}
-        <div className="w-full flex items-center justify-between gap-2">
+        <div className="flex w-full items-center justify-between gap-2">
           <h3 className="text-gray-400">Price on {chainToUpdate}:</h3>
           <div className="text-right">
             {`$ ${prices.SOIL[chainToUpdate].toLocaleString(undefined, {
@@ -33,7 +33,7 @@ export const UpdateSoilPriceComponent: React.FC = () => {
         </div>
 
         {/* realtime price */}
-        <div className="w-full flex items-center justify-between gap-2">
+        <div className="flex w-full items-center justify-between gap-2">
           <h3 className="text-gray-400">Realtime Price:</h3>
           <div className="text-right">
             {`$ ${prices.SOIL.Optimism.toLocaleString(undefined, {
